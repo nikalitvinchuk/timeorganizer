@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="timeorganizer.Views.LoginPage"
+             Title="Logowanie">
+    <VerticalStackLayout>
+        <Entry x:Name="Login"  Placeholder="Podaj login" Text="{Binding LoginValue}" TextChanged="OnTextChangedLoggin"/>
+
+        <Entry x:Name="Pass" Placeholder="Podaj hasło" IsPassword="True" Text="{Binding PassValue}" TextChanged="OnTextChangedPass" />
+        <Button
+            x:Name="LoginButton"
+            Text="Zaloguj"
+            SemanticProperties.Hint="Zaloguj się do konta"
+            Clicked="TryLoggIn"
+            HorizontalOptions="Center" />
+    </VerticalStackLayout>
+</ContentPage>
