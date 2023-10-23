@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using timeorganizer.DatabaseModels;
 
 namespace timeorganizer
 {
@@ -18,7 +19,7 @@ namespace timeorganizer
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
-
+            builder.Services.AddSingleton<DatabaseLogin>();
             return builder.Build();
         }
     }

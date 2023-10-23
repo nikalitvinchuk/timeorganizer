@@ -1,4 +1,6 @@
-﻿namespace timeorganizer
+﻿using timeorganizer.DatabaseModels;
+
+namespace timeorganizer
 {
     public partial class App : Application
     {
@@ -8,5 +10,18 @@
 
             MainPage = new AppShell();
         }
+        static DatabaseLogin database;
+        public static DatabaseLogin Database
+        {
+            get
+            {
+                if (database == null)
+                {
+                    database = new DatabaseLogin(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "timeorganizer.db"));
+                }
+                return database;
+            }
+        }
     }
+
 }
