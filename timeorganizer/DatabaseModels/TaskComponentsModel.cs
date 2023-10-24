@@ -1,12 +1,10 @@
-﻿using GoogleGson;
-using Java.Lang;
-using SQLite;
+﻿using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace timeorganizer.DatabaseModels
+namespace timeorganizer.DatabaseModels //model podzadan obecnie nie wykorzystywany
 {
     internal class TaskComponentsModel
     {

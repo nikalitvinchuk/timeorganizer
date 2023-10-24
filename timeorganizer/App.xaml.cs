@@ -17,7 +17,8 @@ namespace timeorganizer
             {
                 if (database == null)
                 {
-                    database = new DatabaseLogin(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "timeorganizer.db"));
+                    database = new DatabaseLogin(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "timeorganizer.db")); //podpiecie  bazy do projeku 
+                    // obecnie localDB.
                 }
                 return database;
             }

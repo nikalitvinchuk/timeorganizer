@@ -19,7 +19,7 @@ namespace timeorganizer
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
-            builder.Services.AddSingleton<DatabaseLogin>();
+            builder.Services.AddSingleton<DatabaseLogin>(); 
             return builder.Build();
         }
     }

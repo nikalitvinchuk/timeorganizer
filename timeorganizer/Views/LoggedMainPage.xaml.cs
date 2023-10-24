@@ -10,7 +10,7 @@ public partial class LoggedMainPage : FlyoutPage
         flyoutPage.collectionViewFlyout.SelectionChanged += OnSelectionChanged;
     }
 
-    void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    void OnSelectionChanged(object sender, SelectionChangedEventArgs e) //event urchamiany po kazdej zmianie wyboru w menu
     {
         var item = e.CurrentSelection.FirstOrDefault() as FlyoutPageItem;
         {
@@ -30,7 +30,7 @@ public partial class LoggedMainPage : FlyoutPage
                     break;
 
                 case "Logout":
-                    App.Current.MainPage = new AppShell();
+                    App.Current.MainPage = new AppShell(); //wylogowanie - zmiana domyslego widoku aby nie bylo mozliwosci powrotu strzalka 
 
                     break;
             }

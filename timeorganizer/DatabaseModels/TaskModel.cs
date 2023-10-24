@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace timeorganizer.DatabaseModels
+namespace timeorganizer.DatabaseModels //model zadan glownych 
 {
     internal class TaskModel
     {
