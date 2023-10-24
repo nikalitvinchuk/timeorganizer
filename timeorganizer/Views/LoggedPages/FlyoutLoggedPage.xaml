@@ -2,10 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="timeorganizer.Views.FlyoutLoggedPage"
-             Title="FlyoutLoggedPage">
+             Title="timeorganizer">
     <StackLayout>
         <Label
-            Text="Welcome to FlyoutDetailsPage!"
+            Text="Strona glowna"
             TextColor="White" FontAttributes="Bold" FontSize="Large"
             VerticalOptions="CenterAndExpand"
             HorizontalOptions="CenterAndExpand" />

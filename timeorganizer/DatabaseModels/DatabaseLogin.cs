@@ -9,22 +9,27 @@ namespace timeorganizer.DatabaseModels //logowanie do bazy danych
 {
     public class DatabaseLogin
     {
-        readonly SQLiteAsyncConnection database;
+        readonly SQLiteConnection database;
+        string _dbpath;
 
         public DatabaseLogin(string dbPath)
         {
-            database = new SQLiteAsyncConnection(dbPath);
-            database.CreateTableAsync<LoginModel>().Wait();
+            database = new SQLiteConnection(dbPath);
+            this._dbpath = dbPath;
+            database.Cre<Users>();
+            database.CreateTableAsync<TaskComponents>().Wait();
+            database.CreateTableAsync<Task>().Wait();
         }
 
-        public Task<LoginModel> GetLoginDataAsync(string userName)
+        public Task<Users> GetLoginDataAsync(string userName)
         {
-            return database.Table<LoginModel>()
+            database.open();
+            return database.Table<Users>()
                             .Where(i => i.Email == userName)
                             .FirstOrDefaultAsync();
         }
 
-        public Task<int> SaveLoginDataAsync(LoginModel loginData)
+        public Task<int> SaveLoginDataAsync(Users loginData)
         {
             return database.InsertAsync(loginData);
         }

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace timeorganizer.DatabaseModels //model uzytkownika 
 {
-    public class LoginModel
+    [Table("Users")]
+    public class Users
     {
-        [PrimaryKey]
+        [PrimaryKey,AutoIncrement]
         public int Id { get; set; }
         public string Email { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-        public bool isAdmin { get; set; }
         public bool RememberMe { get; set; } = false;
         public DateTime DataCreated { get; set; }
 
