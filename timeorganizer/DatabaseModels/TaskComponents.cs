@@ -1,20 +1,21 @@
-﻿using GoogleGson;
-using Java.Lang;
-using SQLite;
+﻿using SQLite;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
-namespace timeorganizer.DatabaseModels
+namespace timeorganizer.DatabaseModels //model podzadan obecnie nie wykorzystywany
 {
-    internal class TaskComponentsModel
+    [SQLite.Table("TaskComponents")]
+    public class TaskComponents
     {
-        [PrimaryKey]
+        [PrimaryKey,AutoIncrement]
         public int Id { get; set; } // id zadania
 
         public string Name { get; set; }
         public string Description { get; set; }
+
         public int TaskId { get; set; }
         public int UserId { get; set; }
         public string Status { get; set; }

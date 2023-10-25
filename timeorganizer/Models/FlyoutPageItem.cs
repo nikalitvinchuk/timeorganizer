@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace timeorganizer.Models
+namespace timeorganizer.Models // model struktury menu wykorzystywany w flyoutmenupage
 {
     public class FlyoutPageItem
     {

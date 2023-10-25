@@ -4,23 +4,32 @@
              x:Class="timeorganizer.Views.RegisterPage"
              Title="Rejestracja">
     <VerticalStackLayout>
-        <Entry x:Name="Email"  Placeholder="Podaj Email" Text="{Binding EmailValue}" TextChanged="OnTextChangedEmail"/>
-        <Entry x:Name="Login"  Placeholder="Podaj login" Text="{Binding LoginValue}" TextChanged="OnTextChangedLogin"/>
+        <Entry x:Name="Email"  Placeholder="Podaj Email" Text="{Binding Email}" />
+        <Entry x:Name="Login"  Placeholder="Podaj login" Text="{Binding Login}" />
 
-        <Entry x:Name="Pass" Placeholder="Podaj hasło" IsPassword="True" Text="{Binding PassValue}" TextChanged="OnTextChangedPass" />
-        <Entry x:Name="PassVerification" Placeholder="Powtórz hasło" IsPassword="True" Text="{Binding PassVerificationValue}" TextChanged="OnTextChangedPassVerification" />
+        <Entry x:Name="Pass" Placeholder="Podaj hasło" IsPassword="True" Text="{Binding Password}" />
+        <Entry x:Name="PassVerification" Placeholder="Powtórz hasło" IsPassword="True" Text="{Binding PasswordVerification}" />
         <Button
             x:Name="RegisterButton"
-            Text="Zarejestruj"
             SemanticProperties.Hint="Rejestracja nowego konta w systemie"
-            Clicked="TryRegister"
-            HorizontalOptions="Center" />
+            HorizontalOptions="Center"
+            Command="{Binding RegisterCommand}">
+            <Button.Triggers>
+                <DataTrigger TargetType="Button" 
+                                         Binding="{Binding Id}"
+                                         Value="0">
+                    <Setter Property="Text" Value="Zarejestruj"/>
+                </DataTrigger>
+            </Button.Triggers>
+
+        </Button>
         <Button
             x:Name="GotoLoginButton"
             Text="Przejdz do logowania"
             SemanticProperties.Hint="Zaloguj się do konta"
             Clicked="GotoLoginClicked"
-            HorizontalOptions="Center" />
+            HorizontalOptions="Center"
+            />
 
     </VerticalStackLayout>
 </ContentPage>
