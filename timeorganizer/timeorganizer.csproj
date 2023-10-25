@@ -72,8 +72,4 @@
 	  </MauiXaml>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="PageViewModel\" />
-	</ItemGroup>
-
 </Project>

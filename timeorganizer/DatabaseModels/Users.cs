@@ -16,7 +16,7 @@ namespace timeorganizer.DatabaseModels //model uzytkownika
         public string Login { get; set; }
         public string Password { get; set; }
         public bool RememberMe { get; set; } = false;
-        public DateTime DataCreated { get; set; }
+        public DateTime DataCreated { get; set; } = DateTime.Now;
 
     }
 }

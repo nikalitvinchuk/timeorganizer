@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace timeorganizer.DatabaseModels //model zadan glownych 
 {
-    [Table("Task")]
-    public class Task
+    [Table("Tasks")]
+    public class Tasks
     {
         [PrimaryKey,AutoIncrement]
         public int Id { get; set; }

@@ -1,5 +1,8 @@
 
 
+using SQLitePCL;
+using timeorganizer.DatabaseModels;
+
 namespace timeorganizer.Views;
 
 public partial class LoginPage : ContentPage
@@ -8,8 +11,7 @@ public partial class LoginPage : ContentPage
     
     public string PassValue ;
     public LoginPage()
-	{
-        
+    {
         InitializeComponent();
     }
     private void OnTextChangedLoggin(object sender, EventArgs e) // przepisanie wartosci z pola entry login. uruchamiany po karzdej zmianie warosci w oknie
