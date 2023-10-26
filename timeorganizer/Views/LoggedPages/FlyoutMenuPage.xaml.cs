@@ -14,7 +14,8 @@ public partial class FlyoutMenuPage : ContentPage
 
         collectionViewFlyout.ItemsSource = flyoutPageItems;
     }
-    ObservableCollection<FlyoutPageItem> flyoutPageItems = new ObservableCollection<FlyoutPageItem>();
+    ObservableCollection<FlyoutPageItem> flyoutPageItems = new ObservableCollection<FlyoutPageItem>(); //kojelka wykorzystywana w menu - istneje mozliwosc generowania obiektow bezposredniu
+                                                                                                       ///z bazy obecnie zrobione statycznie w ciele funkcji (linie 11-13)
 	public ObservableCollection<FlyoutPageItem> FlyoutPageItems { get { return flyoutPageItems; } }
 
 

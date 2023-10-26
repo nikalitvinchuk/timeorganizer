@@ -39,7 +39,7 @@ namespace timeorganizer.PageViewModels
                 Password = Password,
                 Id = Id,
                 Login = Login,
-                DataCreated = (DateTime.Now).ToLongDateString(),
+                DataCreated = DateTime.Now,
                 RememberMe = false
             };
 
@@ -67,7 +67,7 @@ namespace timeorganizer.PageViewModels
             }
             catch (Exception ex)
             {
-                ex.ToString();
+
             }
             finally
             {
