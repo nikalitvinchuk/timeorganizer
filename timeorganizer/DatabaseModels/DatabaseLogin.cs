@@ -15,7 +15,7 @@ namespace timeorganizer.DatabaseModels
 
         private SQLiteAsyncConnection _connection;
         private SQLiteAsyncConnection Database =>
-            (_connection ??= new SQLiteAsyncConnection(DbPath,
+             (_connection ??= new SQLiteAsyncConnection(DbPath,
                 SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.SharedCache)); // polączenie do bazy
 
         private async Task CreateTableIfNotExists<TTable>() where TTable : class, new() //tworzenie tabel z klas
