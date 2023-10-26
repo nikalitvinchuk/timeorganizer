@@ -9,11 +9,14 @@
             Padding="30,0"
             VerticalOptions="Center">
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
+           
+            <Image 
+            Source="time.png" 
+            HeightRequest="180" 
+            WidthRequest="180"
+            Margin="0, -90, 0, 20"
+            >
+            </Image>
 
             <Label
                 Text="Hello, World!"
@@ -22,7 +25,7 @@
                 HorizontalOptions="Center" />
 
             <Label
-                Text="Welcome to .NET Multi-platform App UI"
+                Text="Welcome to Your Time Organizer"
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I"
                 FontSize="18"
@@ -30,17 +33,29 @@
 
             <Button
                 x:Name="LoginButton"
-                Text="Zaloguj"
+                Text="Log In"
                 SemanticProperties.Hint="Logowanie do istniejącego konta"
                 Clicked="OnLoginClicked"
-                HorizontalOptions="Center" />
+                HorizontalOptions="Center" 
+                WidthRequest="250"
+                BorderColor="LightYellow"
+                BorderWidth="1"
+                TextColor="White"
+                BackgroundColor="MediumPurple"
+                CornerRadius="25"/>
 
             <Button
                 x:Name="RegisterButton"
-                Text="Zarejestruj konto"
+                Text="Sign In"
                 SemanticProperties.Hint="Nie masz jeszcze konta? Zarejestruj się!!"
                 Clicked="OnRegisterClicked"
-                HorizontalOptions="Center" />
+                HorizontalOptions="Center"
+                WidthRequest="250"
+                BorderColor="LightYellow"
+                BorderWidth="1"
+                TextColor="White"
+                BackgroundColor="MediumPurple"
+                CornerRadius="25"/>
 
         </VerticalStackLayout>
     </ScrollView>

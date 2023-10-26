@@ -49,6 +49,37 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Nowy folder1\**" />
+	  <AndroidResource Remove="Nowy folder2\**" />
+	  <Compile Remove="Nowy folder1\**" />
+	  <Compile Remove="Nowy folder2\**" />
+	  <EmbeddedResource Remove="Nowy folder1\**" />
+	  <EmbeddedResource Remove="Nowy folder2\**" />
+	  <MauiCss Remove="Nowy folder1\**" />
+	  <MauiCss Remove="Nowy folder2\**" />
+	  <MauiXaml Remove="Nowy folder1\**" />
+	  <MauiXaml Remove="Nowy folder2\**" />
+	  <None Remove="Nowy folder1\**" />
+	  <None Remove="Nowy folder2\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Remove="Resources\Images\Image1.png" />
+	  <MauiImage Remove="Resources\Images\time.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Images\Image1.png" />
+	  <None Remove="Resources\Images\time.png" />
+	  <None Remove="Resources\Images\user.png" />
+	  <None Remove="Resources\Images\user2.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Resources\Images\time.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
@@ -70,6 +101,10 @@
 	  <MauiXaml Update="Views\RegisterPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Nowy folder\" />
 	</ItemGroup>
 
 </Project>

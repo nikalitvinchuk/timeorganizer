@@ -1,6 +1,7 @@
 ﻿
 using timeorganizer.Views;
 
+
 namespace timeorganizer
 {
     public partial class MainPage : ContentPage
