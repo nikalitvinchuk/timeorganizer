@@ -65,18 +65,16 @@
 
 	<ItemGroup>
 	  <MauiImage Remove="Resources\Images\Image1.png" />
-	  <MauiImage Remove="Resources\Images\time.png" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\background1.png" />
+	  <None Remove="Resources\Images\background2.png" />
 	  <None Remove="Resources\Images\Image1.png" />
+	  <None Remove="Resources\Images\spice.png" />
 	  <None Remove="Resources\Images\time.png" />
 	  <None Remove="Resources\Images\user.png" />
 	  <None Remove="Resources\Images\user2.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="Resources\Images\time.png" />
 	</ItemGroup>
 
 	<ItemGroup>

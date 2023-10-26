@@ -1,35 +1,126 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="timeorganizer.Views.RegisterPage"
-             Title="Rejestracja">
+             x:Class="timeorganizer.Views.RegisterPage">
+    
     <VerticalStackLayout>
-        <Entry x:Name="Email"  Placeholder="Podaj Email" Text="{Binding Email}" />
-        <Entry x:Name="Login"  Placeholder="Podaj login" Text="{Binding Login}" />
 
-        <Entry x:Name="Pass" Placeholder="Podaj hasło" IsPassword="True" Text="{Binding Password}" />
-        <Entry x:Name="PassVerification" Placeholder="Powtórz hasło" IsPassword="True" Text="{Binding PasswordVerification}" />
-        <Button
+        <Label 
+            Text="SIGN IN"
+            FontAttributes="Bold" 
+            FontSize="Large"
+            HorizontalOptions="CenterAndExpand"
+            TextColor="mediumpurple"
+            Margin="0,120,0,50"
+            />
+
+        <Entry 
+            x:Name="Email"  
+            Placeholder="Podaj Email" 
+            Text="{Binding Email}"
+            WidthRequest="350"
+            Margin="0,0,0,30"
+            HeightRequest="50">
+                <Entry.Triggers>
+                    <DataTrigger TargetType="Entry" Binding="{Binding IsFocused, Source={x:Reference Email}}" Value="True">
+                        <Setter Property="BackgroundColor" Value="MediumPurple"></Setter>
+                        <Setter Property="TextColor" Value="White"></Setter>
+                        <Setter Property="PlaceholderColor" Value="White"></Setter>
+                    </DataTrigger>
+                </Entry.Triggers>
+            </Entry>
+
+            <Entry 
+            x:Name="Login"  
+            Placeholder="Podaj login" 
+            Text="{Binding Login}" 
+            WidthRequest="350"
+            Margin="0,0,0,30"
+            HeightRequest="50">
+                <Entry.Triggers>
+                    <DataTrigger TargetType="Entry" Binding="{Binding IsFocused, Source={x:Reference Login}}" Value="True">
+                        <Setter Property="BackgroundColor" Value="MediumPurple"></Setter>
+                        <Setter Property="TextColor" Value="White"></Setter>
+                        <Setter Property="PlaceholderColor" Value="White"></Setter>
+                    </DataTrigger>
+                </Entry.Triggers>
+            </Entry>
+
+
+            <Entry 
+            x:Name="Pass" 
+            Placeholder="Podaj hasło" 
+            IsPassword="True" 
+            Text="{Binding Password}" 
+            WidthRequest="350"
+            Margin="0,0,0,30"
+            HeightRequest="50">
+                <Entry.Triggers>
+                    <DataTrigger TargetType="Entry" Binding="{Binding IsFocused, Source={x:Reference Pass}}" Value="True">
+                        <Setter Property="BackgroundColor" Value="MediumPurple"></Setter>
+                        <Setter Property="TextColor" Value="White"></Setter>
+                        <Setter Property="PlaceholderColor" Value="White"></Setter>
+                    </DataTrigger>
+                </Entry.Triggers>
+            </Entry>
+
+
+            <Entry 
+            x:Name="PassVerification" 
+            Placeholder="Powtórz hasło" 
+            IsPassword="True" 
+            Text="{Binding PasswordVerification}" 
+            WidthRequest="350"
+            Margin="0,0,0,30"
+            HeightRequest="50">
+                <Entry.Triggers>
+                    <DataTrigger TargetType="Entry" Binding="{Binding IsFocused, Source={x:Reference PassVerification}}" Value="True">
+                        <Setter Property="BackgroundColor" Value="MediumPurple"></Setter>
+                        <Setter Property="TextColor" Value="White"></Setter>
+                        <Setter Property="PlaceholderColor" Value="White"></Setter>
+                    </DataTrigger>
+                </Entry.Triggers>
+            </Entry>
+
+
+            <Button
             x:Name="RegisterButton"
             SemanticProperties.Hint="Rejestracja nowego konta w systemie"
             HorizontalOptions="Center"
-            Command="{Binding RegisterCommand}">
-            <Button.Triggers>
-                <DataTrigger TargetType="Button" 
+            Command="{Binding RegisterCommand}"
+            WidthRequest="250"
+            BorderColor="LightYellow"
+            BorderWidth="1"
+            BackgroundColor="MediumPurple"
+            CornerRadius="25"
+            Margin="0,0,0,10"
+            TextColor="White">
+
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button" 
                                          Binding="{Binding Id}"
                                          Value="0">
-                    <Setter Property="Text" Value="Zarejestruj"/>
-                </DataTrigger>
-            </Button.Triggers>
+                        <Setter Property="Text" Value="Zarejestruj"/>
+                    </DataTrigger>
+                </Button.Triggers>
 
-        </Button>
-        <Button
+            </Button>
+
+            <Button
             x:Name="GotoLoginButton"
             Text="Przejdz do logowania"
             SemanticProperties.Hint="Zaloguj się do konta"
             Clicked="GotoLoginClicked"
             HorizontalOptions="Center"
+            WidthRequest="250"
+            BorderColor="LightYellow"
+            BorderWidth="1"
+            BackgroundColor="black"
+            TextColor="MediumPurple"
+            Margin="0,20,0,0"
+            CornerRadius="25"
             />
 
-    </VerticalStackLayout>
+        </VerticalStackLayout>
+
 </ContentPage>

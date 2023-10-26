@@ -38,4 +38,9 @@ public partial class LoginPage : ContentPage
             }   
         }
     }
+    private async void TryLoggOut(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new MainPage());
+    }
+
 }

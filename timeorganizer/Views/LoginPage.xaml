@@ -9,7 +9,7 @@
     <VerticalStackLayout>
 
         <Label 
-            Text="SIGN IN"
+            Text="LOG IN"
             FontAttributes="Bold" 
             FontSize="Large"
             HorizontalOptions="CenterAndExpand"
@@ -81,13 +81,14 @@
             BorderWidth="1"
             BackgroundColor="MediumPurple"
             CornerRadius="25"
+            TextColor="White"
             />
 
         <Button
             x:Name="LogoutButton"
             Text="Wróć"
             SemanticProperties.Hint="Zaloguj się do konta"
-            Clicked="TryLoggIn"
+            Clicked="TryLoggOut"
             HorizontalOptions="Center"
             WidthRequest="250"
             BorderColor="LightYellow"
