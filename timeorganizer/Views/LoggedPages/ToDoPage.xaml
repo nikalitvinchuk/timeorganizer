@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="timeorganizer.Views.LoggedPages.ToDoPage"
+             Title="ToDoPage">
+    <VerticalStackLayout>
+        <Label 
+            Text="Zrealizuj swoje plany!"
+            VerticalOptions="Center" 
+            TextColor="Grey"
+            HorizontalOptions="Center" />
+        
+        <Label 
+    Text="Podaj tytuł swojego zadania"
+    VerticalOptions="Center" 
+    TextColor="Grey"
+    HorizontalOptions="Center" />
+        <Entry Text="{Binding YourTextProperty}" Placeholder="Np. Nauka Języka Angielskiego" IsPassword="False" Keyboard="Default" /> <!--'YourTextProperty' pole w modelu danych, do powiązania wprowadzonych tekstów.-->
+
+
+        <Label 
+    Text="Opisz swoje zadania"
+    VerticalOptions="Center" 
+    TextColor="Grey"
+    HorizontalOptions="Center" />
+        <Entry Text="{Binding YourTextProperty}" Placeholder="Określ konkrety, które chcesz zrealizować." IsPassword="False" Keyboard="Default" />
+
+
+        <Label 
+    Text="Podaj nazwę swojego podzadania"
+    VerticalOptions="Center" 
+    TextColor="Grey"
+    HorizontalOptions="Center" />
+        <Entry Text="{Binding YourTextProperty}" Placeholder="to pole raczej będzie do wypełnienia dopieo po utworzeniu głównego zadania" IsPassword="False" Keyboard="Default" />
+
+
+        <Label 
+    Text="Określ typ zadania"
+    VerticalOptions="Center" 
+    TextColor="Grey"
+    HorizontalOptions="Center" />
+        <Entry Text="{Binding YourTextProperty}" Placeholder="Wprowadź typ zadania: home/work/hobby/other" IsPassword="False" Keyboard="Default" />
+
+
+        <Label 
+    Text="Wprowadź datę utworzenia zadania: "
+    VerticalOptions="Center" 
+    TextColor="Grey"
+    HorizontalOptions="Center" />
+
+        <Entry Text="{Binding YourTextProperty}" Placeholder="dzień/miesiąc/rok" IsPassword="False" Keyboard="Default" />
+
+        <Label 
+    Text="Data ostatniej aktualizacji"
+    VerticalOptions="Center" 
+    TextColor="Grey"
+    HorizontalOptions="Center" />
+
+        <Entry Text="{Binding YourTextProperty}" Placeholder="dzień/miesiąc/rok" IsPassword="False" Keyboard="Default" />
+
+        <Button Text="Utwórz główne zadanie" Clicked="OnCreateTaskClicked" />
+
+
+    </VerticalStackLayout>
+</ContentPage>

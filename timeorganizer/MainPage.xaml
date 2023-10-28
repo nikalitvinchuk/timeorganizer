@@ -57,6 +57,14 @@
                 BackgroundColor="MediumPurple"
                 CornerRadius="25"/>
 
+          <!--<Label
+                Text="Welcome to Your Time Organizer"
+                SemanticProperties.HeadingLevel="Level2"
+                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+                FontSize="18"
+                HorizontalOptions="Center"
+               Clicked="nazwa funkcji która jest w />   ??!!--> 
+              
         </VerticalStackLayout>
     </ScrollView>
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="timeorganizer.Views.LoggedPages.InstagramPage"
+             Title="InstagramPage">
+    <VerticalStackLayout>
+        <Label 
+            Text="Nasza społeczność na Instagramie! Zobacz jak inni posiadacze naszej super aplikacji świetnie sobie radzą z organizacją czasu! Skanuj kod QR i zobacz na własne oczy!"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <!--tutaj png kodu qr z instagramu faktycznie stworzonego na potrzeby projektu-->
+    </VerticalStackLayout>
+</ContentPage>
