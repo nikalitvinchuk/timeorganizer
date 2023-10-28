@@ -75,6 +75,11 @@ namespace timeorganizer.DatabaseModels
             await CreateTableIfNotExists<TTable>();
             return await Database.DeleteAsync<TTable>(primaryKey) > 0;
         }
+        public async Task<bool> IsLoginUniqueAsync(string login) //sprawdza unikalność loginu/ jeśli już jest w bazie zwraca null
+        {
+            var existingUser = await Database.Table<Users>().Where(user => user.Login == login).FirstOrDefaultAsync();
+            return existingUser == null;
+        }
 
         public async ValueTask DisposeAsync() => await _connection?.CloseAsync(); // zamkniecie polaczenia z baza
     }

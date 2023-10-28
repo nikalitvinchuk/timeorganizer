@@ -69,6 +69,13 @@ namespace timeorganizer.PageViewModels
                 return;
             }
 
+            var allUser = await _context.GetAllAsync<Users>(); //pobieramy wszystkie rekordy z users
+            if(allUser.Any(user => user.Login==Login)) //jeśli którys z elementów jest taki sam wyswietli sie alert
+            {
+                await Application.Current.MainPage.DisplayAlert("Błąd", "Login już istnieje w bazie, wpisz inny", "OK");
+                return;
+            }
+
 
             Users User = new()
             {

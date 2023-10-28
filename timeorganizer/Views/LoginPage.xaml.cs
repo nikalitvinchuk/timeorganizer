@@ -24,8 +24,17 @@ public partial class LoginPage : ContentPage
         var text = ((Entry)sender).Text;
         PassValue = text;
     }
+
+
     private void TryLoggIn(object sender, EventArgs e) // uruchamiane po kliknieciu przycisku zaloguj
 	{
+        if(!isValidEntry())
+        {
+            //w przypadku braku poprawnych danych - alert
+            return;
+        }
+
+
         if (!string.IsNullOrEmpty(LoginValue))
         {
             if (!string.IsNullOrEmpty(PassValue))
@@ -37,6 +46,31 @@ public partial class LoginPage : ContentPage
                 }
             }   
         }
+    }
+    private bool isValidEntry()
+    {
+        if (string.IsNullOrEmpty(PassValue) && string.IsNullOrEmpty(LoginValue))
+        {
+            Application.Current.MainPage.DisplayAlert("B³¹d", "Nie poda³eœ loginu i has³a", "OK");
+            return false;
+        }
+        
+        else if (string.IsNullOrEmpty(LoginValue))
+        {
+            Application.Current.MainPage.DisplayAlert("B³¹d", "Nie poda³eœ loginu", "OK");
+            return false;
+        }
+        else if (string.IsNullOrEmpty(PassValue))
+        {
+            Application.Current.MainPage.DisplayAlert("B³¹d", "Nie poda³eœ has³a", "OK");
+            return false;
+        }
+        else
+        {
+            Application.Current.MainPage.DisplayAlert("B³¹d", "Niepoprawne dane", "OK");
+            return false;
+        }
+        return true;
     }
     private async void TryLoggOut(object sender, EventArgs e)
     {
