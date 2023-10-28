@@ -14,7 +14,7 @@
             Source="time.png" 
             HeightRequest="180" 
             WidthRequest="180"
-            Margin="0, -90, 0, 20"
+            Margin="0, 0, 0, 20"
             >
             </Image>
 

@@ -5,8 +5,7 @@ using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 
 namespace timeorganizer.PageViewModels
-{// przykladowa rejestracja z wykorzystaniem dostepu do bazy danych, zrobilem bo mogloby byc wam ciezko ogarnac, nie ma zrobionej weryfikacji poprawnosci itd
-    //trzeba bedzie dorobic.
+{//dodawanie nowych zadań
     public partial class AddTaskViewModel : ObservableObject
     {
         private string _name, _desc, _type, _status;
