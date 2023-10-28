@@ -47,7 +47,9 @@ namespace timeorganizer.PageViewModels
             {
                 if (User.Id == 0)
                 {
-                    // Create product
+                    //{Przykłąd użycie filtra:  
+                    //var lista = await _context.GetFileteredAsync<Users>(x => x.Login == Login && x.Id == Id);
+                    // } -Greg92
                     await _context.AddItemAsync<Users>(User);
                     await Shell.Current.GoToAsync("LoginPage");
                 }
