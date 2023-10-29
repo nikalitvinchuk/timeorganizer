@@ -3,6 +3,7 @@ using timeorganizer.DatabaseModels;
 using timeorganizer.Views;
 using timeorganizer.PageViewModels;
 
+
 namespace timeorganizer
 {
     public static class MauiProgram
@@ -25,6 +26,8 @@ namespace timeorganizer
             builder.Services.AddSingleton<Users>();
             builder.Services.AddSingleton<RegisterPageViewModel>(); 
             builder.Services.AddSingleton<RegisterPage>();
+            builder.Services.AddSingleton<LoginPage>();
+            builder.Services.AddSingleton<LoginPageViewModel>();
             return builder.Build();
         }
     }
