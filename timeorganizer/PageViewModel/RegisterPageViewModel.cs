@@ -75,6 +75,11 @@ namespace timeorganizer.PageViewModels
                 await Application.Current.MainPage.DisplayAlert("Błąd", "Login już istnieje w bazie, wpisz inny", "OK");
                 return;
             }
+            if (allUser.Any(user => user.Email == Email)) //jeśli którys z elementów jest taki sam wyswietli sie alert
+            {
+                await Application.Current.MainPage.DisplayAlert("Błąd", "Email już istnieje w bazie, wpisz inny", "OK");
+                return;
+            }
 
 
             Users User = new()

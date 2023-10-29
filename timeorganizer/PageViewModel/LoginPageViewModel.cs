@@ -42,6 +42,25 @@ namespace timeorganizer.PageViewModels
             var user = users.FirstOrDefault(); //pobieramy pierwszy element który pasuje
             if (user != null && user.Password == PassValue)
             {
+
+                //-------------------------OBSŁUGA SESJI-----------------------------
+                string sessionToken = Guid.NewGuid().ToString(); //unikalny token sesji (GUID)
+                string dateCreated = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+                string expirationDate = DateTime.Now.AddMinutes(7).ToString("dd-MM-yyyy HH:mm:ss");
+                
+                //dodawanie danych do tabeli
+                var session = new UserSession
+                {
+                    UserId= user.Id,
+                    Token= sessionToken,
+                    DateCreated = dateCreated,
+                    ExpirationDate= expirationDate
+                };
+                await _context.AddItemAsync<UserSession>(session);
+
+                //-----------------------KONIEC OBSŁUGI SESJI-------------------------
+
+                
                 await Application.Current.MainPage.DisplayAlert("Sukces", "Zalogowano pomyślnie", "OK");
                 App.Current.MainPage = new LoggedMainPage(); // zmiana domyslnego widoku na widok flyout
             }
