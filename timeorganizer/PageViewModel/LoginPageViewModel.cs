@@ -56,11 +56,13 @@ namespace timeorganizer.PageViewModels
                     DateCreated = dateCreated,
                     ExpirationDate= expirationDate
                 };
-                await _context.AddItemAsync<UserSession>(session);
+                await _context.AddItemAsync<UserSession>(session); // NALEZY DOROBIC PRZEDLUZANIE SESJI I AUTOMATYCZNE WYLOGOWANIE 
+                                                                   // w przeciwnym wypadku nie korzystamy z expirationDate
+                                                                   //  po uplywie tego czasu powinno wylogowac- JB
 
                 //-----------------------KONIEC OBSŁUGI SESJI-------------------------
 
-                
+
                 await Application.Current.MainPage.DisplayAlert("Sukces", "Zalogowano pomyślnie", "OK");
                 App.Current.MainPage = new LoggedMainPage(); // zmiana domyslnego widoku na widok flyout
             }

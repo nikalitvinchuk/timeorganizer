@@ -22,7 +22,7 @@ namespace timeorganizer.Views
             switch (item.Title)
             {
                 case "Home":
-                    Detail = new NavigationPage(new MainPage());
+                    Detail = new NavigationPage(new MainPage()); // NIE MOZE BYC NA MAINPAGE - JEST TO STRONA LOGOWANIA, HOME JEST W FLYOUTLOGGEDPAGE -JB
                     break;
 
                 case "Calendar":

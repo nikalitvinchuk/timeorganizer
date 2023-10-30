@@ -21,17 +21,17 @@ namespace timeorganizer.PageViewModels
         private DateTime Modified;
         public ICommand RegisterCommand { private set; get; }
 
-        //                  ZMIENNE DLA DODANIA PODZADANIA
+        //                  ZMIENNE DLA DODANIA PODZADANIA - do podzadan powinien zostać utworzony nowy model - JB 
 
         private string _nameU, _descU, _statusU;
         private int _userIdU,  _tid;
         public string NameU { get => _nameU; set => _nameU = value; }
         public string DescriptionU { get => _descU; set => _descU = value; }
         public string StatusU { get => _statusU; set => _statusU = value; }
-        public int TaskId { get => _tid; set => _tid = value; } //Pobierane skąd???? Wcześniej klikniętego zadania???Musi zostać tu przekazane przy wejściu? Elemnt który pokazuje zadanie po kliknięciu musi pobrać z bazy informacje o tym zadaniu, a w sumie jego ID? 
+        public int TaskId { get => _tid; set => _tid = value; } //ID ZADANIA MOZE ZOSTAC POBRANE Z BAZY FUNCKJA GetFileteredAsync LUB PRZEKAZANE W MOMENCIE KLIKANIA NA ZADANIE POPRZED BINDING - JB
         public int UserIdU { get => _userIdU; set => _userIdU = value; } //Pobierane z sesji zalogowanego użytkownika
-        private bool TaskComplited; // Ustawiane przed dodaniem do modelu
-        private bool IsActive; //Ustawiane potem prrzed dodaniem do bazy
+        private bool TaskComplited; // Ustawiane przed dodaniem do modelu - WARTOSC DOMYSLNA 0 - po wykonaniu zmiana na 1 i status na FIN - JB
+        private bool IsActive; //Ustawiane potem prrzed dodaniem do bazy - domyslnie na 1 po wykonaniu/zawieszeniu zadania zmiana na 0 - JB
 
         //                  FUNKCJE PLIKU
         private readonly DatabaseLogin _context;
@@ -51,9 +51,9 @@ namespace timeorganizer.PageViewModels
                 Name=Name
                 , Description=Description
                 , Type=Typ
-                , UserId=UserId//   POBRANY SKĄD??? OBECNEJ SESJI UŻYTKOWNIKA??
+                , UserId= UserId // NAJLEPIEJ POBRAC Z TABELI USERSESSION funkcją GetFileteredAsync -JB
                 , status=Status
-                , RealizedPercent=Progress
+                , RealizedPercent=Progress // domyslnie powinno byc 0 - brak mozliwosci podania z reki -JB
                 , Updated=Modified
             };
 
@@ -76,7 +76,7 @@ namespace timeorganizer.PageViewModels
             });
         }
 
-        //                  FUNKCJA DODAWANIA PODZADANIA 
+        //                  FUNKCJA DODAWANIA PODZADANIA - powinno być w osobnym modelu -JB
 
         private async void AddTaskComponent(object obj){
             TaskComponents TC = new() { 

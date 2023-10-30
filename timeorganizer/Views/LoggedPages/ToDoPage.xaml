@@ -58,7 +58,7 @@
 
         <Entry Text="{Binding YourTextProperty}" Placeholder="dzień/miesiąc/rok" IsPassword="False" Keyboard="Default" />
 
-        <Button Text="Utwórz główne zadanie" Clicked="OnCreateTaskClicked" />
+        <Button Text="Utwórz główne zadanie" />
 
 
     </VerticalStackLayout>
