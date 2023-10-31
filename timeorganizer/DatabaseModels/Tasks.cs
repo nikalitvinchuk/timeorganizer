@@ -17,6 +17,7 @@ namespace timeorganizer.DatabaseModels //model zadan glownych
         public string Type { get; set; } //typ zadania
         public int UserId { get; set; } //użytkownik tworzacy
         public string status { get; set; } // REM ACT
+        public int Priority { get; set; } //priorytet zadania
         public int RealizedPercent { get; set; } //procent realizacji obliczany na podstawie liczby podzadań/liczba zralizowanych
         public DateTime Created { get; set; } = DateTime.Now; //data utworzenia
         public DateTime Updated { get; set; } //data aktualizacji 
