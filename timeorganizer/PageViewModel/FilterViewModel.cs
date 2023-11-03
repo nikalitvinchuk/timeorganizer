@@ -1,10 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using SQLite;
-using System.Collections.ObjectModel;
-using System.Linq.Expressions;
-using System.Windows.Input;
-using timeorganizer.DatabaseModels;
 
 
 namespace timeorganizer.PageViewModels

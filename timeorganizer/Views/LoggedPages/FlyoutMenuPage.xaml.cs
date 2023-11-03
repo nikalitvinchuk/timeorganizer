@@ -5,9 +5,9 @@ namespace timeorganizer.Views;
 
 public partial class FlyoutMenuPage : ContentPage
 {
-	public FlyoutMenuPage()
-	{
-		InitializeComponent();
+    public FlyoutMenuPage()
+    {
+        InitializeComponent();
         flyoutPageItems.Add(new FlyoutPageItem { Title = "Home", MenuIcon = "home.png" });//menuIcon jest to ikona jaka ma siê wyœwietlaæ przy poszczególnej opcji  
         flyoutPageItems.Add(new FlyoutPageItem { Title = "Calendar", MenuIcon = "calendar.png" });
         flyoutPageItems.Add(new FlyoutPageItem { Title = "ToDo", MenuIcon = "todo.png" });
@@ -21,8 +21,8 @@ public partial class FlyoutMenuPage : ContentPage
         collectionViewFlyout.ItemsSource = flyoutPageItems;
     }
     ObservableCollection<FlyoutPageItem> flyoutPageItems = new ObservableCollection<FlyoutPageItem>(); //kojelka wykorzystywana w menu - istneje mozliwosc generowania obiektow bezposredniu
-                                                                                                       ///z bazy obecnie zrobione statycznie w ciele funkcji (linie 11-13)
-	public ObservableCollection<FlyoutPageItem> FlyoutPageItems { get { return flyoutPageItems; } }
+    ///z bazy obecnie zrobione statycznie w ciele funkcji (linie 11-13)
+    public ObservableCollection<FlyoutPageItem> FlyoutPageItems { get { return flyoutPageItems; } }
 
 
 }

@@ -9,6 +9,7 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <Entry Text="{Binding YourTextProperty}" Placeholder="Pole na wpisanie notatki" IsPassword="False" Keyboard="Default" />
-        <Button Text="Dodaj notatkę do listy" <!--Clicked="OnCreateTaskClicked" <!--Należy w cliked podpiac komende z pageviewmodel jak bedzie zrobione obecnie z tym nie bedzie sie uruchamiac program - JB -->/>
+        <Button Text="Dodaj notatkę do listy" />
+        <!--Clicked="OnCreateTaskClicked" <!--Należy w cliked podpiac komende z pageviewmodel jak bedzie zrobione obecnie z tym nie bedzie sie uruchamiac program - JB -->
     </VerticalStackLayout>
 </ContentPage>

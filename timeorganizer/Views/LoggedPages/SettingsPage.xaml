@@ -8,5 +8,20 @@
             Text="Welcome to .NET MAUI!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+
+
+        <Button
+            x:Name="LoginButton"
+            Text="Zaloguj"
+            SemanticProperties.Hint="Zaloguj się do konta"
+            Command="{Binding DeleteAccount}"
+            HorizontalOptions="Center"
+            WidthRequest="250"
+            BorderColor="LightYellow"
+            BorderWidth="1"
+            BackgroundColor="MediumPurple"
+            CornerRadius="25"
+            TextColor="White"
+            />
     </VerticalStackLayout>
 </ContentPage>

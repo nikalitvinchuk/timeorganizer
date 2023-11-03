@@ -1,9 +1,18 @@
+using timeorganizer.PageViewModel;
+
 namespace timeorganizer.Views.LoggedPages;
 
 public partial class SettingsPage : ContentPage
 {
-	public SettingsPage()
+    private readonly SettingsViewModel _viewModel;
+
+    public SettingsPage()
 	{
-		InitializeComponent();
-	}
+        if (BindingContext == null)
+        {
+            BindingContext = new SettingsViewModel();
+        }
+        InitializeComponent();
+    }
+
 }

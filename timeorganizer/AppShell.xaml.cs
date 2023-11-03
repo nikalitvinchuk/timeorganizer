@@ -1,5 +1,4 @@
-﻿using timeorganizer.DatabaseModels;
-using timeorganizer.Views;
+﻿using timeorganizer.Views;
 
 namespace timeorganizer
 {
