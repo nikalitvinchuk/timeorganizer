@@ -89,7 +89,8 @@ namespace timeorganizer.PageViewModels
                 Id = Id,
                 Login = Login,
                 DataCreated = (DateTime.Now).ToLongDateString(),
-                RememberMe = false
+                RememberMe = false,
+                DataModified = null
             };
 
             await ExecuteAsync(async () =>

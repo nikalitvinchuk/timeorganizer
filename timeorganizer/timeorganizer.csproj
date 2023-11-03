@@ -51,16 +51,22 @@
 	<ItemGroup>
 	  <AndroidResource Remove="Nowy folder1\**" />
 	  <AndroidResource Remove="Nowy folder2\**" />
+	  <AndroidResource Remove="Nowy folder\**" />
 	  <Compile Remove="Nowy folder1\**" />
 	  <Compile Remove="Nowy folder2\**" />
+	  <Compile Remove="Nowy folder\**" />
 	  <EmbeddedResource Remove="Nowy folder1\**" />
 	  <EmbeddedResource Remove="Nowy folder2\**" />
+	  <EmbeddedResource Remove="Nowy folder\**" />
 	  <MauiCss Remove="Nowy folder1\**" />
 	  <MauiCss Remove="Nowy folder2\**" />
+	  <MauiCss Remove="Nowy folder\**" />
 	  <MauiXaml Remove="Nowy folder1\**" />
 	  <MauiXaml Remove="Nowy folder2\**" />
+	  <MauiXaml Remove="Nowy folder\**" />
 	  <None Remove="Nowy folder1\**" />
 	  <None Remove="Nowy folder2\**" />
+	  <None Remove="Nowy folder\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -122,10 +128,6 @@
 	  <MauiXaml Update="Views\RegisterPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Nowy folder\" />
 	</ItemGroup>
 
 </Project>
