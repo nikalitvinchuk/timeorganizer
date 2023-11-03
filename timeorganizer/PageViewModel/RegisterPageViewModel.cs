@@ -1,7 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
-using System.Linq.Expressions;
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 
@@ -9,8 +6,8 @@ namespace timeorganizer.PageViewModels
 {// przykladowa rejestracja z wykorzystaniem dostepu do bazy danych
     public partial class RegisterPageViewModel : ObservableObject
     {
-        private string _email, _password, _password2, _login; 
-            int _id;
+        private string _email, _password, _password2, _login;
+        int _id;
         public string Email { get => _email; set => _email = value; }
         public string Login { get => _login; set => _login = value; }
         public string Password { get => _password2; set => _password2 = value; }
@@ -24,7 +21,7 @@ namespace timeorganizer.PageViewModels
         private bool _loginError;
         private bool _passwordError;
         private bool _passwordVerificationError;
-        
+
         //odświeżenie danych w przypadku zmian
         public bool EmailError
         {
@@ -63,14 +60,14 @@ namespace timeorganizer.PageViewModels
 
         private async void CreateUser(object obj)
         {
-            if(!isValidInput()) //metoda do weryfikacji poprawności danych
+            if (!isValidInput()) //metoda do weryfikacji poprawności danych
             {
-              //wyswietli komunikat w zalezności od wystepującego błedu w podaniu danych
+                //wyswietli komunikat w zalezności od wystepującego błedu w podaniu danych
                 return;
             }
 
             var allUser = await _context.GetAllAsync<Users>(); //pobieramy wszystkie rekordy z users
-            if(allUser.Any(user => user.Login==Login)) //jeśli którys z elementów jest taki sam wyswietli sie alert
+            if (allUser.Any(user => user.Login == Login)) //jeśli którys z elementów jest taki sam wyswietli sie alert
             {
                 await Application.Current.MainPage.DisplayAlert("Błąd", "Login już istnieje w bazie, wpisz inny", "OK");
                 return;
@@ -106,7 +103,7 @@ namespace timeorganizer.PageViewModels
                 else
                 { }
             });
-                  
+
         }
 
 
@@ -140,7 +137,7 @@ namespace timeorganizer.PageViewModels
                 Application.Current.MainPage.DisplayAlert("Błąd", "Wpisz poprawny email", "OK");
                 return false;
             }
-            else if(LoginError)
+            else if (LoginError)
             {
                 Application.Current.MainPage.DisplayAlert("Błąd", "Długość znaków w podanym loginie nie może być mniejsza niż 4", "OK");
                 return false;
@@ -160,7 +157,7 @@ namespace timeorganizer.PageViewModels
         }
 
         private bool isValidEmail(string email) //metoda do sprawdzenia poprawności podanego maila;
-             //tworzy obiekt w systemie System.Net.Mail.MailAddress, jesli powodzenie, poprawny mail
+                                                //tworzy obiekt w systemie System.Net.Mail.MailAddress, jesli powodzenie, poprawny mail
         {
             try
             {
@@ -172,6 +169,6 @@ namespace timeorganizer.PageViewModels
                 return false;
             }
         }
-        
+
     }
 }

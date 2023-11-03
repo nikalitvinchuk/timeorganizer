@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace timeorganizer.DatabaseModels
 {
-    [Table("UserSession")]
-    public class UserSession
+    [Table("UserSessions")]
+    public class UserSessions
     {
         [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
+        public int  Id  { get; set; }
         public int UserId { get; set; }
         public string Token { get; set; }
         public string DateCreated { get; set; }

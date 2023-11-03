@@ -1,12 +1,7 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace timeorganizer.DatabaseModels 
+namespace timeorganizer.DatabaseModels
 {
     public class DatabaseLogin : IAsyncDisposable // przykładowy plik jak korzystać z połączenia do bazy danych stworzony dla rejestracji RegisterPageviewModel - dane podane z palca
     {
@@ -41,7 +36,7 @@ namespace timeorganizer.DatabaseModels
             return await table.Where(predicate).ToListAsync();
         }
 
-        private async Task<TResult> Execute<TTable, TResult>(Func<Task<TResult>> action) where TTable : class, new() 
+        private async Task<TResult> Execute<TTable, TResult>(Func<Task<TResult>> action) where TTable : class, new()
         {
             await CreateTableIfNotExists<TTable>();
             return await action();

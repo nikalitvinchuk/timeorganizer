@@ -1,16 +1,11 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace timeorganizer.DatabaseModels //model zadan glownych 
 {
     [Table("Tasks")]
     public class Tasks
     {
-        [PrimaryKey,AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public string Name { get; set; } //nazwa zadania
         public string Description { get; set; } //opis zadania

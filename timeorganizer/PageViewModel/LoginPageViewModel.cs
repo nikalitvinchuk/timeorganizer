@@ -1,8 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
-using System.Linq.Expressions;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 using timeorganizer.Views;
 
@@ -47,18 +43,21 @@ namespace timeorganizer.PageViewModels
                 string sessionToken = Guid.NewGuid().ToString(); //unikalny token sesji (GUID)
                 string dateCreated = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
                 string expirationDate = DateTime.Now.AddMinutes(7).ToString("dd-MM-yyyy HH:mm:ss");
-                
+
+                //dodanie tokena do PAMIECI ABY BYL DO NIEGO DOSTEP -JB 
+                await SecureStorage.Default.SetAsync("token", sessionToken);
                 //dodawanie danych do tabeli
-                var session = new UserSession
+                var session = new UserSessions
                 {
-                    UserId= user.Id,
-                    Token= sessionToken,
+
+                    UserId = user.Id,
+                    Token = sessionToken,
                     DateCreated = dateCreated,
-                    ExpirationDate= expirationDate
+                    ExpirationDate = expirationDate
                 };
-                await _context.AddItemAsync<UserSession>(session); // NALEZY DOROBIC PRZEDLUZANIE SESJI I AUTOMATYCZNE WYLOGOWANIE 
-                                                                   // w przeciwnym wypadku nie korzystamy z expirationDate
-                                                                   //  po uplywie tego czasu powinno wylogowac- JB
+                await _context.AddItemAsync<UserSessions>(session); // NALEZY DOROBIC PRZEDLUZANIE SESJI I AUTOMATYCZNE WYLOGOWANIE 
+                                                                    // w przeciwnym wypadku nie korzystamy z expirationDate
+                                                                    //  po uplywie tego czasu powinno wylogowac- JB
 
                 //-----------------------KONIEC OBSŁUGI SESJI-------------------------
 

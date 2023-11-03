@@ -1,5 +1,4 @@
 using timeorganizer.Models;
-using System.Threading.Tasks; // Dodany brakuj¹cy using
 using timeorganizer.Views.LoggedPages;
 
 namespace timeorganizer.Views
