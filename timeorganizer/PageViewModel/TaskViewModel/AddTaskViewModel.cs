@@ -24,28 +24,27 @@ namespace timeorganizer.PageViewModels
             _context = new DatabaseLogin();
             AddTaskCommand = new Command(AddTask);
         }
-        private async void Getid(){
+        private async Task<int> Getid() {
             string _tokenvalue = await SecureStorage.Default.GetAsync("token");
-            var getids = await _context.GetAllAsync<UserSessions>();
-            if (getids.Any(t => t.Token == _tokenvalue))
-            {
+            var getids = await _context.GetFileteredAsync<UserSessions>(t => t.Token == _tokenvalue);
+            if (getids.Any(t => t.Token == _tokenvalue)) {
                 var getid = getids.First(t => t.Token == _tokenvalue);
-                _userId = getid.UserId;
+                return getid.UserId;
             }
-
+            else { return 0; }
         }
         [ObservableProperty]
         private bool _isBusy;
 
         private async void AddTask(object obj){
-            Getid();
+            if(_userId==0) _userId=await Getid();
             Status = "Act";
             Modified = DateTime.Now.ToString("dd.MM.yyyy, HH:mm");
                 Tasks Task = new(){
                     Name = Name
                     ,Description = Description
                     ,Type = Typ
-                    ,UserId = UserId 
+                    ,UserId = _userId
                     ,status = Status
                     ,RealizedPercent = Progress 
                     ,Updated = Modified

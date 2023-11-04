@@ -9,6 +9,29 @@
             VerticalOptions="Center" 
             TextColor="Grey"
             HorizontalOptions="Center" />
+
+        <CollectionView x:Name="taskView"
+                    x:FieldModifier="public"
+                    SelectionMode="Single">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="5,10" BackgroundColor="#742D9E">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="1"
+                           Margin="20,0"
+                           Text="{Binding Name}"
+                           FontSize="20" TextColor="Black"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!--                       STACK Z DODAWANIEM ZADANIA                            -Greg-->
         <StackLayout x:Name="AddTaskLayout" IsVisible="False">
             <Label 
                 Text="Podaj tytuł swojego zadania"
@@ -54,8 +77,9 @@
 
                 <Entry Text="{Binding YourTextProperty}" Placeholder="dzień/miesiąc/rok" IsPassword="False" Keyboard="Default" />-->
 
-            <Button Text="Utwórz główne zadanie" Command="{Binding Path=addTask.AddTaskCommand}"/>
+            <Button Text="Utwórz główne zadanie" Command="{Binding Path=addTask.AddTaskCommand}" Clicked="Refresh" />
         </StackLayout>
         <Button Text="Dodaj" Clicked="OnAddButtonClicked" HorizontalOptions="Center" x:Name="ButtonAddTask"/>
+        <!--                       KONIEC STACKU Z DODAWANIEM ZADANIA                       -Greg--> 
     </VerticalStackLayout>
 </ContentPage>

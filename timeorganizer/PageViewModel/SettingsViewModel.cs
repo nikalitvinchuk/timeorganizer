@@ -38,16 +38,14 @@ namespace timeorganizer.PageViewModel
         // WALIDACJA HASEL
 
         //POBRANIE ID Z SESJI 
-        private async void getid()
-        {
+        private async Task<int> Getid() {
             string _tokenvalue = await SecureStorage.Default.GetAsync("token");
-            var getids = await _context.GetAllAsync<UserSessions>();
-            if (getids.Any(t => t.Token == _tokenvalue)) // można dodac EXPIRYDATE POZNIEJ i weryfikowac czy można wykonać operacje !
-            {
+            var getids = await _context.GetFileteredAsync<UserSessions>(t => t.Token == _tokenvalue);
+            if (getids.Any(t => t.Token == _tokenvalue)) {
                 var getid = getids.First(t => t.Token == _tokenvalue);
-                _id = getid.UserId;
+                return getid.UserId;
             }
-
+            else { return 0; }
         }
         private bool validatepassword()
         {
@@ -80,7 +78,7 @@ namespace timeorganizer.PageViewModel
         // ZMIANA EMAIL
         private async void ChangeEmailCommand()
         {
-            if (_id == 0) getid();
+            if (_id == 0) _id = await Getid();
 
             Users user = new Users();
             user = _context.GetItemByKeyAsync<Users>(_id).Result;
@@ -95,7 +93,7 @@ namespace timeorganizer.PageViewModel
         private async void ChangePasswordCommand()
 
         {
-            if (_id == 0) getid();
+            if (_id == 0) _id = await Getid();
             Users user = new Users();
             user = _context.GetItemByKeyAsync<Users>(_id).Result;
             if (validatepassword())
@@ -108,7 +106,7 @@ namespace timeorganizer.PageViewModel
         // USUWANIE KONTA
         private async void DeleteAccountCommand()
         {
-            if (_id == 0) getid();
+            if (_id == 0) _id = await Getid();
             Users user = new Users();
             user = _context.GetItemByKeyAsync<Users>(_id).Result;
             if (_passwordconfirm == user.Password)

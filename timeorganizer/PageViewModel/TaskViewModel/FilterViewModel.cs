@@ -1,102 +1,71 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using SQLite;
+using Microsoft.Maui.Controls;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Windows.Input;
+using timeorganizer.DatabaseModels;
 
-namespace timeorganizer.PageViewModel
-{
+namespace timeorganizer.PageViewModel {
 
-    public partial class FilterViewModel : ObservableObject
-    {
+    public partial class FilterViewModel : ObservableObject {
+
+        private string _name, _description, _typ, _status, _created;
+        private int _priority, _prcomplited, _userId;
+
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Category { get; set; } //w Tasks.cs jest: public string Type { get; set; } //typ zadania
-        public int UserId { get; set; }
-        public DateTime Created { get; set; } = DateTime.Now;
-        public DateTime Updated { get; set; }
-        public string Status { get; set; } //tego nie mam w Tasks.cs
-        public bool IsDone { get; set; } //tego nie mam w Tasks.cs
-        public int Priority { get; set; } //tego nie mam w Tasks.cs
+        //public string Name { get => _name; set => _name = value; }
+        public string Description { get => _description; set => _description = value; }
+        public string Typ { get => _typ; set => _typ = value; }
+
+        public int UserId;
+        public string Created { get => _created; set => _created = value; }
+
+        public string Updated;
+        public string Status { get => _status; set => _status = value; } //tego nie mam w Tasks.cs
+        public bool IsDone { get; set; }
+        public int Priority { get => _priority; set => _priority = value; }
         public int RealizedPercent { get; set; }
-    }
+        public ObservableCollection<Tasks> TasksCollection { get; set; }
+        public ICommand ShowTasks { private set; get; }
 
-    public class TaskManager
-    {
-        private string connectionString = "Data Source=Timeorgranizer.db3";
-
-        //Pobierania wszystkich zadań z bazy danych, wykonuje zapytanie SQL do tabeli "Tasks" i mapuje wynik na obiekty klasy Task
-        public List<Task> GetAllTasks()
-        {
-            List<Task> tasks = new List<Task>();
-
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-
-            {
-                //connection.Open();
-
-                string query = "SELECT * FROM Tasks";
-                //SQLiteCommand command = new SQLiteCommand(query, connection);
-                //using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    //while (reader.Read())
-                    //{
-                    //    Task task = new Task
-                    //    {
-                    //        Id = Convert.ToInt32(reader["Id"]),
-                    //        Name = reader["Name"].ToString(),
-                    //        Category = reader["Category"].ToString(),
-                    //        IsDone = Convert.ToBoolean(reader["IsDone"]),
-                    //        DueDate = Convert.ToDateTime(reader["DueDate"]),
-                    //        Priority = Convert.ToInt32(reader["Priority"])
-                    //    };
-                    //    tasks.Add(task);
-                    //}
-                }
-                //command.Dispose();
+        private readonly DatabaseLogin _context;
+        public FilterViewModel() {
+            _context = new DatabaseLogin();
+            //ShowTasks = new Command(async () => await FilterTasksAsync());
+            //ShowTasks = new Command(FilterTasks);
+        }
+        private async Task<int> Getid() {
+            string _tokenvalue = await SecureStorage.Default.GetAsync("token");
+            var getids = await _context.GetFileteredAsync<UserSessions>(t => t.Token == _tokenvalue);
+            if (getids.Any(t => t.Token == _tokenvalue)) {
+                var getid = getids.First(t => t.Token == _tokenvalue);
+                return getid.UserId;
             }
-            return tasks;
+            else { return 0; }
         }
 
-        //Sortowanie zadania wg kategorii
-        //public List<Task> SortTasksByCategory(List<Task> tasks)
-        //{
-        //    return tasks.OrderBy(task => task.Category).ToList();
-        //}
-        //Sortowanie zadania wg statusu (wykonane/niewykonane)
-        //public List<Task> SortTasksByStatus(List<Task> tasks)
-        //{
-        //    return tasks.OrderBy(task => task.IsDone).ToList();
-        //}
-        //Sortowanie zadania wg czasu (terminu wykonania)
-        //public List<Task> SortTasksByTime(List<Task> tasks)
-        //{
-        //    return tasks.OrderBy(task => task.DueDate).ToList();
-        //}
-        //Sortowanie zadania wg priorytetu
-        //public List<Task> SortTasksByPriority(List<Task> tasks)
-        //{
-        //    return tasks.OrderBy(task => task.Priority).ToList();
-        //}
+        [ObservableProperty]
+        private bool _isBusy;
+
+        public async Task<ObservableCollection<Tasks>> FilterTasks() {
+            if (_userId == 0) { _userId = await Getid(); }
+            await ExecuteAsync(async () => {
+                var tasks = await _context.GetFileteredAsync<Tasks>(x => x.UserId == _userId);
+                TasksCollection = new ObservableCollection<Tasks>(tasks);
+            });
+            return TasksCollection;
+        }
+        private async Task ExecuteAsync(Func<Task> operation) {
+            IsBusy = true;
+            try {
+                await operation?.Invoke();
+            }
+            catch (Exception ex) {
+            }
+            finally {
+                IsBusy = false;
+            }
+        }
     }
 
-    //Pobieranie wszystkich zadań z bazy danych do obiektu TaskManager; później zadania są sortowane wg kategorii, statusu, czasu i priorytetu
-    //class Program
-    //{
-    //    //static void Main(string[] args)
-    //    {
-    //        TaskManager taskManager = new TaskManager();
-    //        //List<Task> tasks = taskManager.GetAllTasks();
-
-    //        // Sortowanie zadań według kategorii
-    //       //List<Task> tasksByCategory = taskManager.SortTasksByCategory(tasks);
-
-    //        // Sortowanie zadań według statusu
-    //        //List<Task> tasksByStatus = taskManager.SortTasksByStatus(tasks);
-
-    //        // Sortowanie zadań według czasu
-    //        //List<Task> tasksByTime = taskManager.SortTasksByTime(tasks);
-
-    //        // Sortowanie zadań według priorytetu
-    //        //List<Task> tasksByPriority = taskManager.SortTasksByPriority(tasks);
-    //    }
-    //}
 }
