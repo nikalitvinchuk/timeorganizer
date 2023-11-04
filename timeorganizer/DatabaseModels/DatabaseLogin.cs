@@ -49,7 +49,6 @@ namespace timeorganizer.DatabaseModels
 
         public async Task<bool> AddItemAsync<TTable>(TTable item) where TTable : class, new() //dodawanie do tabeli
         {
-
             return await Execute<TTable, bool>(async () => await Database.InsertAsync(item) > 0);
         }
 

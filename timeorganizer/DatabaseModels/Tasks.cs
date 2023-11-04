@@ -14,9 +14,8 @@ namespace timeorganizer.DatabaseModels //model zadan glownych
         public string status { get; set; } // REM ACT
         public int Priority { get; set; } //priorytet zadania
         public int RealizedPercent { get; set; } //procent realizacji obliczany na podstawie liczby podzadań/liczba zralizowanych
-        public DateTime Created { get; set; } = DateTime.Now; //data utworzenia
-        public DateTime Updated { get; set; } //data aktualizacji 
-
+        public string Created { get; set; } = (DateTime.Now).ToString("dd.MM.yyyy, HH:mm"); //data utworzenia
+        public string Updated { get; set; } //data aktualizacji     // ZMIENIŁEM TYP POLA NA STRINGA - Greg
 
 
     }

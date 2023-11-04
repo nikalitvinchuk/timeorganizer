@@ -9,57 +9,53 @@
             VerticalOptions="Center" 
             TextColor="Grey"
             HorizontalOptions="Center" />
-        
-        <Label 
-    Text="Podaj tytuł swojego zadania"
-    VerticalOptions="Center" 
-    TextColor="Grey"
-    HorizontalOptions="Center" />
-        <Entry Text="{Binding YourTextProperty}" Placeholder="Np. Nauka Języka Angielskiego" IsPassword="False" Keyboard="Default" /> <!--'YourTextProperty' pole w modelu danych, do powiązania wprowadzonych tekstów.-->
+        <StackLayout x:Name="AddTaskLayout" IsVisible="False">
+            <Label 
+                Text="Podaj tytuł swojego zadania"
+                VerticalOptions="Center" 
+                TextColor="Grey"
+                HorizontalOptions="Center" />
+            <Entry Text="{Binding Path=addTask.Name}" Placeholder="Np. Nauka Języka Angielskiego" IsPassword="False" Keyboard="Default" /> <!--'YourTextProperty' pole w modelu danych, do powiązania wprowadzonych tekstów.-->
 
+            <Label 
+                Text="Opisz swoje zadania"
+                VerticalOptions="Center" 
+                TextColor="Grey"
+                HorizontalOptions="Center" />
+            <Entry Text="{Binding Path=addTask.Description}" Placeholder="Określ konkrety, które chcesz zrealizować." IsPassword="False" Keyboard="Default" />
 
-        <Label 
-    Text="Opisz swoje zadania"
-    VerticalOptions="Center" 
-    TextColor="Grey"
-    HorizontalOptions="Center" />
-        <Entry Text="{Binding YourTextProperty}" Placeholder="Określ konkrety, które chcesz zrealizować." IsPassword="False" Keyboard="Default" />
+                <!--<Label 
+            Text="Podaj nazwę swojego podzadania"
+            VerticalOptions="Center" 
+            TextColor="Grey"
+            HorizontalOptions="Center" />
+                <Entry Text="{Binding YourTextProperty}" Placeholder="to pole raczej będzie do wypełnienia dopieo po utworzeniu głównego zadania" IsPassword="False" Keyboard="Default" />-->
 
+            <Label 
+                Text="Określ typ zadania"
+                VerticalOptions="Center" 
+                TextColor="Grey"
+                HorizontalOptions="Center" />
+            <Entry Text="{Binding Path=addTask.Typ}" Placeholder="Wprowadź typ zadania: home/work/hobby/other" IsPassword="False" Keyboard="Default" />
 
-        <Label 
-    Text="Podaj nazwę swojego podzadania"
-    VerticalOptions="Center" 
-    TextColor="Grey"
-    HorizontalOptions="Center" />
-        <Entry Text="{Binding YourTextProperty}" Placeholder="to pole raczej będzie do wypełnienia dopieo po utworzeniu głównego zadania" IsPassword="False" Keyboard="Default" />
+                <!--<Label 
+            Text="Wprowadź datę utworzenia zadania: "
+            VerticalOptions="Center" 
+            TextColor="Grey"
+            HorizontalOptions="Center" />
 
+                <Entry Text="{Binding YourTextProperty}" Placeholder="dzień/miesiąc/rok" IsPassword="False" Keyboard="Default" />-->
 
-        <Label 
-    Text="Określ typ zadania"
-    VerticalOptions="Center" 
-    TextColor="Grey"
-    HorizontalOptions="Center" />
-        <Entry Text="{Binding YourTextProperty}" Placeholder="Wprowadź typ zadania: home/work/hobby/other" IsPassword="False" Keyboard="Default" />
+                <!--<Label 
+            Text="Data ostatniej aktualizacji"
+            VerticalOptions="Center" 
+            TextColor="Grey"
+            HorizontalOptions="Center" />
 
+                <Entry Text="{Binding YourTextProperty}" Placeholder="dzień/miesiąc/rok" IsPassword="False" Keyboard="Default" />-->
 
-        <Label 
-    Text="Wprowadź datę utworzenia zadania: "
-    VerticalOptions="Center" 
-    TextColor="Grey"
-    HorizontalOptions="Center" />
-
-        <Entry Text="{Binding YourTextProperty}" Placeholder="dzień/miesiąc/rok" IsPassword="False" Keyboard="Default" />
-
-        <Label 
-    Text="Data ostatniej aktualizacji"
-    VerticalOptions="Center" 
-    TextColor="Grey"
-    HorizontalOptions="Center" />
-
-        <Entry Text="{Binding YourTextProperty}" Placeholder="dzień/miesiąc/rok" IsPassword="False" Keyboard="Default" />
-
-        <Button Text="Utwórz główne zadanie" />
-
-
+            <Button Text="Utwórz główne zadanie" Command="{Binding Path=addTask.AddTaskCommand}"/>
+        </StackLayout>
+        <Button Text="Dodaj" Clicked="OnAddButtonClicked" HorizontalOptions="Center" x:Name="ButtonAddTask"/>
     </VerticalStackLayout>
 </ContentPage>

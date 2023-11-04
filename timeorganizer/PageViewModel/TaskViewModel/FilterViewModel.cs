@@ -1,8 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using SQLite;
 
-
-namespace timeorganizer.PageViewModels
+namespace timeorganizer.PageViewModel
 {
 
     public partial class FilterViewModel : ObservableObject
