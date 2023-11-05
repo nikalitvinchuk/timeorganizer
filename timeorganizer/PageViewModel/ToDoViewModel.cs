@@ -7,6 +7,6 @@ public class ToDoViewModel : ObservableObject
 {
     public AddTaskViewModel addTask { get; } = new AddTaskViewModel();
     public AddSubTaskViewModel AddSTask { get; } = new AddSubTaskViewModel();
-    public FilterViewModel ShowTask { get; } = new FilterViewModel();
+    public FilterViewModel showTask { get; } = new FilterViewModel();
 
 }

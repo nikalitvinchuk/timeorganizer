@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using timeorganizer.DatabaseModels;
 using timeorganizer.PageViewModel;
 using timeorganizer.PageViewModels;
+using Windows.UI.Xaml.Data;
 
 namespace timeorganizer.Views.LoggedPages;
 
@@ -14,15 +15,31 @@ public partial class ToDoPage : ContentPage
         InitializeComponent();
     }
     ObservableCollection<Tasks> listaZadan = new();
+    ObservableCollection<Tasks> listaSubZadan = new();
+    
     protected override async void OnAppearing() {
         base.OnAppearing();
-        FilterViewModel filterViewModel = new();
-        listaZadan = await filterViewModel.FilterTasks();
-        taskView.ItemsSource = listaZadan;
-        OnPropertyChanged(nameof(listaZadan));
+
+        //FilterViewModel filterViewModel = new();
+        //listaSubZadan = await filterViewModel.FilterTasks();
+        //listaZadan = await filterViewModel.FilterTasks();
+
+        ////
+        //taskView.ItemsSource = filterViewModel.TasksCollection;
+
+        //
+        //subTaskView.ItemsSource = listaSubZadan;
     }
+    
     private void Refresh(object sender, EventArgs e) {
-        OnAppearing();
+        
+
+    }
+    private void OnShowButtonClicekd(object sender, EventArgs e) {
+        if (taskView.IsVisible == true) 
+            taskView.IsVisible = false;
+        else
+            taskView.IsVisible = true;
     }
     private void OnAddButtonClicked(object sender, EventArgs e)
     {

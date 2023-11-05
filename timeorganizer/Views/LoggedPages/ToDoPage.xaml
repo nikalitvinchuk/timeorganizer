@@ -2,32 +2,98 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="timeorganizer.Views.LoggedPages.ToDoPage"
+             xmlns:viewModels="clr-namespace:timeorganizer.PageViewModels"
              Title="ToDoPage">
-    <VerticalStackLayout>
+    <ScrollView>
+    <VerticalStackLayout >
         <Label 
             Text="Zrealizuj swoje plany!"
             VerticalOptions="Center" 
             TextColor="Grey"
             HorizontalOptions="Center" />
 
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <!-- Rzędy dla poszczególnych zmiennych -->
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Wartości dla poszczególnych zmiennych -->
+                <Label Grid.Row="0" Grid.Column="0" Text="Name:" />
+                <Entry Grid.Row="0" Grid.Column="1" Text="{Binding Path=showTask.Name, Mode=TwoWay}" />
+
+                <Label Grid.Row="1" Grid.Column="0" Text="Description:" />
+                <Entry Grid.Row="1" Grid.Column="1" Text="{Binding Path=showTask.Description, Mode=TwoWay}" />
+
+                <Label Grid.Row="2" Grid.Column="0" Text="Type:" />
+                <Entry Grid.Row="2" Grid.Column="1" Text="{Binding Path=showTask.Typ}" />
+
+                <Label Grid.Row="3" Grid.Column="0" Text="Status:" />
+                <Entry Grid.Row="3" Grid.Column="1" Text="{Binding Path=showTask.Status}" />
+
+                <Label Grid.Row="4" Grid.Column="0" Text="Created:" />
+                <Entry Grid.Row="4" Grid.Column="1" Text="{Binding Path=showTask.Created}" />
+            </Grid>
+
+            <!--                    Przyciski sterujące wyświetlaniem danych        -->
+            <Button Text="Pokaż/Ukryj zadania" Clicked="OnShowButtonClicekd" HorizontalOptions="Center" x:Name="ShowButton"/>
+            <Button Text="Filtruj" HorizontalOptions="Center" x:Name="FilterButton" Command="{Binding Path=showTask.ShowTasks}" />
+        <!--                    Collection View Wyseitlający zadania            -->
         <CollectionView x:Name="taskView"
-                    x:FieldModifier="public"
-                    SelectionMode="Single">
+                    ItemsSource="{Binding Path=showTask.TasksCollection}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
+                        <Frame Padding="1" BackgroundColor="White">
                     <Grid Padding="5,10" BackgroundColor="#742D9E">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="1"
+                        <Label Grid.Column="0"
                            Margin="20,0"
                            Text="{Binding Name}"
                            FontSize="20" TextColor="Black"
                            FontAttributes="Bold"
                            VerticalOptions="Center" />
+                        <Label Grid.Column="1"
+                           Margin="20,0"
+                           Text="{Binding Description}"
+                           FontSize="20" TextColor="Black"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center" />
+                        <Label Grid.Column="2"
+                           Margin="20,0"
+                           Text="{Binding Type}"
+                           FontSize="20" TextColor="Black"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center" />
+                            <Label Grid.Column="3"
+                           Margin="20,0"
+                           Text="{Binding Termin}"
+                           FontSize="20" TextColor="Black"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center" />
+                            <Label Grid.Column="4"
+                           Margin="20,0"
+                           Text="{Binding status}"
+                           FontSize="20" TextColor="Black"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center" />
                     </Grid>
-                </DataTemplate>
+                        </Frame>
+                    </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
@@ -61,6 +127,14 @@
                 HorizontalOptions="Center" />
             <Entry Text="{Binding Path=addTask.Typ}" Placeholder="Wprowadź typ zadania: home/work/hobby/other" IsPassword="False" Keyboard="Default" />
 
+            <Label 
+                Text="Podaj Termin wykonanaia zadania"
+                VerticalOptions="Center" 
+                TextColor="Grey"
+                HorizontalOptions="Center" />
+                <DatePicker Date="{Binding Path=addTask.Termin, Mode=TwoWay}" MaximumDate="2024-12-31" MinimumDate="2023-01-01" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    
+
                 <!--<Label 
             Text="Wprowadź datę utworzenia zadania: "
             VerticalOptions="Center" 
@@ -82,4 +156,5 @@
         <Button Text="Dodaj" Clicked="OnAddButtonClicked" HorizontalOptions="Center" x:Name="ButtonAddTask"/>
         <!--                       KONIEC STACKU Z DODAWANIEM ZADANIA                       -Greg--> 
     </VerticalStackLayout>
+        </ScrollView>
 </ContentPage>

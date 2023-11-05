@@ -8,6 +8,7 @@ namespace timeorganizer.PageViewModels
     {
         private string _name, _desc, _type, _status;
         private int _userId, _relizedpr;
+        private DateTime _termin;
         public string Name { get => _name; set => _name = value; }
         public string Description { get => _desc; set => _desc = value; }
         public string Typ { get => _type; set => _type = value; }
@@ -16,7 +17,8 @@ namespace timeorganizer.PageViewModels
         public int UserId { get => _userId; set => _userId = value; }
         public int Progress { get => _relizedpr; set => _relizedpr = value; }
 
-        private string Modified;
+        public string Modified;
+        public DateTime Termin { get => _termin; set => _termin = value; }
         public ICommand AddTaskCommand { private set; get; }
 
         private readonly DatabaseLogin _context;
@@ -48,6 +50,13 @@ namespace timeorganizer.PageViewModels
                     ,status = Status
                     ,RealizedPercent = Progress 
                     ,Updated = Modified
+                    ,Termin = Termin.ToString("dd.MM.yyyy")
+        };
+                TaskComponents SubTask = new(){
+                    Name = Name
+                    ,Description = "Test"
+                    ,TaskId = 12
+                    ,UserId = 9
                 };
 
                 await ExecuteAsync(async () =>{
@@ -85,6 +94,7 @@ namespace timeorganizer.PageViewModels
 
                     if (i == 0) {
                         await _context.AddItemAsync<Tasks>(Task);
+                        await _context.AddItemAsync<TaskComponents>(SubTask);
                         await App.Current.MainPage.DisplayAlert("Succes", "Dodano zadanie do bazy", "Ok");
                     }
 
