@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="timeorganizer.Views.CalendarPage"
+             Title="CalendarPage">
+    <VerticalStackLayout>
+        <Label 
+            Text="Oto Twój kalendarz z wypisanymi zadaniami na konkretną date !"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        
+        <!--kalendarz z wypisanymi zadaniami coś jak google/ 
+        albo lista w której są rozpisane zadania, ale tylko i 
+        wtłącznie od dziś do przyszłości, nigdy nie ma zadań z przeszłości-->
+        
+    </VerticalStackLayout>
+</ContentPage>

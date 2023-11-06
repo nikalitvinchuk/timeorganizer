@@ -1,12 +1,7 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace timeorganizer.DatabaseModels 
+namespace timeorganizer.DatabaseModels
 {
     public class DatabaseLogin : IAsyncDisposable // przykładowy plik jak korzystać z połączenia do bazy danych stworzony dla rejestracji RegisterPageviewModel - dane podane z palca
     {
@@ -14,8 +9,8 @@ namespace timeorganizer.DatabaseModels
         private static string DbPath => Path.Combine(FileSystem.AppDataDirectory, DbName);
 
         private SQLiteAsyncConnection _connection;
-        private SQLiteAsyncConnection Database =>
-            (_connection ??= new SQLiteAsyncConnection(DbPath,
+        private SQLiteAsyncConnection Database => 
+             (_connection ??= new SQLiteAsyncConnection(DbPath,
                 SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.SharedCache)); // polączenie do bazy
 
         private async Task CreateTableIfNotExists<TTable>() where TTable : class, new() //tworzenie tabel z klas
@@ -29,6 +24,12 @@ namespace timeorganizer.DatabaseModels
             return Database.Table<TTable>();
         }
 
+        public async Task<List<TTable>> GetByQuery<TTable>(string query, params object[] args) where TTable : class, new() {
+            return await Database.QueryAsync<TTable>(query, args);
+        } //Dodałem żebym móc wykonywać operacje SQL-a na bazie/ potrzebuję do dynamicznego filtrowania
+          //Przykąłd użycie:
+                            //var query = $"SELECT * FROM Tasks WHERE UserId = {_userId}";
+                            //var tasks = await _context.GetByQuery<Tasks>(query);
         public async Task<IEnumerable<TTable>> GetAllAsync<TTable>() where TTable : class, new() //odczyt z tabeli 
         {
             var table = await GetTableAsync<TTable>();
@@ -38,10 +39,11 @@ namespace timeorganizer.DatabaseModels
         public async Task<IEnumerable<TTable>> GetFileteredAsync<TTable>(Expression<Func<TTable, bool>> predicate) where TTable : class, new() //wyszukiwanie w tabeli - przekazujemy funckje
         {
             var table = await GetTableAsync<TTable>();
-            return await table.Where(predicate).ToListAsync();
+            var tt = await table.Where(predicate).ToListAsync();
+            return tt;
         }
 
-        private async Task<TResult> Execute<TTable, TResult>(Func<Task<TResult>> action) where TTable : class, new() 
+        private async Task<TResult> Execute<TTable, TResult>(Func<Task<TResult>> action) where TTable : class, new()
         {
             await CreateTableIfNotExists<TTable>();
             return await action();
@@ -54,7 +56,6 @@ namespace timeorganizer.DatabaseModels
 
         public async Task<bool> AddItemAsync<TTable>(TTable item) where TTable : class, new() //dodawanie do tabeli
         {
-
             return await Execute<TTable, bool>(async () => await Database.InsertAsync(item) > 0);
         }
 
@@ -77,6 +78,23 @@ namespace timeorganizer.DatabaseModels
         }
 
         public async ValueTask DisposeAsync() => await _connection?.CloseAsync(); // zamkniecie polaczenia z baza
+
+
+
+
+        public  Expression<Func<TTable, bool>> CreatePredicateToFiltred<TTable>(IDictionary<string, object> parameters)
+        {
+            var param = Expression.Parameter(typeof(TTable), "p");
+            Expression? body = null;
+            foreach (var pair in parameters)
+            {
+                var member = Expression.Property(param, pair.Key);
+                var constant = Expression.Constant(pair.Value);
+                var expression = Expression.Equal(member, constant);
+                body = body == null ? expression : Expression.AndAlso(body, expression);
+            }
+            return Expression.Lambda<Func<TTable, bool>>(body, param);
+        }
     }
 }
 

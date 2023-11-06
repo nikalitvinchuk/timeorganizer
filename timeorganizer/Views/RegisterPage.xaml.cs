@@ -9,12 +9,12 @@ public partial class RegisterPage : ContentPage
 
     public RegisterPage(RegisterPageViewModel viewModel)
     {
-        
+
         BindingContext = viewModel;
         _viewModel = viewModel;
         InitializeComponent();
     }
-   
+
     public void GotoLoginClicked(object sender, EventArgs e)
     {
         Shell.Current.GoToAsync("LoginPage");

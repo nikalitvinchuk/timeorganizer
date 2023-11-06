@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="timeorganizer.Views.LoggedPages.SettingsPage"
+             Title="SettingsPage">
+    <VerticalStackLayout>
+        <Label 
+            Text="Welcome to .NET MAUI!"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
+
+        <Button
+            x:Name="LoginButton"
+            Text="DELETE"
+            SemanticProperties.Hint="Zaloguj się do konta"
+            Command="{Binding DeleteAccount}"
+            HorizontalOptions="Center"
+            WidthRequest="250"
+            BorderColor="LightYellow"
+            BorderWidth="1"
+            BackgroundColor="MediumPurple"
+            CornerRadius="25"
+            TextColor="White"
+            />
+        <Button
+    x:Name="EMAIL"
+    Text="EMAIL"
+    SemanticProperties.Hint="Zaloguj się do konta"
+    Command="{Binding ChangeEmail}"
+    HorizontalOptions="Center"
+    WidthRequest="250"
+    BorderColor="LightYellow"
+    BorderWidth="1"
+    BackgroundColor="MediumPurple"
+    CornerRadius="25"
+    TextColor="White"
+    />
+        <Button
+    x:Name="HASLO"
+    Text="HASLO"
+    SemanticProperties.Hint="Zaloguj się do konta"
+    Command="{Binding ChangePassword}"
+    HorizontalOptions="Center"
+    WidthRequest="250"
+    BorderColor="LightYellow"
+    BorderWidth="1"
+    BackgroundColor="MediumPurple"
+    CornerRadius="25"
+    TextColor="White"
+    />
+        <Button
+x:Name="EIH"
+Text="EMAIL I HASLO"
+SemanticProperties.Hint="Zaloguj się do konta"
+Command="{Binding ChangeEmailAndPassword}"
+HorizontalOptions="Center"
+WidthRequest="250"
+BorderColor="LightYellow"
+BorderWidth="1"
+BackgroundColor="MediumPurple"
+CornerRadius="25"
+TextColor="White"
+/>
+    </VerticalStackLayout>
+</ContentPage>

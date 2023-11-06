@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="timeorganizer.Views.LoggedPages.ContactsPage"
+             Title="ContactsPage">
+    <VerticalStackLayout>
+        <Label 
+            Text="Wszystkie pytania oraz informację proszę kierować na maila: timeorganizer@xyz.com"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Label 
+             Text="Infolinia: +48 123456789"
+             VerticalOptions="Center" 
+             HorizontalOptions="Center" />
+        <Label 
+            Text="Klient kontaktując się z nami akceptuje informacje odnośnie RODO."
+            VerticalOptions="Center" 
+            TextColor="Grey"
+            HorizontalOptions="Center" />
+    </VerticalStackLayout>
+</ContentPage>

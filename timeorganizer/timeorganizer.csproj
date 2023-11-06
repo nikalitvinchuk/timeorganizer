@@ -49,6 +49,41 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Nowy folder1\**" />
+	  <AndroidResource Remove="Nowy folder2\**" />
+	  <AndroidResource Remove="Nowy folder\**" />
+	  <Compile Remove="Nowy folder1\**" />
+	  <Compile Remove="Nowy folder2\**" />
+	  <Compile Remove="Nowy folder\**" />
+	  <EmbeddedResource Remove="Nowy folder1\**" />
+	  <EmbeddedResource Remove="Nowy folder2\**" />
+	  <EmbeddedResource Remove="Nowy folder\**" />
+	  <MauiCss Remove="Nowy folder1\**" />
+	  <MauiCss Remove="Nowy folder2\**" />
+	  <MauiCss Remove="Nowy folder\**" />
+	  <MauiXaml Remove="Nowy folder1\**" />
+	  <MauiXaml Remove="Nowy folder2\**" />
+	  <MauiXaml Remove="Nowy folder\**" />
+	  <None Remove="Nowy folder1\**" />
+	  <None Remove="Nowy folder2\**" />
+	  <None Remove="Nowy folder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Remove="Resources\Images\Image1.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Images\background1.png" />
+	  <None Remove="Resources\Images\background2.png" />
+	  <None Remove="Resources\Images\Image1.png" />
+	  <None Remove="Resources\Images\spice.png" />
+	  <None Remove="Resources\Images\time.png" />
+	  <None Remove="Resources\Images\user.png" />
+	  <None Remove="Resources\Images\user2.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
@@ -57,6 +92,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\CalendarPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoggedPages\ContactsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\LoggedPages\FlyoutLoggedPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -64,6 +105,21 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LoggedMainPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoggedPages\InstagramPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoggedPages\NotesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoggedPages\SettingsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoggedPages\StatisticsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoggedPages\ToDoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginPage.xaml">

@@ -9,7 +9,7 @@
              IconImageSource="hamburger.png"
              Title=" ">
         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                Spacing="10" Margin="10,20">
+                Spacing="10" Margin="10,20" BackgroundColor="#742D9E">
 
         <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="5" >
             <Image Aspect="AspectFit" Source="test" 
@@ -39,7 +39,7 @@
                     SelectionMode="Single">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="5,10" >
+                    <Grid Padding="5,10" BackgroundColor="#742D9E">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30"/>
                             <ColumnDefinition Width="*" />
@@ -59,7 +59,7 @@
         <BoxView HeightRequest="1" BackgroundColor="White"/>
 
         <StackLayout VerticalOptions="EndAndExpand">
-            <Label Text="Testowe menu"
+            <Label Text="Bieżąca data"
                TextColor="Black"
                FontAttributes="Bold"
                HorizontalOptions="Center" />

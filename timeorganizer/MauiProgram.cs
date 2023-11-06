@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using timeorganizer.DatabaseModels;
-using timeorganizer.Views;
 using timeorganizer.PageViewModels;
+using timeorganizer.Views;
+
 
 namespace timeorganizer
 {
@@ -19,12 +20,14 @@ namespace timeorganizer
                 });
 
 #if DEBUG
-		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
             builder.Services.AddSingleton<DatabaseLogin>();
             builder.Services.AddSingleton<Users>();
-            builder.Services.AddSingleton<RegisterPageViewModel>(); 
+            builder.Services.AddSingleton<RegisterPageViewModel>();
             builder.Services.AddSingleton<RegisterPage>();
+            builder.Services.AddSingleton<LoginPage>();
+            builder.Services.AddSingleton<LoginPageViewModel>();
             return builder.Build();
         }
     }
