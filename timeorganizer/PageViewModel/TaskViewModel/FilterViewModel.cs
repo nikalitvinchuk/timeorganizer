@@ -3,8 +3,9 @@ using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 
@@ -54,22 +55,38 @@ namespace timeorganizer.PageViewModel {
 
         public async Task<ObservableCollection<Tasks>> FilterTasks() {
             if (_userId == 0) { _userId = await Getid(); }
-            List<string> Lista_zapytan = new();
-            List<string> ListaZmienych = new() { "Name", "Description", "Type", "Status", "Created" };
+            //List<string> Lista_zapytan = new();
+            //List<string> ListaZmienych = new() { "Name", "Description", "Type", "Status", "Created" };
             await ExecuteAsync(async () => {
-                foreach (string Zmienna in ListaZmienych) {
-                    var wartosc = GetType().GetProperty(Zmienna)?.GetValue(this, null)?.ToString();
-                    if (!string.IsNullOrEmpty(wartosc)) {
-                        Lista_zapytan.Add($"{Zmienna} = '{wartosc}'");
-                    }
-                }
-                var query = "SELECT * FROM Tasks WHERE UserId = " + _userId;
-                if (Lista_zapytan.Count > 0) {
-                    query += " AND " + string.Join(" AND ", Lista_zapytan);
-                }
-                var tasks = await _context.GetByQuery<Tasks>(query);
-                TasksCollection = new ObservableCollection<Tasks>(tasks);
+                //foreach (string Zmienna in ListaZmienych) {
+                //    var wartosc = GetType().GetProperty(Zmienna)?.GetValue(this, null)?.ToString();
+                //    if (!string.IsNullOrEmpty(wartosc)) {
+                //        Lista_zapytan.Add($"{Zmienna} = '{wartosc}'");
+                //    }
+                //}
+                //var query = "SELECT * FROM Tasks WHERE UserId = " + _userId;
+                //if (Lista_zapytan.Count > 0) {
+                //    query += " AND " + string.Join(" AND ", Lista_zapytan);
+                //}
+                //var tasks = await _context.GetByQuery<Tasks>(query);
+                //
+                //
+
+                // ZMIENIONE TAK ABY KORZYSTALO Z GOTOWEJ FUNKCJI :)  - JB
+                var filters = new Dictionary<string, object>
+                {
+                    { "Userid", _userId }
+                };
+                if (!string.IsNullOrWhiteSpace(_name)) filters.Add("Name", _name);
+                if (!string.IsNullOrWhiteSpace(_description)) filters.Add("Description", _description);
+                if (!string.IsNullOrWhiteSpace(_typ)) filters.Add("Type", _typ);
+                if (!string.IsNullOrWhiteSpace(_status)) filters.Add("Status", _status);
+                if (!string.IsNullOrWhiteSpace(_created)) filters.Add("Created", _created);
+               
+                TasksCollection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters)));
+                filters.Clear();
                 OnPropertyChanged(nameof(TasksCollection));
+
             });
             return TasksCollection;
         }
@@ -85,6 +102,9 @@ namespace timeorganizer.PageViewModel {
                 IsBusy = false;
             }
         }
+
+        
+
     }
 
 }

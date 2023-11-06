@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using timeorganizer.PageViewModel;
 
 namespace timeorganizer.Views.LoggedPages;
@@ -14,5 +15,6 @@ public partial class SettingsPage : ContentPage
         }
         InitializeComponent();
     }
+    
 
 }
