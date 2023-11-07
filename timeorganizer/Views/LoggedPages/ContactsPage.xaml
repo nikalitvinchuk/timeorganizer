@@ -12,6 +12,27 @@
              Text="Infolinia: +48 123456789"
              VerticalOptions="Center" 
              HorizontalOptions="Center" />
+
+        <Label 
+             Text="Formularz kontaktowy:"
+             VerticalOptions="Center" 
+             HorizontalOptions="Center" />
+
+        <Label 
+             Text="Podaj mail/telefon aby otrzymać odpowiedz"
+             VerticalOptions="Center" 
+             HorizontalOptions="Center" />
+        <Entry Text="{Binding Path=addTask.Description}" Placeholder="przykładowy@mail.com" IsPassword="False" Keyboard="Default" />
+
+        <Label 
+               Text="Komentarz"
+               VerticalOptions="Center" 
+               HorizontalOptions="Center" />    
+        <Entry Text="{Binding Path=addTask.Description}" Placeholder="Nie wiem jak w aplikacji ..." IsPassword="False" Keyboard="Default" />
+
+        <Button Text="Wyślij" Command="{Binding Path=addTask.AddTaskCommand}" />
+
+
         <Label 
             Text="Klient kontaktując się z nami akceptuje informacje odnośnie RODO."
             VerticalOptions="Center" 
