@@ -9,7 +9,7 @@ namespace timeorganizer.DatabaseModels
         private static string DbPath => Path.Combine(FileSystem.AppDataDirectory, DbName);
 
         private SQLiteAsyncConnection _connection;
-        private SQLiteAsyncConnection Database => 
+        private SQLiteAsyncConnection Database =>
              (_connection ??= new SQLiteAsyncConnection(DbPath,
                 SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.SharedCache)); // polączenie do bazy
 
@@ -24,12 +24,13 @@ namespace timeorganizer.DatabaseModels
             return Database.Table<TTable>();
         }
 
-        public async Task<List<TTable>> GetByQuery<TTable>(string query, params object[] args) where TTable : class, new() {
+        public async Task<List<TTable>> GetByQuery<TTable>(string query, params object[] args) where TTable : class, new()
+        {
             return await Database.QueryAsync<TTable>(query, args);
         } //Dodałem żebym móc wykonywać operacje SQL-a na bazie/ potrzebuję do dynamicznego filtrowania
           //Przykąłd użycie:
-                            //var query = $"SELECT * FROM Tasks WHERE UserId = {_userId}";
-                            //var tasks = await _context.GetByQuery<Tasks>(query);
+          //var query = $"SELECT * FROM Tasks WHERE UserId = {_userId}";
+          //var tasks = await _context.GetByQuery<Tasks>(query);
         public async Task<IEnumerable<TTable>> GetAllAsync<TTable>() where TTable : class, new() //odczyt z tabeli 
         {
             var table = await GetTableAsync<TTable>();
@@ -82,7 +83,7 @@ namespace timeorganizer.DatabaseModels
 
 
 
-        public  Expression<Func<TTable, bool>> CreatePredicateToFiltred<TTable>(IDictionary<string, object> parameters)
+        public Expression<Func<TTable, bool>> CreatePredicateToFiltred<TTable>(IDictionary<string, object> parameters)
         {
             var param = Expression.Parameter(typeof(TTable), "p");
             Expression? body = null;

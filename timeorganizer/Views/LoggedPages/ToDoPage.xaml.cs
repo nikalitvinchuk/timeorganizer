@@ -2,8 +2,6 @@ using System.Collections.ObjectModel;
 using timeorganizer.DatabaseModels;
 using timeorganizer.PageViewModel;
 using timeorganizer.PageViewModels;
-using Windows.UI.Xaml.Data;
-
 namespace timeorganizer.Views.LoggedPages;
 
 public partial class ToDoPage : ContentPage

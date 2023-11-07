@@ -1,17 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 
-namespace timeorganizer.PageViewModel {
+namespace timeorganizer.PageViewModel
+{
 
-    public partial class FilterViewModel : ObservableObject {
+    public partial class FilterViewModel : ObservableObject
+    {
 
         private string _name, _description, _typ, _status, _created;
         private int _priority, _prcomplited, _userId;
@@ -35,29 +31,34 @@ namespace timeorganizer.PageViewModel {
         public ICommand ShowTasks { private set; get; }
 
         private readonly DatabaseLogin _context;
-        public FilterViewModel() {
+        public FilterViewModel()
+        {
             _context = new DatabaseLogin();
             ShowTasks = new Command(async () => await FilterTasks());
             //ShowTasks = new Command(FilterTasks);
         }
-        private async Task<int> Getid() {
+        private async Task<int> Getid()
+        {
             string _tokenvalue = await SecureStorage.Default.GetAsync("token");
             var getids = await _context.GetFileteredAsync<UserSessions>(t => t.Token == _tokenvalue);
-            if (getids.Any(t => t.Token == _tokenvalue)) {
+            if (getids.Any(t => t.Token == _tokenvalue))
+            {
                 var getid = getids.First(t => t.Token == _tokenvalue);
                 return getid.UserId;
             }
             else { return 0; }
         }
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private bool _isBusy;
 
-        public async Task<ObservableCollection<Tasks>> FilterTasks() {
+        public async Task<ObservableCollection<Tasks>> FilterTasks()
+        {
             if (_userId == 0) { _userId = await Getid(); }
             //List<string> Lista_zapytan = new();
             //List<string> ListaZmienych = new() { "Name", "Description", "Type", "Status", "Created" };
-            await ExecuteAsync(async () => {
+            await ExecuteAsync(async () =>
+            {
                 //foreach (string Zmienna in ListaZmienych) {
                 //    var wartosc = GetType().GetProperty(Zmienna)?.GetValue(this, null)?.ToString();
                 //    if (!string.IsNullOrEmpty(wartosc)) {
@@ -82,7 +83,7 @@ namespace timeorganizer.PageViewModel {
                 if (!string.IsNullOrWhiteSpace(_typ)) filters.Add("Type", _typ);
                 if (!string.IsNullOrWhiteSpace(_status)) filters.Add("Status", _status);
                 if (!string.IsNullOrWhiteSpace(_created)) filters.Add("Created", _created);
-               
+
                 TasksCollection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters)));
                 filters.Clear();
                 OnPropertyChanged(nameof(TasksCollection));
@@ -91,19 +92,23 @@ namespace timeorganizer.PageViewModel {
             return TasksCollection;
         }
 
-            private async Task ExecuteAsync(Func<Task> operation) {
+        private async Task ExecuteAsync(Func<Task> operation)
+        {
             IsBusy = true;
-            try {
+            try
+            {
                 await operation?.Invoke();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
             }
-            finally {
+            finally
+            {
                 IsBusy = false;
             }
         }
 
-        
+
 
     }
 
