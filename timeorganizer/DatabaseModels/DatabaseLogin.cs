@@ -24,6 +24,13 @@ namespace timeorganizer.DatabaseModels
             return Database.Table<TTable>();
         }
 
+        public async Task<List<TTable>> GetByQuery<TTable>(string query, params object[] args) where TTable : class, new()
+        {
+            return await Database.QueryAsync<TTable>(query, args);
+        } //Dodałem żebym móc wykonywać operacje SQL-a na bazie/ potrzebuję do dynamicznego filtrowania
+          //Przykąłd użycie:
+          //var query = $"SELECT * FROM Tasks WHERE UserId = {_userId}";
+          //var tasks = await _context.GetByQuery<Tasks>(query);
         public async Task<IEnumerable<TTable>> GetAllAsync<TTable>() where TTable : class, new() //odczyt z tabeli 
         {
             var table = await GetTableAsync<TTable>();
@@ -33,7 +40,8 @@ namespace timeorganizer.DatabaseModels
         public async Task<IEnumerable<TTable>> GetFileteredAsync<TTable>(Expression<Func<TTable, bool>> predicate) where TTable : class, new() //wyszukiwanie w tabeli - przekazujemy funckje
         {
             var table = await GetTableAsync<TTable>();
-            return await table.Where(predicate).ToListAsync();
+            var tt = await table.Where(predicate).ToListAsync();
+            return tt;
         }
 
         private async Task<TResult> Execute<TTable, TResult>(Func<Task<TResult>> action) where TTable : class, new()
@@ -71,6 +79,23 @@ namespace timeorganizer.DatabaseModels
         }
 
         public async ValueTask DisposeAsync() => await _connection?.CloseAsync(); // zamkniecie polaczenia z baza
+
+
+
+
+        public Expression<Func<TTable, bool>> CreatePredicateToFiltred<TTable>(IDictionary<string, object> parameters)
+        {
+            var param = Expression.Parameter(typeof(TTable), "p");
+            Expression? body = null;
+            foreach (var pair in parameters)
+            {
+                var member = Expression.Property(param, pair.Key);
+                var constant = Expression.Constant(pair.Value);
+                var expression = Expression.Equal(member, constant);
+                body = body == null ? expression : Expression.AndAlso(body, expression);
+            }
+            return Expression.Lambda<Func<TTable, bool>>(body, param);
+        }
     }
 }
 

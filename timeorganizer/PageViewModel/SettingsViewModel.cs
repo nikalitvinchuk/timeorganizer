@@ -38,10 +38,12 @@ namespace timeorganizer.PageViewModel
         // WALIDACJA HASEL
 
         //POBRANIE ID Z SESJI 
-        private async Task<int> Getid() {
+        private async Task<int> Getid()
+        {
             string _tokenvalue = await SecureStorage.Default.GetAsync("token");
             var getids = await _context.GetFileteredAsync<UserSessions>(t => t.Token == _tokenvalue);
-            if (getids.Any(t => t.Token == _tokenvalue)) {
+            if (getids.Any(t => t.Token == _tokenvalue))
+            {
                 var getid = getids.First(t => t.Token == _tokenvalue);
                 return getid.UserId;
             }
@@ -81,7 +83,7 @@ namespace timeorganizer.PageViewModel
             if (_id == 0) _id = await Getid();
 
             Users user = new Users();
-            user = _context.GetItemByKeyAsync<Users>(_id).Result;
+            user = await _context.GetItemByKeyAsync<Users>(_id);
             if (validateEmail())
             {
                 user.Email = _email;
@@ -95,7 +97,7 @@ namespace timeorganizer.PageViewModel
         {
             if (_id == 0) _id = await Getid();
             Users user = new Users();
-            user = _context.GetItemByKeyAsync<Users>(_id).Result;
+            user = await _context.GetItemByKeyAsync<Users>(_id);
             if (validatepassword())
             {
                 user.Password = _password;
@@ -108,12 +110,12 @@ namespace timeorganizer.PageViewModel
         {
             if (_id == 0) _id = await Getid();
             Users user = new Users();
-            user = _context.GetItemByKeyAsync<Users>(_id).Result;
+            user = await _context.GetItemByKeyAsync<Users>(_id);
             if (_passwordconfirm == user.Password)
             {
                 await _context.DeleteItemAsync<Users>(user);
             }
-
+            App.Current.MainPage = new AppShell();
         }
         // ZMIANA HASLA I EMAIL
         private void ChangeAllCommand()

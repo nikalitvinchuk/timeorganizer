@@ -17,8 +17,8 @@ namespace timeorganizer.DatabaseModels //model podzadan obecnie nie wykorzystywa
         public bool TaskComplited { get; set; }
         public bool IsActive { get; set; }
 
-        public DateTime Created { get; set; } = DateTime.Now;
-        public DateTime LastUpdated { get; set; }
+        public string Created { get; set; }
+        public string LastUpdated { get; set; }
 
 
     }
