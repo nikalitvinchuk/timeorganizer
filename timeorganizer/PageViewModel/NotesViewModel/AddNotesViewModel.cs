@@ -105,6 +105,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
             }
             catch (Exception ex)
             {
+                await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
             }
             finally
             {

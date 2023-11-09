@@ -84,7 +84,7 @@ namespace timeorganizer.PageViewModel
                 if (!string.IsNullOrWhiteSpace(_status)) filters.Add("Status", _status);
                 if (!string.IsNullOrWhiteSpace(_created)) filters.Add("Created", _created);
 
-                TasksCollection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters)));
+                TasksCollection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>( _context.CreatePredicateToFiltred<Tasks>(filters)));
                 filters.Clear();
                 OnPropertyChanged(nameof(TasksCollection));
 
@@ -101,6 +101,7 @@ namespace timeorganizer.PageViewModel
             }
             catch (Exception ex)
             {
+                await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
             }
             finally
             {

@@ -90,13 +90,14 @@ namespace timeorganizer.PageViewModels
         private async Task ExecuteAsync(Func<Task> operation)
         {
             IsBusy = true;
-#pragma warning disable CS0168 // Zmienna jest zadeklarowana, ale nie jest nigdy u¿ywana
             try
             {
                 await operation?.Invoke();
             }
-            catch (Exception ex) { }
-#pragma warning restore CS0168 // Zmienna jest zadeklarowana, ale nie jest nigdy u¿ywana
+            catch (Exception ex) {
+                await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok"); 
+            }
+
             finally
             {
                 IsBusy = false;

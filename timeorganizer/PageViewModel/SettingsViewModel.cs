@@ -1,11 +1,13 @@
-﻿using System.Windows.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Text;
+using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 
 
 
 namespace timeorganizer.PageViewModel
 {
-    public class SettingsViewModel
+    public partial class SettingsViewModel : ObservableObject
     {
         private readonly DatabaseLogin _context;
 
@@ -28,6 +30,8 @@ namespace timeorganizer.PageViewModel
         public string ConfirmPassword { get => _passwordconfirm; set => _passwordconfirm = value; }
         public string CurrentPassword { get => _currentpassword; set => _currentpassword = value; }
 
+        [ObservableProperty]
+        private bool _IsBusy = false;
         // KOMENDY DO WYWOLANIA W DANEJ KOMENDZIE - NA DANA METODE POWINNO OTWIERAC SIE NOWE OKNO Z ODPOWIEDNIMI
         // POLAMI DO UZUPELNIENIA 
         public ICommand ChangePassword { private set; get; }
@@ -49,7 +53,7 @@ namespace timeorganizer.PageViewModel
             }
             else { return 0; }
         }
-        private bool validatepassword()
+        private async Task<bool> validatepassword()
         {
             if (string.IsNullOrWhiteSpace(_currentpassword)) return false;
             if (_currentpassword.Length == 0) return false;
@@ -58,7 +62,10 @@ namespace timeorganizer.PageViewModel
             if (string.IsNullOrWhiteSpace(_passwordconfirm)) return false;
             if (_passwordconfirm.Length == 0) return false;
             Users user = new Users();
-            user = _context.GetItemByKeyAsync<Users>(_id).Result;
+            await ExecuteAsync(async () =>
+            {
+                user = await _context.GetItemByKeyAsync<Users>(_id);
+            });
             if (user == null) return false;
             if (user.Password != CurrentPassword) return false;
             if (user.Password == Password) return false;
@@ -80,48 +87,81 @@ namespace timeorganizer.PageViewModel
         // ZMIANA EMAIL
         private async void ChangeEmailCommand()
         {
-            if (_id == 0) _id = await Getid();
-
-            Users user = new Users();
-            user = await _context.GetItemByKeyAsync<Users>(_id);
-            if (validateEmail())
+            await ExecuteAsync(async () =>
             {
-                user.Email = _email;
-                user.DataModified = (DateTime.Now).ToLongDateString();
-                await _context.UpdateItemAsync<Users>(user);
+                if (_id == 0) _id = await Getid();
+
+                Users user = new Users();
+                user = await _context.GetItemByKeyAsync<Users>(_id);
+                if (validateEmail())
+                {
+                    user.Email = _email;
+                    user.DataModified = (DateTime.Now).ToLongDateString();
+                    await _context.UpdateItemAsync<Users>(user);
+                }
             }
+            );
+            
         }
         // ZMIANA HASLA
         private async void ChangePasswordCommand()
 
         {
-            if (_id == 0) _id = await Getid();
-            Users user = new Users();
-            user = await _context.GetItemByKeyAsync<Users>(_id);
-            if (validatepassword())
+            await ExecuteAsync(async () =>
             {
-                user.Password = _password;
-                user.DataModified = (DateTime.Now).ToLongDateString();
-                await _context.UpdateItemAsync(user);
+                if (_id == 0) _id = await Getid();
+                Users user = new Users();
+                user = await _context.GetItemByKeyAsync<Users>(_id);
+                if (await validatepassword())
+                {
+                    user.Password = _password;
+                    user.DataModified = (DateTime.Now).ToLongDateString();
+                    await _context.UpdateItemAsync(user);
+                }
             }
+            );
+            
         }
         // USUWANIE KONTA
         private async void DeleteAccountCommand()
         {
-            if (_id == 0) _id = await Getid();
-            Users user = new Users();
-            user = await _context.GetItemByKeyAsync<Users>(_id);
-            if (_passwordconfirm == user.Password)
+            await ExecuteAsync(async () =>
             {
-                await _context.DeleteItemAsync<Users>(user);
+                if (_id == 0) _id = await Getid();
+                Users user = new Users();
+                user = await _context.GetItemByKeyAsync<Users>(_id);
+                if (_passwordconfirm == user.Password)
+                {
+                    await _context.DeleteItemAsync<Users>(user);
+                }
+                App.Current.MainPage = new AppShell();
             }
-            App.Current.MainPage = new AppShell();
+            );
+            
         }
         // ZMIANA HASLA I EMAIL
         private void ChangeAllCommand()
         {
+
             ChangeEmailCommand();
             ChangePasswordCommand();
+        }
+
+        private async Task ExecuteAsync(Func<Task> operation)
+        {
+            IsBusy = true;
+            try
+            {
+                await operation?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
     }
 }

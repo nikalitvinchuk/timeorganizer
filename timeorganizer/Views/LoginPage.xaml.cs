@@ -9,7 +9,6 @@ public partial class LoginPage : ContentPage
 
     public LoginPage(LoginPageViewModel viewModel)
     {
-
         BindingContext = viewModel;
         _viewModel = viewModel;
         InitializeComponent();
