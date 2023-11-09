@@ -15,5 +15,18 @@
     Title="Home"
     ContentTemplate="{DataTemplate views:RegisterPage}"
     Route="RegisterPage" />
+    <!--<Shell.Resources>
+    <ResourceDictionary>
+        --><!-- Definicja kolorów --><!--
+        <Color x:Key="PrimaryColor">#3498db</Color>
+        <Color x:Key="SecondaryColor">#2ecc71</Color>
+
+        --><!-- Definicja stylu dla Label -->
+        <!--<Style TargetType="Label" x:Key="CustomLabelStyle">
+            <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>--><!--
+    </ResourceDictionary>
+    </Shell.Resources>-->
 
 </Shell>
