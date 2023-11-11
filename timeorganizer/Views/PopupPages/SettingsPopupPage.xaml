@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:pages="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  xmlns:mopupsanim="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  x:Class="timeorganizer.Views.PopupPages.SettingsPopupPage"
+                 Title="SettingsPopupPage"
+                  BackgroundColor="#80000000"
+                  CloseWhenBackgroundIsClicked="False">
+
+    <pages:PopupPage.Animation>
+        <mopupsanim:ScaleAnimation
+            DurationIn="700"
+            EasingIn="BounceOut"
+            PositionIn="Bottom"
+            PositionOut="Center"
+            ScaleIn="1"
+            ScaleOut="0.7" />
+    </pages:PopupPage.Animation>
+    <ScrollView HorizontalOptions="Center" VerticalOptions="Center">
+        <Border WidthRequest="350" HeightRequest="500"
+                BackgroundColor="AntiqueWhite"
+                HorizontalOptions="Center">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="40,0,0,40"/>
+            </Border.StrokeShape>
+            <VerticalStackLayout Spacing="3">
+                <Label x:Name="Email_label" HorizontalOptions="Center" Text="Podaj Nowy Email"  IsVisible="False"/> 
+                <Entry
+                    x:Name="Email"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Placeholder="Nowy Email" IsVisible="False" Text="{Binding Email}"/>
+                <Label x:Name="Password_label" HorizontalOptions="Center"  Text="Podaj Nowe hasło" />
+                <Entry
+                    x:Name="Password" IsPassword="True"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Placeholder="Nowe Hasło" Text="{Binding Password}" IsVisible="False"/>
+                <Label x:Name="PasswordVerif_label" HorizontalOptions="Center"  Text="Powtórz nowe hasło"  IsVisible="False"/>
+                <Entry
+                    x:Name="PasswordVerif" IsPassword="True"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Placeholder="Powtórz Hasło" IsVisible="False" Text="{Binding ConfirmPassword}"/>
+                <Label x:Name="PasswordConfirm_label" HorizontalOptions="Center" Text="Podaj obecne hasło" />
+                <Entry
+                    x:Name="PasswordConfirm" IsPassword="True"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Placeholder="Podaj obecne Hasło" Text="{Binding CurrentPassword}"/>
+                <Label x:Name="CurPass" HorizontalOptions="Center" Text="Podaj Nowy Email" IsVisible="False"/>
+
+                <Button
+                    x:Name="AcceptButton"
+                    Margin="10,5"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="EndAndExpand"
+                    BackgroundColor="Green"
+                    Text="Zatwierdz">
+                </Button>
+                <Button
+                    x:Name="DenyButton"
+                    Margin="10,5"
+                    HorizontalOptions="Fill"
+                    BackgroundColor="Red"
+                    VerticalOptions="EndAndExpand"
+                    Text="Anuluj"
+                    Clicked="Deny_Clicked">
+                </Button>
+            </VerticalStackLayout>
+        </Border>
+
+    </ScrollView>
+</pages:PopupPage>

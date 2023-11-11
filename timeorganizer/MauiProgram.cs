@@ -2,7 +2,10 @@
 using timeorganizer.DatabaseModels;
 using timeorganizer.PageViewModels;
 using timeorganizer.Views;
-
+using Mopups;
+using Mopups.Hosting;
+using Mopups.Interfaces;
+using Mopups.Services;
 
 namespace timeorganizer
 {
@@ -28,6 +31,8 @@ namespace timeorganizer
             builder.Services.AddSingleton<RegisterPage>();
             builder.Services.AddSingleton<LoginPage>();
             builder.Services.AddSingleton<LoginPageViewModel>();
+            builder.Services.AddSingleton<IPopupNavigation>(MopupService.Instance);
+            builder.ConfigureMopups();
             return builder.Build();
         }
     }
