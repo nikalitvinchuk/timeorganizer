@@ -1,11 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
+using timeorganizer.PageViewModel;
 
 namespace timeorganizer.PageViewModels
 {//dodawanie nowych zadań
     public partial class AddTaskViewModel : ObservableObject
     {
+
         private string _name, _desc, _type, _status;
         private int _userId, _relizedpr;
         private DateTime _termin;
@@ -22,6 +24,9 @@ namespace timeorganizer.PageViewModels
         public ICommand AddTaskCommand { private set; get; }
 
         private readonly DatabaseLogin _context;
+
+        
+
         public AddTaskViewModel()
         {
             _context = new DatabaseLogin();
@@ -77,6 +82,8 @@ namespace timeorganizer.PageViewModels
 
             await ExecuteAsync(async () =>
             {
+                var activityViewModel = new ActivityViewModel();
+
                 List<string> list = new() { Name, Description, Typ, Status, UserId.ToString(), Progress.ToString() };
                 int i = 0;
                 string nazwa = "";
@@ -119,7 +126,9 @@ namespace timeorganizer.PageViewModels
                 {
                     await _context.AddItemAsync<Tasks>(Task);
                     await _context.AddItemAsync<TaskComponents>(SubTask);
+                    await activityViewModel.ChangeExpirationDateCommand();
                     await App.Current.MainPage.DisplayAlert("Succes", "Dodano zadanie do bazy", "Ok");
+                    
                 }
 
             });

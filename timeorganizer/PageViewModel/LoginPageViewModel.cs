@@ -1,11 +1,13 @@
 ﻿using System.Windows.Input;
 using timeorganizer.DatabaseModels;
+using timeorganizer.PageViewModel;
 using timeorganizer.Views;
 
 namespace timeorganizer.PageViewModels
 {
     public partial class LoginPageViewModel
     {
+  
         private string _login, _password;
         public string Login { get => _login; set => _login = value; }
         public string Password { get => _password; set => _password = value; }
