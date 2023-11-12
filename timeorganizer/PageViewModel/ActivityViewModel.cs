@@ -10,14 +10,22 @@ using timeorganizer.DatabaseModels;
 using timeorganizer.PageViewModel;
 using timeorganizer.Views;
 
+
 namespace timeorganizer.PageViewModel
 {
     public class ActivityViewModel : ObservableObject
     {
+
         private readonly DatabaseLogin _context;
+        private string LastActivity { get; set; }
+        private System.Timers.Timer timer;
+
         public ActivityViewModel()
         {
             _context = new DatabaseLogin();
+            timer = new System.Timers.Timer(1000); //wywołanie co sekunde 
+            timer.Elapsed += async (sender, e) => await CheckLastActivityVsExpirationDate(); 
+            timer.Enabled = true;
         }
 
 
@@ -44,17 +52,18 @@ namespace timeorganizer.PageViewModel
 
 
         //funkcja po wywołaniu której sesja jest przedłużana - NL
+        //musi być sprawdzana od początku po zalogowaniu! - do rozbudowy
         public async Task ChangeExpirationDateCommand()
         {
             Debug.WriteLine("Metoda ChangeExpirationDateCommand rozpoczęta.");
 
             int userId = await Getid();
             string userToken = await GetToken();
-
+            
             Debug.WriteLine("Pobrano token użytkownika: " + userToken);
             if (userId != 0)
             {
-                Debug.WriteLine("Uzyskano ID użytkownika.");
+                Debug.WriteLine("Uzyskano ID użytkownika");
 
                 var sessions = await _context.GetFileteredAsync<UserSessions>(t => t.UserId == userId);
                 foreach (var session in sessions)
@@ -63,7 +72,9 @@ namespace timeorganizer.PageViewModel
                     {
                         Debug.WriteLine("Pobrano sesję użytkownika: " + userId);
 
-                        session.ExpirationDate = DateTime.Now.AddMinutes(7).ToString("dd-MM-yyyy HH:mm:ss");
+                        session.ExpirationDate = DateTime.Now.AddMinutes(1).ToString("dd-MM-yyyy HH:mm:ss");
+                        LastActivity = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+                        Debug.WriteLine("w change mamy lastactivity: " + LastActivity);
                         await _context.UpdateItemAsync<UserSessions>(session);
 
                         Debug.WriteLine("Zaktualizowano datę wygaśnięcia sesji.");
@@ -80,6 +91,34 @@ namespace timeorganizer.PageViewModel
         }
 
 
+        //funkcja do automatycznego wylogowania - dokonczyc
+        public async Task CheckLastActivityVsExpirationDate()
+        {
+            int userId = await Getid();
+            string userToken = await GetToken();
+
+            if (userId != 0)
+            {
+                var sessions = await _context.GetFileteredAsync<UserSessions>(t => t.UserId == userId);
+                foreach (var session in sessions)
+                {
+                    if (session.Token == userToken)
+                    {
+                        string timeNow = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+
+                        Debug.WriteLine("ExpirationDate "+ session.ExpirationDate);
+                        Debug.WriteLine("Czas teraz "+ timeNow);
+                        
+                        if (timeNow == session.ExpirationDate)
+                        {
+                            Debug.WriteLine("TimeNow=ExpirationDate");
+                            //przejscie do podstrony mainPage - dokończyc
+                        }
+
+                    }
+                }
+            }
+        }
 
     }
 }

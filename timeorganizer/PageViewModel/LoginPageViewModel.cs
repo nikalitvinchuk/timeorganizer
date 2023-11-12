@@ -44,7 +44,7 @@ namespace timeorganizer.PageViewModels
                 //-------------------------OBSŁUGA SESJI-----------------------------
                 string sessionToken = Guid.NewGuid().ToString(); //unikalny token sesji (GUID)
                 string dateCreated = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
-                string expirationDate = DateTime.Now.AddMinutes(7).ToString("dd-MM-yyyy HH:mm:ss");
+                string expirationDate = DateTime.Now.AddMinutes(1).ToString("dd-MM-yyyy HH:mm:ss");
 
                 //dodanie tokena do PAMIECI ABY BYL DO NIEGO DOSTEP -JB 
                 await SecureStorage.Default.SetAsync("token", sessionToken);
