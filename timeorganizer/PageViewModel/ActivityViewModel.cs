@@ -36,31 +36,42 @@ namespace timeorganizer.PageViewModel
             else { return 0; }
         }
 
+        //pobranie i zwrócenie tokenu
+        private async Task<string> GetToken()
+        {
+            return await SecureStorage.Default.GetAsync("token");
+        }
+
+
+        //funkcja po wywołaniu której sesja jest przedłużana - NL
         public async Task ChangeExpirationDateCommand()
         {
-            Debug.WriteLine("Metoda ChangeExpirationDateCommand rozpoczęta."); 
+            Debug.WriteLine("Metoda ChangeExpirationDateCommand rozpoczęta.");
 
             int userId = await Getid();
+            string userToken = await GetToken();
+
+            Debug.WriteLine("Pobrano token użytkownika: " + userToken);
             if (userId != 0)
             {
                 Debug.WriteLine("Uzyskano ID użytkownika.");
 
-                UserSessions session = new UserSessions();
-                session = await _context.GetItemByKeyAsync<UserSessions>(userId);
-
-                if (session != null)
+                var sessions = await _context.GetFileteredAsync<UserSessions>(t => t.UserId == userId);
+                foreach (var session in sessions)
                 {
-                    Debug.WriteLine("Pobrano sesję użytkownika: "+ userId); 
+                    if (session.Token == userToken)
+                    {
+                        Debug.WriteLine("Pobrano sesję użytkownika: " + userId);
 
-                    session.ExpirationDate = DateTime.Now.AddMinutes(7).ToString("dd-MM-yyyy HH:mm:ss");
-                    await _context.UpdateItemAsync<UserSessions>(session);
+                        session.ExpirationDate = DateTime.Now.AddMinutes(7).ToString("dd-MM-yyyy HH:mm:ss");
+                        await _context.UpdateItemAsync<UserSessions>(session);
 
-                    Debug.WriteLine("Zaktualizowano datę wygaśnięcia sesji."); 
+                        Debug.WriteLine("Zaktualizowano datę wygaśnięcia sesji.");
+                        return;
+                    }
                 }
-                else
-                {
-                    Debug.WriteLine("Sesja użytkownika nie została pobrana."); 
-                }
+
+                Debug.WriteLine("Sesja użytkownika nie została pobrana lub token jest niezgodny.");
             }
             else
             {

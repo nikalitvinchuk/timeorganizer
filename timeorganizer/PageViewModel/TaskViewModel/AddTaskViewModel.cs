@@ -82,7 +82,7 @@ namespace timeorganizer.PageViewModels
 
             await ExecuteAsync(async () =>
             {
-                var activityViewModel = new ActivityViewModel();
+                var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
 
                 List<string> list = new() { Name, Description, Typ, Status, UserId.ToString(), Progress.ToString() };
                 int i = 0;
@@ -100,6 +100,7 @@ namespace timeorganizer.PageViewModels
                             3 => "Typ",
                             _ => "",
                         };
+                        await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                         await App.Current.MainPage.DisplayAlert("Błąd_Puste", $"Pole {nazwa} jest puste", "Ok");
                         break;
                     }
@@ -115,6 +116,7 @@ namespace timeorganizer.PageViewModels
                                 3 => "Typ",
                                 _ => "",
                             };
+                            await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                             await App.Current.MainPage.DisplayAlert("Za długie", $"Pole {nazwa} jest za długie. Pole może mieć maksymalnie wartość 200 znaków", "Ok");
                             break;
                         }
@@ -126,7 +128,7 @@ namespace timeorganizer.PageViewModels
                 {
                     await _context.AddItemAsync<Tasks>(Task);
                     await _context.AddItemAsync<TaskComponents>(SubTask);
-                    await activityViewModel.ChangeExpirationDateCommand();
+                    await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                     await App.Current.MainPage.DisplayAlert("Succes", "Dodano zadanie do bazy", "Ok");
                     
                 }
@@ -177,6 +179,7 @@ namespace timeorganizer.PageViewModels
         //}
         private async Task ExecuteAsync(Func<Task> operation)
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             IsBusy = true;
             try
             {
@@ -184,6 +187,7 @@ namespace timeorganizer.PageViewModels
             }
             catch (Exception ex)
             {
+                await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                 await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
             }
             finally

@@ -12,6 +12,7 @@ namespace timeorganizer.PageViewModel
     {
         private readonly DatabaseLogin _context;
 
+
         public SettingsViewModel()
         {
             _context = new DatabaseLogin();
@@ -113,6 +114,9 @@ namespace timeorganizer.PageViewModel
         // ZMIANA EMAIL
         private async void ChangeEmailCommand_execute()
         {
+
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
             await ExecuteAsync(async () =>
             {
                 if (_id == 0) _id = await Getid();
@@ -125,6 +129,7 @@ namespace timeorganizer.PageViewModel
                     user.DataModified = (DateTime.Now).ToLongDateString();
                     await _context.UpdateItemAsync<Users>(user);
                     await MopupService.Instance.PopAsync(true);
+                    await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                     await App.Current.MainPage.DisplayAlert("Success", "Dane zostały poprawnie zmienione", "Ok");
                 }
                 else
@@ -139,6 +144,7 @@ namespace timeorganizer.PageViewModel
         private async void ChangePasswordCommand_execute()
 
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             await ExecuteAsync(async () =>
             {
                 if (_id == 0) _id = await Getid();
@@ -150,6 +156,7 @@ namespace timeorganizer.PageViewModel
                     user.DataModified = (DateTime.Now).ToLongDateString();
                     await _context.UpdateItemAsync(user);
                     await MopupService.Instance.PopAsync(true);
+                    await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                     await App.Current.MainPage.DisplayAlert("Success", "Dane zostały poprawnie zmienione", "Ok");
                 }
             }
@@ -159,6 +166,7 @@ namespace timeorganizer.PageViewModel
         // USUWANIE KONTA
         private async void DeleteAccountCommand()
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             bool answer = await App.Current.MainPage.DisplayAlert("Usuwanie Konta", "Czy chcesz usunąć swoje konto?", "Tak", "Nie");
             if (answer)
             {
@@ -171,6 +179,7 @@ namespace timeorganizer.PageViewModel
                     {
                         await _context.DeleteItemAsync<Users>(user);
                     }
+                    await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                     App.Current.MainPage = new AppShell();
                 }
                 );
@@ -179,7 +188,7 @@ namespace timeorganizer.PageViewModel
         // ZMIANA HASLA I EMAIL
         private async void ChangeAllCommand_execute()
         {
-            
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             await ExecuteAsync(async () =>
             {
                 
@@ -193,6 +202,7 @@ namespace timeorganizer.PageViewModel
                     user.DataModified = (DateTime.Now).ToLongDateString();
                     await _context.UpdateItemAsync(user);
                     await MopupService.Instance.PopAsync(true);
+                    await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                     await App.Current.MainPage.DisplayAlert("Success", "Dane zostały poprawnie zmienione", "Ok");
                 }                
                 else
@@ -206,6 +216,7 @@ namespace timeorganizer.PageViewModel
 
         private async Task ExecuteAsync(Func<Task> operation)
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             IsBusy = true;
             try
             {
@@ -213,6 +224,7 @@ namespace timeorganizer.PageViewModel
             }
             catch (Exception ex)
             {
+                await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                 await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
             }
             finally
