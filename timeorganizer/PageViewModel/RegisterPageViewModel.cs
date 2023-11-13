@@ -72,9 +72,7 @@ namespace timeorganizer.PageViewModels
                 await Application.Current.MainPage.DisplayAlert("Błąd", "Login już istnieje w bazie, wpisz inny", "OK");
                 return;
             }
-            Email = "";
-            Password = "";
-            Login = "";
+
 
             Users User = new()
             {
@@ -86,6 +84,9 @@ namespace timeorganizer.PageViewModels
                 RememberMe = false,
                 //DataModified = null
             };
+            Email = "";
+            Password = "";
+            Login = "";
 
             await ExecuteAsync(async () =>
             {
