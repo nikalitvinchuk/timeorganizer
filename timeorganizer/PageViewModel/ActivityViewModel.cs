@@ -24,12 +24,9 @@ namespace timeorganizer.PageViewModel
         {
             _context = new DatabaseLogin();
             timer = new System.Timers.Timer(1000); //wywołanie co sekunde 
-            timer.Elapsed += async (sender, e) => await CheckLastActivityVsExpirationDate(); 
-            timer.Enabled = true;
+
         }
-
-
-        private int _id; // zmienna ustalona z user session z pomoca SecureStorge
+ // zmienna ustalona z user session z pomoca SecureStorge
 
         //POBRANIE ID Z SESJI 
         private async Task<int> Getid()
@@ -55,6 +52,9 @@ namespace timeorganizer.PageViewModel
         //musi być sprawdzana od początku po zalogowaniu! - do rozbudowy
         public async Task ChangeExpirationDateCommand()
         {
+
+            timer.Elapsed += async (sender, e) => await CheckLastActivityVsExpirationDate();
+            timer.Enabled = true;
             Debug.WriteLine("Metoda ChangeExpirationDateCommand rozpoczęta.");
 
             int userId = await Getid();
@@ -72,7 +72,7 @@ namespace timeorganizer.PageViewModel
                     {
                         Debug.WriteLine("Pobrano sesję użytkownika: " + userId);
 
-                        session.ExpirationDate = DateTime.Now.AddMinutes(1).ToString("dd-MM-yyyy HH:mm:ss");
+                        session.ExpirationDate = DateTime.Now.AddSeconds(10).ToString("dd-MM-yyyy HH:mm:ss");
                         LastActivity = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
                         Debug.WriteLine("w change mamy lastactivity: " + LastActivity);
                         await _context.UpdateItemAsync<UserSessions>(session);
@@ -83,10 +83,12 @@ namespace timeorganizer.PageViewModel
                 }
 
                 Debug.WriteLine("Sesja użytkownika nie została pobrana lub token jest niezgodny.");
+                return;
             }
             else
             {
                 Debug.WriteLine("Brak ID użytkownika.");
+                return;
             }
         }
 
@@ -94,30 +96,32 @@ namespace timeorganizer.PageViewModel
         //funkcja do automatycznego wylogowania - dokonczyc
         public async Task CheckLastActivityVsExpirationDate()
         {
-            int userId = await Getid();
             string userToken = await GetToken();
 
-            if (userId != 0)
+                var sessions = await _context.GetFileteredAsync<UserSessions>(t => t.Token == userToken);
+                var session = sessions.FirstOrDefault();
+            if (session != null)
             {
-                var sessions = await _context.GetFileteredAsync<UserSessions>(t => t.UserId == userId);
-                foreach (var session in sessions)
+                if (session.Token == userToken)
                 {
-                    if (session.Token == userToken)
+                    var timeNow = DateTime.Now;
+
+                    Debug.WriteLine("ExpirationDate " + session.ExpirationDate);
+                    Debug.WriteLine("Czas teraz " + timeNow);
+
+                    if (timeNow >= DateTime.Parse(session.ExpirationDate))
                     {
-                        string timeNow = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
-
-                        Debug.WriteLine("ExpirationDate "+ session.ExpirationDate);
-                        Debug.WriteLine("Czas teraz "+ timeNow);
-                        
-                        if (timeNow == session.ExpirationDate)
-                        {
-                            Debug.WriteLine("TimeNow=ExpirationDate");
-                            //przejscie do podstrony mainPage - dokończyc
-                        }
-
+                        Debug.WriteLine("TimeNow=ExpirationDate");
+                        SecureStorage.Default.Remove("token");
+                        timer.Enabled = false;
+                        timer.Stop();
+                        return;
                     }
+                    return;
                 }
+                return;
             }
+
         }
 
     }
