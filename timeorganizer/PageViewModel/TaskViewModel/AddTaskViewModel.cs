@@ -193,11 +193,17 @@ namespace timeorganizer.PageViewModels
             }
             catch (Exception ex)
             {
-                await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
-                await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
+                //przedłużanie sesji - funkcja z ActivityViewModel 
+                
                 if (ex.Message == "ERROR")
                 {
+                    await App.Current.MainPage.DisplayAlert("Logout", ex.Message, "Ok");
                     App.Current.MainPage = new AppShell();
+                }
+                else
+                {
+                    await activityViewModel.ChangeExpirationDateCommand();
+                    await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
                 }
             }
             finally
