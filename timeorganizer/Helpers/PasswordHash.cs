@@ -30,22 +30,29 @@ namespace timeorganizer.Helpers
         }
         public static bool Veryfypass(string password, string base64hash)
         {
-            var hashBytes = Convert.FromBase64String(base64hash);
-            var salt = new byte[Saltzise];
-            Array.Copy(hashBytes, 0, salt, 0, Saltzise);
-
-            var key = new Rfc2898DeriveBytes(password, salt, Interations);
-            byte[] hash = key.GetBytes(HashSize);
-            for (var i = 0; i < HashSize; i++)
+            try
             {
-                if (hashBytes[i + Saltzise] != hash[i])
+                var hashBytes = Convert.FromBase64String(base64hash);
+
+                var salt = new byte[Saltzise];
+                Array.Copy(hashBytes, 0, salt, 0, Saltzise);
+
+                var key = new Rfc2898DeriveBytes(password, salt, Interations);
+                byte[] hash = key.GetBytes(HashSize);
+                for (var i = 0; i < HashSize; i++)
                 {
-                    return false;
+                    if (hashBytes[i + Saltzise] != hash[i])
+                    {
+                        return false;
+                    }
                 }
-            }
-            return true;
-            {
+                return true;
+                {
 
+                }
+            }catch (Exception ex)
+            {
+                return false;
             }
         }
     }

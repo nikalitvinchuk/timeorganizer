@@ -1,4 +1,4 @@
-using timeorganizer.Models;
+using timeorganizer.Helpers;
 using timeorganizer.Views.LoggedPages;
 
 namespace timeorganizer.Views
