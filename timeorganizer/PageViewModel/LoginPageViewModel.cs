@@ -36,7 +36,7 @@ namespace timeorganizer.PageViewModels
 
             var users = await _context.GetFileteredAsync<Users>(u => u.Login == LoginValue); //pobrana lista użytkowników zgodnych z LoginValue
             var user = users.FirstOrDefault(); //pobieramy pierwszy element który pasuje
-            if (user != null && user.Password == PassValue)
+            if (user != null && Helpers.Passwordhash.Veryfypass(PassValue,user.Password))
             {
 
                 //-------------------------OBSŁUGA SESJI-----------------------------

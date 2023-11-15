@@ -72,20 +72,21 @@ namespace timeorganizer.PageViewModels
                 await Application.Current.MainPage.DisplayAlert("Błąd", "Login już istnieje w bazie, wpisz inny", "OK");
                 return;
             }
-            Email = "";
-            Password = "";
-            Login = "";
+            
 
             Users User = new()
             {
                 Email = _email,
-                Password = _password,
+                Password = Helpers.Passwordhash.HashPassword(_password),
                 Id = Id,
                 Login = _login,
                 DataCreated = (DateTime.Now).ToLongDateString(),
                 RememberMe = false,
                 //DataModified = null
             };
+            Email = "";
+            Password = "";
+            Login = "";
 
             await ExecuteAsync(async () =>
             {
