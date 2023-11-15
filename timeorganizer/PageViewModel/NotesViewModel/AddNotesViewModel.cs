@@ -40,6 +40,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
 
         private async void AddNote(object obj)
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             if (_userId == 0) _userId = await Getid();
             Notes note = new()
             {
@@ -67,6 +68,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
                             1 => "Tytuł",
                             _ => "",
                         };
+                        await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                         await App.Current.MainPage.DisplayAlert("Błąd_Puste", $"Pole {nazwa} jest puste", "Ok");
                         break;
                     }
@@ -80,6 +82,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
                                 1 => "Tytuł",
                                 _ => "",
                             };
+                            await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                             await App.Current.MainPage.DisplayAlert("Za długie", $"Pole {nazwa} jest za długie. Pole może mieć maksymalnie wartość 200 znaków", "Ok");
                             break;
                         }
@@ -90,6 +93,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
                 if (i == 0)
                 {
                     await _context.AddItemAsync<Notes>(note);
+                    await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                     await App.Current.MainPage.DisplayAlert("Succes", "Dodano notatkę do bazy", "Ok");
                 }
 
@@ -98,6 +102,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
 
         private async Task ExecuteAsync(Func<Task> operation)
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             IsBusy = true;
             try
             {
@@ -105,6 +110,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
             }
             catch (Exception ex)
             {
+                await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                 await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
             }
             finally

@@ -1,9 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.Text;
+﻿
+using CommunityToolkit.Mvvm.ComponentModel;
+using Mopups.PreBaked.PopupPages.Login;
+using Mopups.Services;
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
-
-
+using timeorganizer.Views.PopupPages;
 
 namespace timeorganizer.PageViewModel
 {
@@ -11,17 +12,19 @@ namespace timeorganizer.PageViewModel
     {
         private readonly DatabaseLogin _context;
 
+
         public SettingsViewModel()
         {
             _context = new DatabaseLogin();
-            ChangePassword = new Command(ChangePasswordCommand);
-            ChangeEmail = new Command(ChangeEmailCommand);
-            ChangeEmailAndPassword = new Command(ChangeAllCommand);
+            ChangePassword = new Command(ChangePasswordCommand_execute);
+            ChangeEmail = new Command(ChangeEmailCommand_execute);
+            ChangeEmailAndPassword = new Command(ChangeAllCommand_execute);
             DeleteAccount = new Command(DeleteAccountCommand);
-
-
+            ChangePassword_popup = new Command(ChangePasswordCommand);
+            ChangeEmail_popup = new Command(ChangeEmailCommand);
+            ChangeEmailAndPassword_popup = new Command(ChangeAllCommand);
         }
-        private string _email, _password, _login, _passwordconfirm, _currentpassword;
+        private string _email, _password, _passwordconfirm, _currentpassword;
         private int _id; // zmienna ustalona z user session z pomoca SecureStorge
 
         public string Email { get => _email; set => _email = value; }
@@ -37,9 +40,30 @@ namespace timeorganizer.PageViewModel
         public ICommand ChangePassword { private set; get; }
         public ICommand ChangeEmail { private set; get; }
         public ICommand ChangeEmailAndPassword { private set; get; }
+
+
+
+        public ICommand ChangePassword_popup { private set; get; }
+        public ICommand ChangeEmail_popup { private set; get; }
+        public ICommand ChangeEmailAndPassword_popup { private set; get; }
         public ICommand DeleteAccount { private set; get; }
 
         // WALIDACJA HASEL
+
+
+        public async void ChangeEmailCommand()
+        {
+            await MopupService.Instance.PushAsync(new SettingsPopupPage(1));
+        }
+        public async void ChangePasswordCommand()
+        {
+            await MopupService.Instance.PushAsync(new SettingsPopupPage(2));
+        }
+        public async void ChangeAllCommand()
+        {
+            await MopupService.Instance.PushAsync(new SettingsPopupPage(3));
+        }
+
 
         //POBRANIE ID Z SESJI 
         private async Task<int> Getid()
@@ -55,7 +79,7 @@ namespace timeorganizer.PageViewModel
         }
         private async Task<bool> validatepassword()
         {
-            if (string.IsNullOrWhiteSpace(_currentpassword)) return false;
+            if (string.IsNullOrWhiteSpace(CurrentPassword)) return false;
             if (_currentpassword.Length == 0) return false;
             if (string.IsNullOrWhiteSpace(_password)) return false;
             if (_password.Length == 0) return false;
@@ -67,46 +91,60 @@ namespace timeorganizer.PageViewModel
                 user = await _context.GetItemByKeyAsync<Users>(_id);
             });
             if (user == null) return false;
-            if (user.Password != CurrentPassword) return false;
-            if (user.Password == Password) return false;
-            if (_password != _passwordconfirm) return false;
+            if (user.Password != CurrentPassword) { await App.Current.MainPage.DisplayAlert("Błąd", "Błędne stare hasło, spróbuj ponownie", "Ok"); return false; }
+            if (user.Password == Password) { await App.Current.MainPage.DisplayAlert("Błąd", "Nowe i stare hasło są identyczne, spróbuj ponownie", "Ok"); return false; }
+            if (_password != _passwordconfirm) { await App.Current.MainPage.DisplayAlert("Błąd", "Hasła niezgodne", "Ok"); return false; }
 
             return true;
         }
 
         // WALIDACJA EMAIL
-        private bool validateEmail()
+        private async Task<bool> validateEmail()
         {
             if (string.IsNullOrWhiteSpace(_email)) return false;
             if (_email.Length == 0) return false;
-            if (!_email.Contains('@') || !_email.Contains('.')) return false;
-
+            if (!_email.Contains('@') || !_email.Contains('.'))
+            {
+                await App.Current.MainPage.DisplayAlert("Błąd", "Niepoprawy format email", "Ok");
+                return false;
+            }
             return true;
         }
 
         // ZMIANA EMAIL
-        private async void ChangeEmailCommand()
+        private async void ChangeEmailCommand_execute()
         {
+
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
             await ExecuteAsync(async () =>
             {
                 if (_id == 0) _id = await Getid();
 
                 Users user = new Users();
                 user = await _context.GetItemByKeyAsync<Users>(_id);
-                if (validateEmail())
+                if (await validateEmail())
                 {
                     user.Email = _email;
                     user.DataModified = (DateTime.Now).ToLongDateString();
                     await _context.UpdateItemAsync<Users>(user);
+                    await MopupService.Instance.PopAsync(true);
+                    await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+                    await App.Current.MainPage.DisplayAlert("Success", "Dane zostały poprawnie zmienione", "Ok");
+                }
+                else
+                {
+                     
                 }
             }
             );
             
         }
         // ZMIANA HASLA
-        private async void ChangePasswordCommand()
+        private async void ChangePasswordCommand_execute()
 
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             await ExecuteAsync(async () =>
             {
                 if (_id == 0) _id = await Getid();
@@ -117,6 +155,9 @@ namespace timeorganizer.PageViewModel
                     user.Password = _password;
                     user.DataModified = (DateTime.Now).ToLongDateString();
                     await _context.UpdateItemAsync(user);
+                    await MopupService.Instance.PopAsync(true);
+                    await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+                    await App.Current.MainPage.DisplayAlert("Success", "Dane zostały poprawnie zmienione", "Ok");
                 }
             }
             );
@@ -125,30 +166,57 @@ namespace timeorganizer.PageViewModel
         // USUWANIE KONTA
         private async void DeleteAccountCommand()
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+            bool answer = await App.Current.MainPage.DisplayAlert("Usuwanie Konta", "Czy chcesz usunąć swoje konto?", "Tak", "Nie");
+            if (answer)
+            {
+                await ExecuteAsync(async () =>
+                {
+                    if (_id == 0) _id = await Getid();
+                    Users user = new Users();
+                    user = await _context.GetItemByKeyAsync<Users>(_id);
+                    if (_passwordconfirm == user.Password)
+                    {
+                        await _context.DeleteItemAsync<Users>(user);
+                    }
+                    await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+                    App.Current.MainPage = new AppShell();
+                }
+                );
+            }   
+        }
+        // ZMIANA HASLA I EMAIL
+        private async void ChangeAllCommand_execute()
+        {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             await ExecuteAsync(async () =>
             {
+                
                 if (_id == 0) _id = await Getid();
                 Users user = new Users();
                 user = await _context.GetItemByKeyAsync<Users>(_id);
-                if (_passwordconfirm == user.Password)
+                if (await validatepassword() && await validateEmail())
                 {
-                    await _context.DeleteItemAsync<Users>(user);
+                    user.Password = _password;
+                    user.Email= _email;
+                    user.DataModified = (DateTime.Now).ToLongDateString();
+                    await _context.UpdateItemAsync(user);
+                    await MopupService.Instance.PopAsync(true);
+                    await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+                    await App.Current.MainPage.DisplayAlert("Success", "Dane zostały poprawnie zmienione", "Ok");
+                }                
+                else
+                {
+                    await App.Current.MainPage.DisplayAlert("Błąd", "Niepoprawy format email", "Ok");
                 }
-                App.Current.MainPage = new AppShell();
             }
             );
-            
-        }
-        // ZMIANA HASLA I EMAIL
-        private void ChangeAllCommand()
-        {
 
-            ChangeEmailCommand();
-            ChangePasswordCommand();
         }
 
         private async Task ExecuteAsync(Func<Task> operation)
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             IsBusy = true;
             try
             {
@@ -156,6 +224,7 @@ namespace timeorganizer.PageViewModel
             }
             catch (Exception ex)
             {
+                await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                 await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
             }
             finally

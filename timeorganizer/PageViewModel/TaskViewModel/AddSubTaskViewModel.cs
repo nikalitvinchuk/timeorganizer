@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
+using timeorganizer.PageViewModel;
 
 namespace timeorganizer.PageViewModels
 {
@@ -38,6 +39,9 @@ namespace timeorganizer.PageViewModels
         //                  FUNKCJA DODAWANIA PODZADANIA - powinno byæ w osobnym modelu -JB
         private async void AddSubTask(object obj)
         {
+
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do póŸniejszego wywo³ania ChangeExpirationDate
+
             TaskComponents TC = new()
             {
                 Name = Name
@@ -81,20 +85,24 @@ namespace timeorganizer.PageViewModels
                 }
                 if (i == 1)
                 {
+                    await activityViewModel.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityViewModel 
                     await App.Current.MainPage.DisplayAlert("Failed", "Jedno z lub wiele pól podzadania jest puste", "Ok");
                 }
                 else
+                    await activityViewModel.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityViewModel 
                     await _context.AddItemAsync<TaskComponents>(TC);
             });
         }
         private async Task ExecuteAsync(Func<Task> operation)
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do póŸniejszego wywo³ania ChangeExpirationDate
             IsBusy = true;
             try
             {
                 await operation?.Invoke();
             }
             catch (Exception ex) {
+                await activityViewModel.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityViewModel 
                 await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok"); 
             }
 
