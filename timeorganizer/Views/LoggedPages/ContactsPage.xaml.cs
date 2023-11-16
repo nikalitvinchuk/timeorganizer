@@ -6,4 +6,10 @@ public partial class ContactsPage : ContentPage
     {
         InitializeComponent();
     }
+
+    private async void InstagramTapGestureRecognizer_Tapped(object sender, EventArgs e)
+    {
+        await Launcher.OpenAsync(new Uri("https://www.instagram.com/"));
+    }
+
 }

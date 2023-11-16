@@ -38,5 +38,12 @@
             VerticalOptions="Center" 
             TextColor="Grey"
             HorizontalOptions="Center" />
+
+        <Image Source="instagram_icon.png" WidthRequest="30" HeightRequest="30">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="InstagramTapGestureRecognizer_Tapped" />
+            </Image.GestureRecognizers>
+        </Image>
+
     </VerticalStackLayout>
 </ContentPage>

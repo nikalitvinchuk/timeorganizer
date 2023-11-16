@@ -77,6 +77,7 @@
 	  <None Remove="Resources\Images\background1.png" />
 	  <None Remove="Resources\Images\background2.png" />
 	  <None Remove="Resources\Images\Image1.png" />
+	  <None Remove="Resources\Images\instagram_icon.png" />
 	  <None Remove="Resources\Images\spice.png" />
 	  <None Remove="Resources\Images\time.png" />
 	  <None Remove="Resources\Images\user.png" />
@@ -89,6 +90,12 @@
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.6" />
 		<PackageReference Include="SQLitePCLRaw.core" Version="2.1.6" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Views\HomePage.xaml.cs">
+	    <DependentUpon>HomePage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -123,6 +130,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HomePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\RegisterPage.xaml">

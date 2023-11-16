@@ -2,7 +2,7 @@ using SQLite;
 
 namespace timeorganizer.DatabaseModels;
 
-    [Table("Send")] // wys³anie wiadomoœci do tabeli w bazie danych o nazwie Send????
+    [Table("Send")] // wys³anie wiadomoœci do tabeli w bazie danych o nazwie Send???? Model do kontaktu
 
     public class Message
     {
