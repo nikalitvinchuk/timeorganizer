@@ -2,14 +2,25 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="timeorganizer.Views.LoggedPages.NotesPage"
-             Title="NotesPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Wprowadż swoją pierwszą notatkę"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <Entry Text="{Binding YourTextProperty}" Placeholder="Pole na wpisanie notatki" IsPassword="False" Keyboard="Default" />
-        <Button Text="Dodaj notatkę do listy" />
-        <!--Clicked="OnCreateTaskClicked" Należy w cliked podpiac komende z pageviewmodel jak bedzie zrobione obecnie z tym nie bedzie sie uruchamiac program - JB -->
-    </VerticalStackLayout>
+             BackgroundColor="White">
+
+    <StackLayout Padding="15">
+
+        <!-- Nagłówek -->
+        <Label Text="Notes" FontSize="Title" HorizontalOptions="Center" Margin="0,0,0,20" />
+
+        <!-- Lista notatek -->
+            <StackLayout Padding="10">
+                            <Entry Text="{Binding Path = AddNotes.Title}" FontSize="18" />
+                            <Entry Text="{Binding Path = AddNotes.Content1}" FontSize="14" />
+            </StackLayout>
+
+                        <!-- Przyciski -->
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+            <Button Text="Add Note" Command="{Binding Path = AddNotes.AddNoteCommand}"  HorizontalOptions="FillAndExpand" />
+            <Button Text="Edit Note"  HorizontalOptions="FillAndExpand" />
+        </StackLayout>
+
+    </StackLayout>
+
 </ContentPage>

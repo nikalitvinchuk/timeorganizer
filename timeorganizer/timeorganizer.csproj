@@ -52,21 +52,31 @@
 	  <AndroidResource Remove="Nowy folder1\**" />
 	  <AndroidResource Remove="Nowy folder2\**" />
 	  <AndroidResource Remove="Nowy folder\**" />
+	  <AndroidResource Remove="Views\LoggedPages\Nowy folder\**" />
 	  <Compile Remove="Nowy folder1\**" />
 	  <Compile Remove="Nowy folder2\**" />
 	  <Compile Remove="Nowy folder\**" />
+	  <Compile Remove="Views\LoggedPages\Nowy folder\**" />
 	  <EmbeddedResource Remove="Nowy folder1\**" />
 	  <EmbeddedResource Remove="Nowy folder2\**" />
 	  <EmbeddedResource Remove="Nowy folder\**" />
+	  <EmbeddedResource Remove="Views\LoggedPages\Nowy folder\**" />
 	  <MauiCss Remove="Nowy folder1\**" />
 	  <MauiCss Remove="Nowy folder2\**" />
 	  <MauiCss Remove="Nowy folder\**" />
+	  <MauiCss Remove="Views\LoggedPages\Nowy folder\**" />
 	  <MauiXaml Remove="Nowy folder1\**" />
 	  <MauiXaml Remove="Nowy folder2\**" />
 	  <MauiXaml Remove="Nowy folder\**" />
+	  <MauiXaml Remove="Views\LoggedPages\Nowy folder\**" />
 	  <None Remove="Nowy folder1\**" />
 	  <None Remove="Nowy folder2\**" />
 	  <None Remove="Nowy folder\**" />
+	  <None Remove="Views\LoggedPages\Nowy folder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Views\LoggedPages\AddNotePage.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -87,6 +97,7 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="Mopups" Version="1.2.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.6" />
 		<PackageReference Include="SQLitePCLRaw.core" Version="2.1.6" />
@@ -132,7 +143,7 @@
 	  <MauiXaml Update="Views\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\HomePage.xaml">
+	  <MauiXaml Update="Views\PopupPages\SettingsPopupPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\RegisterPage.xaml">

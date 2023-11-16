@@ -54,6 +54,8 @@ namespace timeorganizer.PageViewModel
 
         public async Task<ObservableCollection<Tasks>> FilterTasks()
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
             if (_userId == 0) { _userId = await Getid(); }
             //List<string> Lista_zapytan = new();
             //List<string> ListaZmienych = new() { "Name", "Description", "Type", "Status", "Created" };
@@ -84,16 +86,19 @@ namespace timeorganizer.PageViewModel
                 if (!string.IsNullOrWhiteSpace(_status)) filters.Add("Status", _status);
                 if (!string.IsNullOrWhiteSpace(_created)) filters.Add("Created", _created);
 
-                TasksCollection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters)));
+                TasksCollection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>( _context.CreatePredicateToFiltred<Tasks>(filters)));
                 filters.Clear();
                 OnPropertyChanged(nameof(TasksCollection));
 
             });
+            await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
             return TasksCollection;
         }
 
         private async Task ExecuteAsync(Func<Task> operation)
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
             IsBusy = true;
             try
             {
@@ -101,11 +106,16 @@ namespace timeorganizer.PageViewModel
             }
             catch (Exception ex)
             {
+                await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+                await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
+
             }
             finally
             {
                 IsBusy = false;
             }
+           
+
         }
 
 

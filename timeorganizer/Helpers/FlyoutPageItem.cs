@@ -1,4 +1,4 @@
-﻿namespace timeorganizer.Models // model struktury menu wykorzystywany w flyoutmenupage
+﻿namespace timeorganizer.Helpers // model struktury menu wykorzystywany w flyoutmenupage
 {
     public class FlyoutPageItem
     {

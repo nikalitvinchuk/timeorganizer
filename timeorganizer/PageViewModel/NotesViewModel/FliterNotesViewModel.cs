@@ -29,6 +29,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
         public int Id { get => _id; set => _id = value; }
         private async Task<ObservableCollection<Notes>> GetNotes()
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             if (_userId == 0) _userId = await Getid();
             await ExecuteAsync(async () =>
             {
@@ -44,6 +45,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
                 OnPropertyChanged(nameof(NotesColletion));
 
             });
+            await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
             return NotesColletion;
         }
 
@@ -53,6 +55,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
 
         private async Task ExecuteAsync(Func<Task> operation)
         {
+            var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             IsBusy = true;
             try
             {
@@ -60,10 +63,12 @@ namespace timeorganizer.PageViewModel.NotesViewModel
             }
             catch (Exception ex)
             {
+                await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+                await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
             }
             finally
             {
-                isBusy = false;
+                IsBusy = false;
             }
         }
 

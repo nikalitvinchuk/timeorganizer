@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using timeorganizer.Models;
+using timeorganizer.Helpers;
 
 namespace timeorganizer.Views;
 

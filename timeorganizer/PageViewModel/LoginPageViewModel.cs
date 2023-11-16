@@ -1,11 +1,13 @@
 ﻿using System.Windows.Input;
 using timeorganizer.DatabaseModels;
+using timeorganizer.PageViewModel;
 using timeorganizer.Views;
 
 namespace timeorganizer.PageViewModels
 {
     public partial class LoginPageViewModel
     {
+  
         private string _login, _password;
         public string Login { get => _login; set => _login = value; }
         public string Password { get => _password; set => _password = value; }
@@ -36,13 +38,13 @@ namespace timeorganizer.PageViewModels
 
             var users = await _context.GetFileteredAsync<Users>(u => u.Login == LoginValue); //pobrana lista użytkowników zgodnych z LoginValue
             var user = users.FirstOrDefault(); //pobieramy pierwszy element który pasuje
-            if (user != null && user.Password == PassValue)
+            if (user != null && Helpers.Passwordhash.Veryfypass(PassValue,user.Password))
             {
 
                 //-------------------------OBSŁUGA SESJI-----------------------------
                 string sessionToken = Guid.NewGuid().ToString(); //unikalny token sesji (GUID)
                 string dateCreated = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
-                string expirationDate = DateTime.Now.AddMinutes(7).ToString("dd-MM-yyyy HH:mm:ss");
+                string expirationDate = DateTime.Now.AddMinutes(1).ToString("dd-MM-yyyy HH:mm:ss");
 
                 //dodanie tokena do PAMIECI ABY BYL DO NIEGO DOSTEP -JB 
                 await SecureStorage.Default.SetAsync("token", sessionToken);

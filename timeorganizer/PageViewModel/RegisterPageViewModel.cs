@@ -66,29 +66,27 @@ namespace timeorganizer.PageViewModels
                 return;
             }
 
-            var allUser = await _context.GetAllAsync<Users>(); //pobieramy wszystkie rekordy z users
-            if (allUser.Any(user => user.Login == Login)) //jeśli którys z elementów jest taki sam wyswietli sie alert
+            var allUser = await _context.GetFileteredAsync<Users>(user => user.Login == Login || user.Email == Email); //pobieramy wszystkie rekordy z users
+            if (allUser.Count() > 0) //jeśli którys z elementów jest taki sam wyswietli sie alert
             {
                 await Application.Current.MainPage.DisplayAlert("Błąd", "Login już istnieje w bazie, wpisz inny", "OK");
                 return;
             }
-            if (allUser.Any(user => user.Email == Email)) //jeśli którys z elementów jest taki sam wyswietli sie alert
-            {
-                await Application.Current.MainPage.DisplayAlert("Błąd", "Email już istnieje w bazie, wpisz inny", "OK");
-                return;
-            }
-
+            
 
             Users User = new()
             {
-                Email = Email,
-                Password = Password,
+                Email = _email,
+                Password = Helpers.Passwordhash.HashPassword(_password),
                 Id = Id,
-                Login = Login,
+                Login = _login,
                 DataCreated = (DateTime.Now).ToLongDateString(),
                 RememberMe = false,
                 //DataModified = null
             };
+            Email = "";
+            Password = "";
+            Login = "";
 
             await ExecuteAsync(async () =>
             {
@@ -98,6 +96,7 @@ namespace timeorganizer.PageViewModels
                     //var lista = await _context.GetFileteredAsync<Users>(x => x.Login == Login && x.Id == Id);
                     // } -Greg92
                     await _context.AddItemAsync<Users>(User);
+
                     await Shell.Current.GoToAsync("LoginPage");
                 }
                 else
@@ -116,6 +115,7 @@ namespace timeorganizer.PageViewModels
             }
             catch (Exception ex)
             {
+                await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
             }
             finally
             {
