@@ -24,14 +24,22 @@ namespace timeorganizer.PageViewModel.NotesViewModel
         }
         private async Task<int> Getid()
         {
-            string _tokenvalue = await SecureStorage.Default.GetAsync("token");
-            var getids = await _context.GetFileteredAsync<UserSessions>(t => t.Token == _tokenvalue);
-            if (getids.Any(t => t.Token == _tokenvalue))
+            try
             {
-                var getid = getids.First(t => t.Token == _tokenvalue);
-                return getid.UserId;
+                string _tokenvalue = await SecureStorage.Default.GetAsync("token");
+                var getids = await _context.GetFileteredAsync<UserSessions>(t => t.Token == _tokenvalue);
+                if (getids.Any(t => t.Token == _tokenvalue))
+                {
+                    var getid = getids.First(t => t.Token == _tokenvalue);
+                    return getid.UserId;
+                }
+                else { return 0; }
             }
-            else { return 0; }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+
         }
         [ObservableProperty]
         private bool _isBusy;
@@ -39,61 +47,73 @@ namespace timeorganizer.PageViewModel.NotesViewModel
         private async void AddNote(object obj)
         {
             var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
-            if (_userId == 0) _userId = await Getid();
-            Notes note = new()
-            {
-                Title = _title,
-                Content = _content,
-                Created = DateTime.Now.ToLongDateString(),
-                LastUpdated = null
-            };
 
-            await ExecuteAsync(async () =>
+            try
             {
-                List<string> list = new() { Title };
-                int i = 0;
-                string nazwa = "";
-                int j = 1;
-                foreach (var wartosc in list)
+                if (_userId == 0) _userId = await Getid();
+                if (_userId != 0)
                 {
-                    if (string.IsNullOrEmpty(wartosc))
+                    Notes note = new()
                     {
-                        i = 1;
-                        nazwa = j switch
-                        {
-                            1 => "Tytuł",
-                            _ => "",
-                        };
+                        Title = _title,
+                        Content = _content,
+                        Created = DateTime.Now.ToLongDateString(),
+                        UserId= _userId,
+                        LastUpdated = null
+                    };
 
-                        await App.Current.MainPage.DisplayAlert("Błąd_Puste", $"Pole {nazwa} jest puste", "Ok");
-                        break;
-                    }
-                    else
+                    await ExecuteAsync(async () =>
                     {
-                        if (wartosc.Length > 100)
+                        List<string> list = new() { Title };
+                        int i = 0;
+                        string nazwa = "";
+                        int j = 1;
+                        foreach (var wartosc in list)
                         {
-                            i = 1;
-                            nazwa = j switch
+                            if (string.IsNullOrEmpty(wartosc))
                             {
-                                1 => "Tytuł",
-                                _ => "",
-                            };
+                                i = 1;
+                                nazwa = j switch
+                                {
+                                    1 => "Tytuł",
+                                    _ => "",
+                                };
 
-                            await App.Current.MainPage.DisplayAlert("Za długie", $"Pole {nazwa} jest za długie. Pole może mieć maksymalnie wartość 200 znaków", "Ok");
-                            break;
+                                await App.Current.MainPage.DisplayAlert("Błąd_Puste", $"Pole {nazwa} jest puste", "Ok");
+                                break;
+                            }
+                            else
+                            {
+                                if (wartosc.Length > 100)
+                                {
+                                    i = 1;
+                                    nazwa = j switch
+                                    {
+                                        1 => "Tytuł",
+                                        _ => "",
+                                    };
+
+                                    await App.Current.MainPage.DisplayAlert("Za długie", $"Pole {nazwa} jest za długie. Pole może mieć maksymalnie wartość 200 znaków", "Ok");
+                                    break;
+                                }
+                                j++;
+                            }
                         }
-                        j++;
-                    }
-                }
 
-                if (i == 0)
-                {
-                    await _context.AddItemAsync<Notes>(note);
-                    await App.Current.MainPage.DisplayAlert("Succes", "Dodano notatkę do bazy", "Ok");
-                }
+                        if (i == 0)
+                        {
+                            await _context.AddItemAsync<Notes>(note);
+                            await App.Current.MainPage.DisplayAlert("Succes", "Dodano notatkę do bazy", "Ok");
+                        }
 
-            });
-            await activityViewModel.ChangeExpirationDateCommand();
+                    });
+                }
+                await activityViewModel.ChangeExpirationDateCommand();
+            }catch(Exception ex)
+            {
+                await activityViewModel.ChangeExpirationDateCommand();
+            }
+ // wystarczy w 1 miejscu na koncu funkcji. 
         }
 
         private async Task ExecuteAsync(Func<Task> operation)

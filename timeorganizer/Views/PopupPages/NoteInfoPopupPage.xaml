@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:pages="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  xmlns:mopupsanim="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  x:Class="timeorganizer.Views.PopupPages.NoteInfoPopupPage"
+                  BackgroundColor="#80000000"
+                  CloseWhenBackgroundIsClicked="False"
+                 >
+
+    <pages:PopupPage.Animation>
+        <mopupsanim:ScaleAnimation
+            DurationIn="700"
+            EasingIn="BounceOut"
+            PositionIn="Bottom"
+            PositionOut="Center"
+            ScaleIn="1"
+            ScaleOut="0.7" />
+    </pages:PopupPage.Animation>
+    <ScrollView HorizontalOptions="Center" VerticalOptions="Center">
+        <Border WidthRequest="350" HeightRequest="500"
+                BackgroundColor="AntiqueWhite"
+                HorizontalOptions="Center">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="40,0,0,40"/>
+            </Border.StrokeShape>
+            
+            <VerticalStackLayout Spacing="3">
+                <Label HorizontalOptions="Center" FontAttributes="Bold" FontSize="Header" x:Name="Title"></Label>
+                <Label HorizontalOptions="Center" FontAttributes="Bold" FontSize="Medium" x:Name="Content"></Label>
+                <Button
+                    x:Name="DenyButton"
+                    Margin="10,5"
+                    HorizontalOptions="Fill"
+                    BackgroundColor="Red"
+                    VerticalOptions="EndAndExpand"
+                    Text="Anuluj"
+                    Clicked="Deny_Clicked">
+                </Button>
+            </VerticalStackLayout>
+        </Border>
+
+    </ScrollView>
+</pages:PopupPage>

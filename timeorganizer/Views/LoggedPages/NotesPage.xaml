@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:timeorganizer.PageViewModel"
              x:Class="timeorganizer.Views.LoggedPages.NotesPage"
+             xmlns:datamodel="clr-namespace:timeorganizer.DatabaseModels"
              BackgroundColor="White">
 
     <StackLayout Padding="15">
@@ -12,15 +14,42 @@
         <!-- Lista notatek -->
             <StackLayout Padding="10">
                             <Entry Text="{Binding Path = AddNotes.Title}" FontSize="18" />
-                            <Entry Text="{Binding Path = AddNotes.Content1}" FontSize="14" />
+                            <Entry Text="{Binding Path = AddNotes.Content}" FontSize="14" />
             </StackLayout>
 
                         <!-- Przyciski -->
         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
             <Button Text="Add Note" Command="{Binding Path = AddNotes.AddNoteCommand}"  HorizontalOptions="FillAndExpand" />
-            <Button Text="Edit Note"  HorizontalOptions="FillAndExpand" />
+            <Button Text="Edit Note" Command="{Binding Path= ShowNotesTitle.GetNote}"  HorizontalOptions="FillAndExpand" />
         </StackLayout>
 
+        <CollectionView ItemsSource="{Binding Path=ShowNotesTitle.NotesColletion}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="datamodel:Notes">
+                    <Grid Padding="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <VerticalStackLayout Grid.Column="0">
+                            <HorizontalStackLayout
+                                Padding="10"
+                                Spacing="4"
+                                VerticalOptions="Center">
+                                <Label FontSize="20" VerticalOptions="Center" Text="{Binding Title}">
+                                </Label>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1" BackgroundColor="Red" TextColor="Aqua" Text="Wyświetl szczegóły" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:NoteViewModel}}, Path=ShowNotesTitle.GetFullNote}" CommandParameter="{Binding Id}">
+                            
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
     </StackLayout>
+
+
 
 </ContentPage>

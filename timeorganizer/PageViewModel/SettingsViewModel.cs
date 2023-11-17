@@ -79,7 +79,7 @@ namespace timeorganizer.PageViewModel
         }
         private async Task<bool> validatepassword()
         {
-            if (string.IsNullOrWhiteSpace(CurrentPassword)) return false;
+            if (string.IsNullOrWhiteSpace(_currentpassword)) return false;
             if (_currentpassword.Length == 0) return false;
             if (string.IsNullOrWhiteSpace(_password)) return false;
             if (_password.Length == 0) return false;
@@ -91,8 +91,8 @@ namespace timeorganizer.PageViewModel
                 user = await _context.GetItemByKeyAsync<Users>(_id);
             });
             if (user == null) return false;
-            if (user.Password != CurrentPassword) { await App.Current.MainPage.DisplayAlert("Błąd", "Błędne stare hasło, spróbuj ponownie", "Ok"); return false; }
-            if (user.Password == Password) { await App.Current.MainPage.DisplayAlert("Błąd", "Nowe i stare hasło są identyczne, spróbuj ponownie", "Ok"); return false; }
+            if (!Helpers.Passwordhash.Veryfypass(_currentpassword, user.Password)) { await App.Current.MainPage.DisplayAlert("Błąd", "Błędne stare hasło, spróbuj ponownie", "Ok"); return false; }
+            if (Helpers.Passwordhash.Veryfypass(_password, user.Password)) { await App.Current.MainPage.DisplayAlert("Błąd", "Nowe i stare hasło są identyczne, spróbuj ponownie", "Ok"); return false; }
             if (_password != _passwordconfirm) { await App.Current.MainPage.DisplayAlert("Błąd", "Hasła niezgodne", "Ok"); return false; }
 
             return true;
@@ -152,7 +152,7 @@ namespace timeorganizer.PageViewModel
                 user = await _context.GetItemByKeyAsync<Users>(_id);
                 if (await validatepassword())
                 {
-                    user.Password = _password;
+                    user.Password = Helpers.Passwordhash.HashPassword(_password);
                     user.DataModified = (DateTime.Now).ToLongDateString();
                     await _context.UpdateItemAsync(user);
                     await MopupService.Instance.PopAsync(true);
