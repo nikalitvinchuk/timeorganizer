@@ -6,12 +6,10 @@ namespace timeorganizer.PageViewModel.NotesViewModel
 {
     public partial class AddNotesViewModel : ObservableObject
     {
-        private string _title, _content1, _content2, _content3;
+        private string _title, _content;
         private int _userId;
         public string Title { get => _title; set => _title = value; }
-        public string Content1 { get => _content1; set => _content1 = value; } // MAX 255 ZNAKÓW trzeba dodać ograniczenie po stronie xamla do entry
-        public string Content2 { get => _content2; set => _content2 = value; } // MAX 255 ZNAKÓW trzeba dodać ograniczenie po stronie xamla do entry
-        public string Content3 { get => _content3; set => _content3 = value; } // MAX 255 ZNAKÓW trzeba dodać ograniczenie po stronie xamla do entry
+        public string Content { get => _content; set => _content = value; } // MAX 255 ZNAKÓW trzeba dodać ograniczenie po stronie xamla do entry
         //public int Id { get => _id; set => _id = value; }
         public int UserId { get => _userId; set => _userId = value; }
 
@@ -45,9 +43,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
             Notes note = new()
             {
                 Title = _title,
-                Content1 = _content1,
-                Content2 = _content2,
-                Content3 = _content3,
+                Content = _content,
                 Created = DateTime.Now.ToLongDateString(),
                 LastUpdated = null
             };
@@ -68,7 +64,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
                             1 => "Tytuł",
                             _ => "",
                         };
-                        await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+
                         await App.Current.MainPage.DisplayAlert("Błąd_Puste", $"Pole {nazwa} jest puste", "Ok");
                         break;
                     }
@@ -82,7 +78,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
                                 1 => "Tytuł",
                                 _ => "",
                             };
-                            await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+
                             await App.Current.MainPage.DisplayAlert("Za długie", $"Pole {nazwa} jest za długie. Pole może mieć maksymalnie wartość 200 znaków", "Ok");
                             break;
                         }
@@ -93,11 +89,11 @@ namespace timeorganizer.PageViewModel.NotesViewModel
                 if (i == 0)
                 {
                     await _context.AddItemAsync<Notes>(note);
-                    await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                     await App.Current.MainPage.DisplayAlert("Succes", "Dodano notatkę do bazy", "Ok");
                 }
 
             });
+            await activityViewModel.ChangeExpirationDateCommand();
         }
 
         private async Task ExecuteAsync(Func<Task> operation)

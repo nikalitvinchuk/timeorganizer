@@ -23,9 +23,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
         [ObservableProperty]
         public bool isBusy;
         public string Title { get => _title; set => _title = value; }
-        public string Content1 { get => _content1; set => _content1 = value; } //max 255 znaków 
-        public string Content2 { get => _content2; set => _content2 = value; } //max 255 znaków 
-        public string Content3 { get => _content3; set => _content3 = value; } //max 255 znaków 
+        public string Content { get => _content1; set => _content1 = value; } //max 255 znaków 
         public int Id { get => _id; set => _id = value; }
         private async Task<ObservableCollection<Notes>> GetNotes()
         {
