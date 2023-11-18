@@ -4,7 +4,7 @@ using timeorganizer.DatabaseModels;
 
 namespace timeorganizer.PageViewModel.NotesViewModel
 {
-    public partial class AddNotesViewModel : ObservableObject
+    public partial class AddNotesExtension : ObservableObject
     {
         private string _title, _content;
         private int _userId;
@@ -17,7 +17,7 @@ namespace timeorganizer.PageViewModel.NotesViewModel
         public ICommand AddNoteCommand { private set; get; }
 
         private readonly DatabaseLogin _context;
-        public AddNotesViewModel()
+        public AddNotesExtension()
         {
             _context = new DatabaseLogin();
             AddNoteCommand = new Command(AddNote);

@@ -5,7 +5,7 @@ using timeorganizer.PageViewModel;
 
 namespace timeorganizer.PageViewModels
 {//dodawanie nowych zadań
-    public partial class AddTaskViewModel : ObservableObject
+    public partial class AddTaskExtension : ObservableObject
     {
 
         private string _name, _desc, _type, _status;
@@ -27,7 +27,7 @@ namespace timeorganizer.PageViewModels
 
         
 
-        public AddTaskViewModel()
+        public AddTaskExtension()
         {
             _context = new DatabaseLogin();
             AddTaskCommand = new Command(AddTask);

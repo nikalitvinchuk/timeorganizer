@@ -4,9 +4,9 @@ using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 using CommunityToolkit.Mvvm;
 
-namespace timeorganizer.PageViewModel;
+namespace timeorganizer.Services;
 
-public partial class ContactsViewModel : ObservableObject
+public partial class ContactsService : ObservableObject
 {
     private string _email, _message;
     public string Email { get => _email; set => _email = value; }
@@ -15,8 +15,8 @@ public partial class ContactsViewModel : ObservableObject
 
     private readonly DatabaseLogin _context;
 
-    public ContactsViewModel(DatabaseLogin context)
-	{
+    public ContactsService(DatabaseLogin context)
+    {
         _context = context;
         SendCommand = new Command(SendMessage);
     }
@@ -35,7 +35,7 @@ public partial class ContactsViewModel : ObservableObject
                 MessageText = Message
             };
 
-           // await _context.SendMessageAsync(newMessage);
+            // await _context.SendMessageAsync(newMessage);
 
             //{
             //    Email = string.Empty;
@@ -45,10 +45,10 @@ public partial class ContactsViewModel : ObservableObject
 
             // Dodatkowo, jeœli chcesz obs³u¿yæ odpowiedŸ z bazy danych, mo¿esz to zrobiæ tutaj.
         }
-       // else
-       // {
-            // Obs³uga b³êdów, na przyk³ad wyœwietlenie komunikatu u¿ytkownikowi.
-           // DisplayAlert("Wype³nij wszystkie pola przed wys³aniem wiadomoœci.");
+        // else
+        // {
+        // Obs³uga b³êdów, na przyk³ad wyœwietlenie komunikatu u¿ytkownikowi.
+        // DisplayAlert("Wype³nij wszystkie pola przed wys³aniem wiadomoœci.");
         //}
     }
 }

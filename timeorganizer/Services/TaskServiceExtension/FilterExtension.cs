@@ -6,7 +6,7 @@ using timeorganizer.DatabaseModels;
 namespace timeorganizer.PageViewModel
 {
 
-    public partial class FilterViewModel : ObservableObject
+    public partial class FilterExtension : ObservableObject
     {
 
         private string _name, _description, _typ, _status, _created;
@@ -31,7 +31,7 @@ namespace timeorganizer.PageViewModel
         public ICommand ShowTasks { private set; get; }
 
         private readonly DatabaseLogin _context;
-        public FilterViewModel()
+        public FilterExtension()
         {
             _context = new DatabaseLogin();
             ShowTasks = new Command(async () => await FilterTasks());

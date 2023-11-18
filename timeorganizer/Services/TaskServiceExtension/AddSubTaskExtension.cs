@@ -5,7 +5,7 @@ using timeorganizer.PageViewModel;
 
 namespace timeorganizer.PageViewModels
 {
-    public partial class AddSubTaskViewModel : ObservableObject
+    public partial class AddSubTaskExtension : ObservableObject
     {
         private string _name, _desc, _status;
         private int _userId, _tid;
@@ -19,7 +19,7 @@ namespace timeorganizer.PageViewModels
         public ICommand AddSubTaskCommand { private set; get; }
 
         private readonly DatabaseLogin _context;
-        public AddSubTaskViewModel()
+        public AddSubTaskExtension()
         {
             _context = new DatabaseLogin();
             AddSubTaskCommand = new Command(AddSubTask);
