@@ -74,6 +74,7 @@ namespace timeorganizer.Service
 
 
                 await Application.Current.MainPage.DisplayAlert("Sukces", "Zalogowano pomyślnie", "OK"); // zmiana domyslnego widoku na widok flyout
+                App.Current.MainPage = new MainPageLogged();            
             }
             else
             {

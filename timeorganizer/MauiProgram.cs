@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Logging;
+
 using timeorganizer.Helpers;
 using timeorganizer.PageViewModel;
 using timeorganizer.PageViewModels;
@@ -25,6 +26,7 @@ namespace timeorganizer
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
 #endif
+
             builder.Services.AddSingleton<LoginService>();
             builder.Services.AddSingleton<SettingsService>();
             builder.Services.AddSingleton<ActivityService>();
