@@ -1,0 +1,11 @@
+﻿@page "/login"
+@using timeorganizer.Service
+@using timeorganizer.Helpers
+<p1> LOGOWANIE MOZNA JUZ ROBIC GOTOWE </p1>
+@inject LoginService loginService
+<button class="btn btn-primary" @onclick="@(() => loginService.LoginCommand.Execute(true))"> Login</button>">
+<input @bind="@loginService.LoginValue" />
+<input @bind="@loginService.PassValue" />
+<a href="/" class="button">WROC</a>
+<a href="/Register" class="button">REGISTER</a>
+

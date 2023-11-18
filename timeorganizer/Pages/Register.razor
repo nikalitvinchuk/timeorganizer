@@ -1,0 +1,10 @@
+﻿@page "/register"
+@using timeorganizer.Service
+
+<p1> REJESTRACJA MOZNA JUZ ROBIC GOTOWE </p1>
+@inject RegisterService registerservice
+<button class="btn btn-primary" @onclick="@(() => registerservice.RegisterCommand.Execute(true))"> Login</button>">
+<input @bind="@registerservice.Email" />
+<input @bind="@registerservice.Login" />
+<input @bind="@registerservice.Password" />
+<input @bind="@registerservice.PasswordVerification" />
