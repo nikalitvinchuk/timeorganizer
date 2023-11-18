@@ -14,7 +14,7 @@ public partial class FlyoutMenuPage : ContentPage
         flyoutPageItems.Add(new FlyoutPageItem { Title = "Notes", MenuIcon = "notes.png" });
         flyoutPageItems.Add(new FlyoutPageItem { Title = "Statistics", MenuIcon = "statistics.png" });
         flyoutPageItems.Add(new FlyoutPageItem { Title = "Contacts", MenuIcon = "contacts.png" });
-        flyoutPageItems.Add(new FlyoutPageItem { Title = "Instagram", MenuIcon = "instagram.png" });
+        //flyoutPageItems.Add(new FlyoutPageItem { Title = "Instagram", MenuIcon = "instagram.png" });
         flyoutPageItems.Add(new FlyoutPageItem { Title = "Settings", MenuIcon = "settings.png" });
         flyoutPageItems.Add(new FlyoutPageItem { Title = "Logout", MenuIcon = "settings.png" });
 

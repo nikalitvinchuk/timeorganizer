@@ -72,7 +72,7 @@ namespace timeorganizer.PageViewModel
                     {
                         Debug.WriteLine("Pobrano sesję użytkownika: " + userId);
 
-                        session.ExpirationDate = DateTime.Now.AddSeconds(10).ToString("dd-MM-yyyy HH:mm:ss");
+                        session.ExpirationDate = DateTime.Now.AddMinutes(10).ToString("dd-MM-yyyy HH:mm:ss");
                         LastActivity = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
                         Debug.WriteLine("w change mamy lastactivity: " + LastActivity);
                         await _context.UpdateItemAsync<UserSessions>(session);

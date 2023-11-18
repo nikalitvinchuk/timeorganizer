@@ -1,8 +1,8 @@
 namespace timeorganizer.Views;
 
-public partial class NewContent1 : ContentView
+public partial class HomePage : ContentPage
 {
-	public NewContent1()
+	public HomePage()
 	{
 		InitializeComponent();
 	}
