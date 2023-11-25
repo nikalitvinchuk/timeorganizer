@@ -1,9 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 
-namespace timeorganizer.PageViewModel
+namespace timeorganizer.Services
 {
 
     public partial class FilterExtension : ObservableObject
@@ -34,7 +35,7 @@ namespace timeorganizer.PageViewModel
         public FilterExtension()
         {
             _context = new DatabaseLogin();
-            ShowTasks = new Command(async () => await FilterTasks());
+            ShowTasks = new RelayCommand(async () => await FilterTasks());
             //ShowTasks = new Command(FilterTasks);
         }
         private async Task<int> Getid()
