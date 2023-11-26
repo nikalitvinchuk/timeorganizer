@@ -4,7 +4,7 @@
 <p1> ToDoPage </p1>
 <img src="logoTO.jpg" alt="Logo TO">
 @inject ToDoService taskService
-
+@inject NavigationManager NavigationManager
 <div style="display: grid; grid-template-columns: auto 1fr;" class="d-flex flex-row">
     <div style="grid-row: 1; grid-column: 1;">
         <label>Name:</label>
@@ -30,6 +30,14 @@
 
 <button @onclick="@(() => taskService.showTask.ShowTasks.Execute(true))" style="margin: 10px auto; display: block;">Filtruj</button>
 
+@code {
+    private async void RedirectToDetails(int taskId) {
+        taskService.AddSTask.TaskId = taskId;
+        await taskService.AddSTask.GetTask();
+        NavigationManager.NavigateTo("/subtask");
+    }
+}
+
 @foreach (var task in taskService.showTask.TasksCollection) {
     <div class="d-flex flex-row border p-2" style="cursor: pointer;">
         <p class="mr-3 mb-0">@task.Name</p>
@@ -37,17 +45,10 @@
         <p class="mr-3 mb-0">@task.Type</p>
         <p class="mr-3 mb-0">@task.status</p>
         <p class="mr-3 mb-0">@task.Termin</p>
-        <a href="/subtask" @onclick="@(e => RedirectToDetails(@task.Id))">
-            Tekst
-        </a>
+        <button @onclick="@(e => RedirectToDetails(@task.Id))">Szczegóły zadania</button>
     </div>
 }
-@code {
-    private void RedirectToDetails(int taskId) {
-        taskService.AddSTask.TaskId = taskId;
-        taskService.AddSTask.GetTaskComm.Execute(true);
-    }
-}
+
 
 <div class="container">
     <div class="row">

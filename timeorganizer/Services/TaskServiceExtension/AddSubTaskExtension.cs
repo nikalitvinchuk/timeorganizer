@@ -24,15 +24,19 @@ namespace timeorganizer.PageViewModels
         private readonly DatabaseLogin _context;
 
         public AddSubTaskExtension(){
+            Zadanie = new();
             _context = new DatabaseLogin();     
             AddSubTaskCommand = new Command(AddSubTask);
-            GetTaskComm = new RelayCommand(GetTask);
+            GetTaskComm = new RelayCommand(async () => await GetTask());
         }
-        private async void GetTask() {
+        public async Task<int> GetTask() {
+            OnPropertyChanged(nameof(Zadanie));
             await ExecuteAsync(async () => {
                 var temp = await _context.GetItemByKeyAsync<Tasks>(_tid);
                 Zadanie = new ObservableCollection<Tasks> { temp };
             });
+            OnPropertyChanged(nameof(Zadanie));
+            return 0;
         }
         private async void Getid(){
             string _tokenvalue = await SecureStorage.Default.GetAsync("token");
