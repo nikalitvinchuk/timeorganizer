@@ -3,14 +3,15 @@ using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 using timeorganizer.PageViewModel;
 
-namespace timeorganizer.PageViewModels
+namespace timeorganizer.Services
 {//dodawanie nowych zadań
-    public partial class AddTaskExtension : ObservableObject
+    public partial class AddTaskExtension
     {
 
         private string _name, _desc, _type, _status;
         private int _userId, _relizedpr;
-        private DateTime _termin;
+        private DateTime _termin = DateTime.Now;
+
         public string Name { get => _name; set => _name = value; }
         public string Description { get => _desc; set => _desc = value; }
         public string Typ { get => _type; set => _type = value; }
@@ -45,8 +46,6 @@ namespace timeorganizer.PageViewModels
                 return 0; }
 
         }
-        [ObservableProperty]
-        private bool _isBusy;
 
         private async void AddTask(object obj)
         {
@@ -132,6 +131,16 @@ namespace timeorganizer.PageViewModels
                     if (i == 0)
                     {
                         await _context.AddItemAsync<Tasks>(Task);
+                        TaskComponents SubTask = new()
+                {
+                    Name = Name
+                    ,
+                    Description = "Test"
+                    ,
+                    TaskId = 12
+                    ,
+                    UserId = 9
+                };
                         await _context.AddItemAsync<TaskComponents>(SubTask);
                         //await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                         await App.Current.MainPage.DisplayAlert("Succes", "Dodano zadanie do bazy", "Ok");
@@ -185,7 +194,6 @@ namespace timeorganizer.PageViewModels
         private async Task ExecuteAsync(Func<Task> operation)
         {
             //var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
-            IsBusy = true;
 
             try
             {
@@ -208,7 +216,6 @@ namespace timeorganizer.PageViewModels
             }
             finally
             {
-                IsBusy = false;
             }
         }
     }

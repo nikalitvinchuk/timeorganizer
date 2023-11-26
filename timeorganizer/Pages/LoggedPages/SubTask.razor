@@ -1,0 +1,49 @@
+﻿@page "/subtask"
+@using timeorganizer.Services
+@using timeorganizer.Helpers
+
+@inject ToDoService taskService
+
+<input @bind="@taskService.AddSTask.TaskId" />
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Termin</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in taskService.AddSTask.Zadanie) {
+            <tr>
+                <td>@task.Name</td>
+                <td>@task.Description</td>
+                <td>@task.Type</td>
+                <td>@task.status</td>
+                <td>@task.Termin</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+
+            <label class="form-label">Podaj tytuł swojego pod zadnaia</label>
+            <input @bind="@taskService.AddSTask.Name" placeholder="Name" />
+
+            <label class="form-label mt-3">Opisz swoje zadania</label>
+            <input @bind="@taskService.AddSTask.Description" placeholder="Description" />
+
+            <button class="btn btn-primary mt-3" @onclick="@(() => taskService.AddSTask.AddSubTaskCommand.Execute(true))">Utwórz główne zadanie</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+

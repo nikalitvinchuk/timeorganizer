@@ -1,10 +1,75 @@
 ﻿@page "/todo"
 @using timeorganizer.Services
 @using timeorganizer.Helpers
-<p1> LOGOWANIE MOZNA JUZ ROBIC GOTOWE </p1>
+<p1> ToDoPage </p1>
 <img src="logoTO.jpg" alt="Logo TO">
-@inject FilterExtension filterExtension
+@inject ToDoService taskService
 
-<p>Podaj Daneeeeeeeeeeeeeee</p>
+<div style="display: grid; grid-template-columns: auto 1fr;" class="d-flex flex-row">
+    <div style="grid-row: 1; grid-column: 1;">
+        <label>Name:</label>
+        <input @bind="@taskService.showTask.Name" />
+    </div>
+    <div style="grid-row: 2; grid-column: 1;">
+        <label>Description:</label>
+        <input @bind="@taskService.showTask.Description" />
+    </div>
+    <div style="grid-row: 3; grid-column: 1;">
+        <label>Type:</label>
+        <input @bind="@taskService.showTask.Typ" />
+    </div>
+    <div style="grid-row: 4; grid-column: 1;">
+        <label>Status:</label>
+        <input @bind="@taskService.showTask.Status" />
+    </div>
+    <div style="grid-row: 5; grid-column: 1;">
+        <label>Created:</label>
+        <input type="date" @bind="@taskService.showTask.CreatedD" />
+    </div>
+</div>
+
+<button @onclick="@(() => taskService.showTask.ShowTasks.Execute(true))" style="margin: 10px auto; display: block;">Filtruj</button>
+
+@foreach (var task in taskService.showTask.TasksCollection) {
+    <div class="d-flex flex-row border p-2" style="cursor: pointer;">
+        <p class="mr-3 mb-0">@task.Name</p>
+        <p class="mr-3 mb-0">@task.Description</p>
+        <p class="mr-3 mb-0">@task.Type</p>
+        <p class="mr-3 mb-0">@task.status</p>
+        <p class="mr-3 mb-0">@task.Termin</p>
+        <a href="/subtask" @onclick="@(e => RedirectToDetails(@task.Id))">
+            Tekst
+        </a>
+    </div>
+}
+@code {
+    private void RedirectToDetails(int taskId) {
+        taskService.AddSTask.TaskId = taskId;
+        taskService.AddSTask.GetTaskComm.Execute(true);
+    }
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <label class="form-label">Podaj tytuł swojego zadania</label>
+            <input class="form-control" @bind="@taskService.addTask.Name" placeholder="Np. Nauka Języka Angielskiego" />
+
+            <label class="form-label mt-3">Opisz swoje zadania</label>
+            <input class="form-control" @bind="@taskService.addTask.Description" placeholder="Określ konkrety, które chcesz zrealizować." />
+
+            <label class="form-label mt-3">Określ typ zadania</label>
+            <input class="form-control" @bind="@taskService.addTask.Typ" placeholder="Wprowadź typ zadania: home/work/hobby/other" />
+
+            <label class="form-label mt-3">Podaj Termin wykonania zadania</label>
+            
+           @*  <input class="datepicker" type="date" data-date-format="dd/mm/yyyy" @bind="@taskService.addTask.Termin"> *@
+            
+            
+
+            <button class="btn btn-primary mt-3" @onclick="@(() => taskService.addTask.AddTaskCommand.Execute(true))">Utwórz główne zadanie</button>
+        </div>
+    </div>
+</div>
 
 

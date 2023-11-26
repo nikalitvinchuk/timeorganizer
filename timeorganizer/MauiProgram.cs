@@ -5,6 +5,7 @@ using timeorganizer.Helpers;
 using timeorganizer.PageViewModel;
 using timeorganizer.PageViewModels;
 using timeorganizer.Service;
+using timeorganizer.Services;
 
 namespace timeorganizer
 {
@@ -28,6 +29,7 @@ namespace timeorganizer
 #endif
 
             builder.Services.AddSingleton<LoginService>();
+            builder.Services.AddSingleton<ToDoService>();
             builder.Services.AddSingleton<SettingsService>();
             builder.Services.AddSingleton<ActivityService>();
             builder.Services.AddSingleton<RegisterService>();

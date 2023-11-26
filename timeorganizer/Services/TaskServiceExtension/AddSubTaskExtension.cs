@@ -1,4 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 using timeorganizer.PageViewModel;
@@ -14,18 +16,25 @@ namespace timeorganizer.PageViewModels
         public string Status { get => _status; set => _status = value; }
         public int TaskId { get => _tid; set => _tid = value; }
         public int UserId { get => _userId; set => _userId = value; }
-        private bool TaskComplited;
-        private bool IsActive;
+        public bool TaskComplited;
+        public bool IsActive;
+        public ObservableCollection<Tasks> Zadanie { get; set; }
         public ICommand AddSubTaskCommand { private set; get; }
-
+        public ICommand GetTaskComm { private set; get; }
         private readonly DatabaseLogin _context;
-        public AddSubTaskExtension()
-        {
-            _context = new DatabaseLogin();
+
+        public AddSubTaskExtension(){
+            _context = new DatabaseLogin();     
             AddSubTaskCommand = new Command(AddSubTask);
+            GetTaskComm = new RelayCommand(GetTask);
         }
-        private async void Getid()
-        {
+        private async void GetTask() {
+            await ExecuteAsync(async () => {
+                var temp = await _context.GetItemByKeyAsync<Tasks>(_tid);
+                Zadanie = new ObservableCollection<Tasks> { temp };
+            });
+        }
+        private async void Getid(){
             string _tokenvalue = await SecureStorage.Default.GetAsync("token");
             var getids = await _context.GetAllAsync<UserSessions>();
             if (getids.Any(t => t.Token == _tokenvalue)) // mo¿na dodac EXPIRYDATE POZNIEJ i weryfikowac czy mo¿na wykonaæ operacje !
@@ -39,26 +48,17 @@ namespace timeorganizer.PageViewModels
         //                  FUNKCJA DODAWANIA PODZADANIA - powinno byæ w osobnym modelu -JB
         private async void AddSubTask(object obj)
         {
-
-            //var activityViewModel = new ActivityViewModel(); //inicjalizacja do póŸniejszego wywo³ania ChangeExpirationDate
-
+            Getid();
             TaskComponents TC = new()
             {
                 Name = Name
-                ,
-                Description = Description
-                ,
-                TaskId = TaskId
-                ,
-                UserId = _userId
-                ,
-                Status = Status
-                ,
-                TaskComplited = false
-                ,
-                IsActive = true
-                ,
-                Created = DateTime.Now.ToLongDateString(), // Przy dodadawniu powinno byc Created a nie Updated
+                ,Description = Description
+                ,TaskId = TaskId
+                ,UserId = _userId
+                ,Status = Status
+                ,TaskComplited = false
+                ,IsActive = true
+                ,Created = DateTime.Now.ToLongDateString(), // Przy dodadawniu powinno byc Created a nie Updated
                 LastUpdated = null
             };
 
