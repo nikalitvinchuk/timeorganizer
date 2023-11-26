@@ -1,16 +1,14 @@
 ﻿@page "/Kontakt"
 @using timeorganizer.Service
 @using timeorganizer.Helpers
+@inject ContactService contactService;
 
-<img src="logoTO.jpg" alt="Logo TO">
-<br />
-<p>Podaj email na którego chcesz otrzymać odpowiedź</p>
-<input />
-<br />
-<p>Opisz nam problem w aplikacji który napotkałeś</p>
-<br />
-<input />
-<button>Wyślij</button>
-<br />
-
-<a href="/" class="button">Wróć</a>
+<div id="container">
+    <h2> Contact Us</h2>
+    <p>Podaj email na którego chcesz otrzymać odpowiedź</p>
+    <input @bind="@contactService.EmailValue" placeholder="E-mail" />
+    <p>Opisz nam problem w aplikacji który napotkałeś</p>
+    <input @bind="@contactService.ReportValue" placeholder="Report" id="reportbutton" />
+    <button @onclick="@(() => contactService.MessageCommand.Execute(true))">Wyślij</button>
+    <a href="/" class="button">Wróć</a>
+</div>

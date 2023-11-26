@@ -31,6 +31,7 @@ namespace timeorganizer
             builder.Services.AddSingleton<SettingsService>();
             builder.Services.AddSingleton<ActivityService>();
             builder.Services.AddSingleton<RegisterService>();
+            builder.Services.AddSingleton<ContactService>();
 
             builder.Services.AddAuthorizationCore();
             return builder.Build();
