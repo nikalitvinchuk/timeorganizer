@@ -1,29 +1,31 @@
 ﻿@page "/todo"
 @using timeorganizer.Services
 @using timeorganizer.Helpers
-<p1> ToDoPage </p1>
-<img src="logoTO.jpg" alt="Logo TO">
+
+<div id="container1">
+    <div>
+<h2> Zadania</h2>
 @inject ToDoService taskService
 @inject NavigationManager NavigationManager
 <div style="display: grid; grid-template-columns: auto 1fr;" class="d-flex flex-row">
     <div style="grid-row: 1; grid-column: 1;">
-        <label>Name:</label>
+        <label>Nazwa </label>
         <input @bind="@taskService.showTask.Name" />
     </div>
     <div style="grid-row: 2; grid-column: 1;">
-        <label>Description:</label>
+        <label>Opis </label>
         <input @bind="@taskService.showTask.Description" />
     </div>
     <div style="grid-row: 3; grid-column: 1;">
-        <label>Type:</label>
+        <label>Typ</label>
         <input @bind="@taskService.showTask.Typ" />
     </div>
     <div style="grid-row: 4; grid-column: 1;">
-        <label>Status:</label>
+        <label>Status </label>
         <input @bind="@taskService.showTask.Status" />
     </div>
     <div style="grid-row: 5; grid-column: 1;">
-        <label>Created:</label>
+        <label>Data</label>
         <input type="date" @bind="@taskService.showTask.CreatedD" />
     </div>
 </div>
@@ -69,8 +71,10 @@
             
 
             <button class="btn btn-primary mt-3" @onclick="@(() => taskService.addTask.AddTaskCommand.Execute(true))">Utwórz główne zadanie</button>
+           
         </div>
     </div>
 </div>
-
-
+<a href="/" class="button">Wróć</a>
+    </div>
+</div>
