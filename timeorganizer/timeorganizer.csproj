@@ -50,6 +50,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="Pages\LoggedPages\ToDoPage.razor.css" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Pages\LoggedPages\ToDoPage.razor.css" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
         <PackageReference Include="IdentityModel.OidcClient" Version="5.2.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="7.0.14" />
