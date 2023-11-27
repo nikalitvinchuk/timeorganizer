@@ -1,9 +1,10 @@
 ﻿@page "/todo"
 @using timeorganizer.Services
 @using timeorganizer.Helpers
-<img src="logoTO.jpg" alt="Logo TO">
+
 <div id="container1">
-<H2> Zadania</H2>
+    <div>
+<h2> Zadania</h2>
 @inject ToDoService taskService
 @inject NavigationManager NavigationManager
 <div style="display: grid; grid-template-columns: auto 1fr;" class="d-flex flex-row">
@@ -75,4 +76,5 @@
     </div>
 </div>
 <a href="/" class="button">Wróć</a>
+    </div>
 </div>

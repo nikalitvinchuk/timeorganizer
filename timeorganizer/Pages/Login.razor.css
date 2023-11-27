@@ -1,4 +1,4 @@
-﻿#container1 {
+﻿#container {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -9,22 +9,8 @@
     justify-content: center;
 }
 
-h2 {
+h2, p {
     color: blueviolet;
-    text-align: center;
-}
-label {
-    color: blueviolet;
-}
-
-
-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid gray;
-    border-radius: 10px;
-    box-sizing: border-box;
 }
 
 button {
@@ -37,6 +23,15 @@ button {
     border-radius: 25px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid gray;
+    border-radius: 10px;
+    box-sizing: border-box;
 }
 
 a {

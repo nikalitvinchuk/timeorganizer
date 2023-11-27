@@ -51,10 +51,12 @@
 
     <ItemGroup>
       <None Remove="Pages\LoggedPages\ToDoPage.razor.css" />
+      <None Remove="Pages\Login.razor.css" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Include="Pages\LoggedPages\ToDoPage.razor.css" />
+      <Content Include="Pages\Login.razor.css" />
     </ItemGroup>
 
     <ItemGroup>

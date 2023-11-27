@@ -1,16 +1,17 @@
 ﻿@page "/login"
 @using timeorganizer.Service
 @using timeorganizer.Helpers
-<p1> LOGOWANIE MOZNA JUZ ROBIC GOTOWE </p1>
-<img src="logoTO.jpg" alt="Logo TO">
 @inject LoginService loginService
 
-<p>Podaj login</p>
-<input @bind="@loginService.LoginValue" />
-<p>Podaj hasło</p>
-<input @bind="@loginService.PassValue" />
-<a href="/" class="button">WROC</a>
-<button class="btn btn-primary" @onclick="@(() => loginService.LoginCommand.Execute(true))"> Login </button>
-<a href="/Register" class="button">REGISTER</a>
-<a href="/" class="button">Odzyskaj hasło</a> 
+<div class="container">
+	<h2> Logowanie </h2>
+	<p>Podaj login</p>
+	<input @bind="@loginService.LoginValue" />
+	<p>Podaj hasło</p>
+	<input @bind="@loginService.PassValue" />
+	<button class="btn btn-primary" @onclick="@(() => loginService.LoginCommand.Execute(true))"> Login </button>
+	<a href="/Register" class="button">Rejestracja</a>
+	<a href="/" class="button">WROC</a>
+
+</div>
 
