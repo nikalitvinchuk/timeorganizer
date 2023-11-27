@@ -41,8 +41,6 @@ namespace timeorganizer.Services
             _filtered = new();
             _context = new DatabaseLogin();
             ShowTasks = new RelayCommand(FilterTasks);
-
-            //ShowTasks = new Command(FilterTasks);
         }
         private async Task<int> Getid()
         {
@@ -61,30 +59,10 @@ namespace timeorganizer.Services
 
         public async void FilterTasks()
         {
-            //var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
-
             if (_userId == 0) { _userId = await Getid(); }
-            //List<string> Lista_zapytan = new();
-            //List<string> ListaZmienych = new() { "Name", "Description", "Type", "Status", "Created" };
             await ExecuteAsync(async () =>
             {
-                //foreach (string Zmienna in ListaZmienych) {
-                //    var wartosc = GetType().GetProperty(Zmienna)?.GetValue(this, null)?.ToString();
-                //    if (!string.IsNullOrEmpty(wartosc)) {
-                //        Lista_zapytan.Add($"{Zmienna} = '{wartosc}'");
-                //    }
-                //}
-                //var query = "SELECT * FROM Tasks WHERE UserId = " + _userId;
-                //if (Lista_zapytan.Count > 0) {
-                //    query += " AND " + string.Join(" AND ", Lista_zapytan);
-                //}
-                //var tasks = await _context.GetByQuery<Tasks>(query);
-                //
-                //
-
-                //_created = CreatedD.ToString("dd.MM.yyyy, HH:mm");
-
-                // ZMIENIONE TAK ABY KORZYSTALO Z GOTOWEJ FUNKCJI :)  - JB
+                OnPropertyChanged(nameof(TasksCollection));
                 var filters = new Dictionary<string, object>
                 {
                     { "Userid", _userId }
@@ -102,19 +80,14 @@ namespace timeorganizer.Services
                 //};
                 //await _context.AddItemAsync<Tasks>(SubTask);
                 TasksCollection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>( _context.CreatePredicateToFiltred<Tasks>(filters)));
+                await Task.Delay(1000);
                 filters.Clear();
                 OnPropertyChanged(nameof(TasksCollection));
-                
-
             });
-            //await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
-            
         }
 
         private async Task ExecuteAsync(Func<Task> operation)
         {
-            //var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
-
             IsBusy = true;
             try
             {
@@ -122,7 +95,6 @@ namespace timeorganizer.Services
             }
             catch (Exception ex)
             {
-               // await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                 await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
 
             }
@@ -130,8 +102,7 @@ namespace timeorganizer.Services
             {
                 IsBusy = false;
             }
-           
-
+          
         }
 
 

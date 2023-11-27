@@ -24,10 +24,8 @@ namespace timeorganizer.PageViewModels
         private readonly DatabaseLogin _context;
 
         public AddSubTaskExtension(){
-            Zadanie = new();
             _context = new DatabaseLogin();     
             AddSubTaskCommand = new Command(AddSubTask);
-            GetTaskComm = new RelayCommand(async () => await GetTask());
         }
         public async Task<int> GetTask() {
             OnPropertyChanged(nameof(Zadanie));
