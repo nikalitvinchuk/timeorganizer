@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
+using timeorganizer.Service;
 
 namespace timeorganizer.Services
 {
@@ -59,6 +60,8 @@ namespace timeorganizer.Services
 
         public async void FilterTasks()
         {
+            var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
             if (_userId == 0) { _userId = await Getid(); }
             await ExecuteAsync(async () =>
             {
@@ -83,11 +86,14 @@ namespace timeorganizer.Services
                 await Task.Delay(1000);
                 filters.Clear();
                 OnPropertyChanged(nameof(TasksCollection));
+                await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
             });
         }
 
         private async Task ExecuteAsync(Func<Task> operation)
         {
+            var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
             IsBusy = true;
             try
             {
@@ -95,7 +101,8 @@ namespace timeorganizer.Services
             }
             catch (Exception ex)
             {
-                await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
+                await App.Current.MainPage.DisplayAlert("Nastąpiło wylogowanie", ex.Message, "Ok");
+                App.Current.MainPage = new MainPage();
 
             }
             finally

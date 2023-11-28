@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +38,8 @@ namespace timeorganizer.Service
         }
         public async void LoginUser()
         {
+            var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
             if (!isValidEntry())
             {
                 //w przypadku braku poprawnych danych - alert
@@ -50,8 +53,8 @@ namespace timeorganizer.Service
 
                 //-------------------------OBSŁUGA SESJI-----------------------------
                 string sessionToken = Guid.NewGuid().ToString(); //unikalny token sesji (GUID)
-                string dateCreated = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
-                string expirationDate = DateTime.Now.AddMinutes(10).ToString("dd-MM-yyyy HH:mm:ss");
+                DateTime dateCreated = DateTime.Now;
+                DateTime expirationDate = DateTime.Now.AddMinutes(3);
 
                 //dodanie tokena do PAMIECI ABY BYL DO NIEGO DOSTEP -JB 
 
@@ -64,17 +67,24 @@ namespace timeorganizer.Service
                     UserId = user.Id,
                     Token = sessionToken,
                     DateCreated = dateCreated,
-                    ExpirationDate = expirationDate
+                    ExpirationDate = expirationDate,
+                    DateCreatedText = dateCreated.ToString("yyyy-MM-dd HH:mm:ss"),
+                    ExpirationDateText = expirationDate.ToString("yyyy-MM-dd HH:mm:ss")
                 };
                 await _context.AddItemAsync<UserSessions>(session); // NALEZY DOROBIC PRZEDLUZANIE SESJI I AUTOMATYCZNE WYLOGOWANIE 
                                                                     // w przeciwnym wypadku nie korzystamy z expirationDate
                                                                     //  po uplywie tego czasu powinno wylogowac- JB
 
+                Debug.WriteLine("Obsługa sesji - OK");
+
                 //-----------------------KONIEC OBSŁUGI SESJI-------------------------
 
 
                 await Application.Current.MainPage.DisplayAlert("Sukces", "Zalogowano pomyślnie", "OK"); // zmiana domyslnego widoku na widok flyout
-                App.Current.MainPage = new MainPageLogged();            
+                App.Current.MainPage = new MainPageLogged();
+
+                await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+                await activityservice.CheckLastActivityVsExpirationDate(); //przedłużanie sesji - funkcja z ActivityViewModel 
             }
             else
             {

@@ -94,6 +94,7 @@ namespace timeorganizer.Service
                     //var lista = await _context.GetFileteredAsync<Users>(x => x.Login == Login && x.Id == Id);
                     // } -Greg92
                     await _context.AddItemAsync<Users>(User);
+                    await Application.Current.MainPage.DisplayAlert("Sukces", "Nowy użytkownik został dodany do bazy", "OK");
                     Email = "";
                     Password = "";
                     PasswordVerification = "";
