@@ -52,6 +52,7 @@
     <ItemGroup>
       <None Remove="Pages\LoggedPages\ToDoPage.razor.css" />
       <None Remove="Pages\Login.razor.css" />
+      <None Remove="Resources\Images\user2.png" />
     </ItemGroup>
 
     <ItemGroup>

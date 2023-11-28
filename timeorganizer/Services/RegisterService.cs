@@ -85,10 +85,7 @@ namespace timeorganizer.Service
                 RememberMe = false,
                 //DataModified = null
             };
-            Email = "";
-            Password = "";
-            Login = "";
-
+            
             await ExecuteAsync(async () =>
             {
                 if (User.Id == 0)
@@ -97,8 +94,13 @@ namespace timeorganizer.Service
                     //var lista = await _context.GetFileteredAsync<Users>(x => x.Login == Login && x.Id == Id);
                     // } -Greg92
                     await _context.AddItemAsync<Users>(User);
+                    Email = "";
+                    Password = "";
+                    PasswordVerification = "";
+                    Login = "";
 
                     //await Shell.Current.GoToAsync("LoginPage");
+
                 }
                 else
                 { }

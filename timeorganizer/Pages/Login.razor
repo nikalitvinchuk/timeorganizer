@@ -4,11 +4,12 @@
 @inject LoginService loginService
 
 <div class="container">
+	<img src="user2.png" />
 	<h2> Logowanie </h2>
 	<p>Podaj login</p>
 	<input @bind="@loginService.LoginValue" />
 	<p>Podaj hasło</p>
-	<input @bind="@loginService.PassValue" />
+	<input @bind="@loginService.PassValue" type="password"/>
 	<button class="btn btn-primary" @onclick="@(() => loginService.LoginCommand.Execute(true))"> Login </button>
 	<a href="/Register" class="button">Rejestracja</a>
 	<a href="/" class="button">WROC</a>
