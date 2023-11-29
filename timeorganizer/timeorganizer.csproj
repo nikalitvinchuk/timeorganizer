@@ -50,8 +50,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="Services\Calendar.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Remove="Pages\Index.razor.css" />
       <None Remove="Pages\LoggedPages\Home.razor.css" />
+      <None Remove="Pages\LoggedPages\Kalendarz.razor.css" />
+      <None Remove="Pages\LoggedPages\Notatki.razor.css" />
+      <None Remove="Pages\LoggedPages\Statystyki.razor.css" />
       <None Remove="Pages\LoggedPages\ToDoPage.razor.css" />
       <None Remove="Pages\Login.razor.css" />
       <None Remove="Resources\Images\user2.png" />
@@ -60,8 +67,12 @@
     <ItemGroup>
       <Content Include="Pages\Index.razor.css" />
       <Content Include="Pages\LoggedPages\Home.razor.css" />
+      <Content Include="Pages\LoggedPages\Kalendarz.razor.css" />
+      <Content Include="Pages\LoggedPages\Notatki.razor.css" />
+      <Content Include="Pages\LoggedPages\Statystyki.razor.css" />
       <Content Include="Pages\LoggedPages\ToDoPage.razor.css" />
       <Content Include="Pages\Login.razor.css" />
+      <Content Include="Services\Calendar.cs" />
     </ItemGroup>
 
     <ItemGroup>
