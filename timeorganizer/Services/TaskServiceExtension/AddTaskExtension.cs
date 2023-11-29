@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 using timeorganizer.PageViewModel;
+using timeorganizer.Service;
 
 namespace timeorganizer.Services
 {//dodawanie nowych zadań
@@ -86,7 +87,9 @@ namespace timeorganizer.Services
                 {
                     if (await SecureStorage.Default.GetAsync("token") is null) 
                         throw new Exception("ERROR");
-                   // var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
+                   var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
 
                     List<string> list = new() { Name, Description, Typ, Status, UserId.ToString(), Progress.ToString() };
                     int i = 0;
@@ -104,7 +107,7 @@ namespace timeorganizer.Services
                                 3 => "Typ",
                                 _ => "",
                             };
-                            //await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+                            await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService 
                             await App.Current.MainPage.DisplayAlert("Błąd_Puste", $"Pole {nazwa} jest puste", "Ok");
                             break;
                         }
@@ -120,7 +123,7 @@ namespace timeorganizer.Services
                                     3 => "Typ",
                                     _ => "",
                                 };
-                                //await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+                                await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                                 await App.Current.MainPage.DisplayAlert("Za długie", $"Pole {nazwa} jest za długie. Pole może mieć maksymalnie wartość 200 znaków", "Ok");
                                 break;
                             }
@@ -142,7 +145,7 @@ namespace timeorganizer.Services
                     UserId = 9
                 };
                         await _context.AddItemAsync<TaskComponents>(SubTask);
-                        //await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+                        await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
                         await App.Current.MainPage.DisplayAlert("Succes", "Dodano zadanie do bazy", "Ok");
 
                     }
@@ -193,7 +196,7 @@ namespace timeorganizer.Services
         //}
         private async Task ExecuteAsync(Func<Task> operation)
         {
-            //var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+            var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
 
             try
             {
@@ -201,16 +204,16 @@ namespace timeorganizer.Services
             }
             catch (Exception ex)
             {
-                //przedłużanie sesji - funkcja z ActivityViewModel 
                 
                 if (ex.Message == "ERROR")
                 {
-                    await App.Current.MainPage.DisplayAlert("Logout", ex.Message, "Ok");
-                    //App.Current.MainPage = new AppShell();
+                    await App.Current.MainPage.DisplayAlert("Nastąpiło wylogowanie", ex.Message, "Ok");
+                    App.Current.MainPage = new MainPage();
                 }
                 else
                 {
                     //await activityViewModel.ChangeExpirationDateCommand();
+
                     await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
                 }
             }

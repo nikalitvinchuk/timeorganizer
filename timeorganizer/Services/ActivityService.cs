@@ -17,7 +17,7 @@ namespace timeorganizer.Service
     {
 
         private readonly DatabaseLogin _context;
-        private string LastActivity { get; set; }
+        private DateTime LastActivity { get; set; }
         private System.Timers.Timer timer;
 
         public ActivityService()
@@ -72,8 +72,8 @@ namespace timeorganizer.Service
                     {
                         Debug.WriteLine("Pobrano sesję użytkownika: " + userId);
 
-                        session.ExpirationDate = DateTime.Now.AddMinutes(10).ToString("dd-MM-yyyy HH:mm:ss");
-                        LastActivity = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+                        session.ExpirationDate = DateTime.Now.AddMinutes(3);
+                        LastActivity = DateTime.Now;
                         Debug.WriteLine("w change mamy lastactivity: " + LastActivity);
                         await _context.UpdateItemAsync<UserSessions>(session);
 
@@ -104,17 +104,24 @@ namespace timeorganizer.Service
             {
                 if (session.Token == userToken)
                 {
-                    var timeNow = DateTime.Now;
+                    DateTime timeNow = DateTime.Now;
 
                     Debug.WriteLine("ExpirationDate " + session.ExpirationDate);
                     Debug.WriteLine("Czas teraz " + timeNow);
 
-                    if (timeNow >= DateTime.Parse(session.ExpirationDate))
+                    if (timeNow >= session.ExpirationDate)
                     {
                         Debug.WriteLine("TimeNow=ExpirationDate");
                         SecureStorage.Default.Remove("token");
                         timer.Enabled = false;
                         timer.Stop();
+
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            App.Current.MainPage.DisplayAlert("Nastąpiło wylogowanie", "Twoja sesja wygasła. Zaloguj się ponownie.", "Ok");
+                            App.Current.MainPage = new MainPage();
+                        });
+                      
                         return;
                     }
                     return;

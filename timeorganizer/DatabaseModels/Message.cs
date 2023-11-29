@@ -10,6 +10,7 @@ public class Message
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
     public string Email { get; set; } //nazwa podawanego maila zwrotnego przez klienta
+    public int UserId { get; set; }
     public string MessageText { get; set; } //komentarz/informacja  jak¹ chce daæ klinet
     public string DateCreate { get; set; }
     public string Status { get; set; }
