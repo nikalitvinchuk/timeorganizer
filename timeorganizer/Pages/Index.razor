@@ -1,11 +1,45 @@
 ﻿@page "/"
-@using timeorganizer.Service
-<div id="container">
-	<img src="logoTO.jpg" alt="Logo TO">
-	<p1> STRONA GŁOWNA MOZNA ROBIC - WSPOLNA DLA UZYTKOWNIKA ZALOGOWANEGO I NIEZALOGOWANEGO (CHYBA ZE OGARNE JAK ZROBIC ZEBY NIE BYLA WSPOLNA XD</p1>
-	<h1> Docelowo strona główna dla niezalogowanego użytkownika</h1>
+@using timeorganizer.Services
+@inject AuthServiceSetUser service
 
-	<a href="login" class="button">Logowanie</a>
-	<a href="register" class="button">Rejestracja</a>
+@if (service.CurrentUser.Identity.IsAuthenticated)
+{
+    // ZALOGOWANY
+    <div id="container">
+        <div>
+            <img src="" alt="logo" />
+            <h2> Witaj!</h2>
+            <h3> Nadchodzące zadania:</h3>
 
-</div>
+            @* <div>  <a href="settings" img src="" alt="Ustawienia" /> <a href="todo" img src="" alt="Zadania" /> </div>
+
+        <div>  <a href="Kontakt" img src="Kontakt" alt="Kontakt" /><a href="" img src="" alt="Kalendarz" /> </div> *@
+
+            @* <div>  <img src="Kontakt" alt="Kontakt" /><img src="" alt="Kalendarz" /> </div> *@
+
+            @* <div>  <img src="Notatnik" alt="Notatnikt" /><img src="statystyki" alt="Statystyki" /> </div> *@
+
+            <h2>Statystyki:</h2>
+
+            <p>Wykonane zaddania</p>
+
+            <p>Niewykonane zadania</p>
+            <p>Postęp</p>
+
+        </div>
+    </div>
+}
+else
+{
+    // NIEZALOGOWANY
+	<div id="container">
+		<img src="logoTO.jpg" alt="Logo TO">
+		<p1> STRONA GŁOWNA MOZNA ROBIC - WSPOLNA DLA UZYTKOWNIKA ZALOGOWANEGO I NIEZALOGOWANEGO (CHYBA ZE OGARNE JAK ZROBIC ZEBY NIE BYLA WSPOLNA XD</p1>
+		<h1> Docelowo strona główna dla niezalogowanego użytkownika</h1>
+
+		<a href="login" class="button">Logowanie</a>
+		<a href="register" class="button">Rejestracja</a>
+
+	</div>
+}
+

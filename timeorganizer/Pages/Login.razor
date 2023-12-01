@@ -1,18 +1,32 @@
 ﻿@page "/login"
-@using timeorganizer.Service
+@using timeorganizer.Services
 @using timeorganizer.Helpers
-@inject LoginService loginService
+@inject LoginService login
+@inject AuthServiceSetUser auth
+@if (!auth.CurrentUser.Identity.IsAuthenticated)
+{
+	<div class="container">
+		<img src="user2.png" />
+		<h2> Logowanie </h2>
+		<p>Podaj login</p>
+		<input @bind="@login.LoginValue" />
+		<p>Podaj hasło</p>
+		<input @bind="@login.PassValue" type="password" />
+		<button class="btn btn-primary" @onclick="@(() => login.LoginCommand.Execute(true))"> Login </button>
+		<a href="/Register" class="button">Rejestracja</a>
+		<a href="/" class="button">WROC</a>
 
-<div class="container">
-	<img src="user2.png" />
-	<h2> Logowanie </h2>
-	<p>Podaj login</p>
-	<input @bind="@loginService.LoginValue" />
-	<p>Podaj hasło</p>
-	<input @bind="@loginService.PassValue" type="password"/>
-	<button class="btn btn-primary" @onclick="@(() => loginService.LoginCommand.Execute(true))"> Login </button>
-	<a href="/Register" class="button">Rejestracja</a>
-	<a href="/" class="button">WROC</a>
+	</div>
 
-</div>
+}
+else
+{
+	<div>jestes juz zalogowany!!</div>
+}
 
+@code{
+
+
+	
+
+}

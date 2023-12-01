@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-
-using timeorganizer.Helpers;
-using timeorganizer.PageViewModel;
-using timeorganizer.PageViewModels;
-using timeorganizer.Service;
+using System.Security.Claims;
 using timeorganizer.Services;
-
 namespace timeorganizer
 {
     public static class MauiProgram
@@ -27,15 +23,18 @@ namespace timeorganizer
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
 #endif
-
             builder.Services.AddSingleton<LoginService>();
             builder.Services.AddSingleton<ToDoService>();
             builder.Services.AddSingleton<SettingsService>();
             builder.Services.AddSingleton<ActivityService>();
             builder.Services.AddSingleton<RegisterService>();
             builder.Services.AddSingleton<ContactService>();
-
             builder.Services.AddAuthorizationCore();
+            builder.Services.TryAddScoped<AuthenticationStateProvider, AuthService>();
+            builder.Services.AddSingleton<AuthServiceSetUser>();
+
+
+            builder.Services.AddOptions();
             return builder.Build();
         }
     }

@@ -1,4 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using System.Security.Claims;
+@using timeorganizer.Services
+@inject AuthServiceSetUser service
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">timeorganizer</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -6,28 +9,105 @@
         </button>
     </div>
 </div>
+@if (service.CurrentUser.Identity.IsAuthenticated)
+{
+    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+        <nav class="flex-column">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true" style="color: blueviolet;"></span> Home
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="settings">
+                    <span class="oi oi-cog" aria-hidden="true" style="color: blueviolet;"></span> Ustawienia
+                </NavLink>
+            </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true" style="color: blueviolet;"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="register">
-                <span class="oi oi-person" aria-hidden="true" style="color: blueviolet;"></span> Rejestracja
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="login">
-                <span class="oi oi-account-login" aria-hidden="true" style="color: blueviolet;"></span> Logowanie
-            </NavLink>
-        </div>
-    </nav>
-</div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="todo">
+                    <span class="oi oi-check" aria-hidden="true" style="color: blueviolet;"></span> Zadania
+                </NavLink>
+            </div>
 
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Kontakt">
+                    <span class="oi oi-envelope-closed" aria-hidden="true" style="color: blueviolet;"></span> Kontakt
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Notatki">
+                    <span class="oi oi-book" aria-hidden="true" style="color: blueviolet;"></span> Notatki
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Kalendarz">
+                    <span class="oi oi-calendar" aria-hidden="true" style="color: blueviolet;"></span> Kalendarz
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Statystyki">
+                    <span class="oi oi-bar-chart" aria-hidden="true" style="color: blueviolet;"></span> Statystyki
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="login" @onclick="logout">
+                    >
+                    <span class="oi oi-list-rich" aria-hidden="true" style="color: blueviolet;"></span> Wyloguj
+                </NavLink>
+            </div>
+        </nav>
+    </div>
+}
+else
+{
+    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+        <nav class="flex-column">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true" style="color: blueviolet;"></span> Home
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="register">
+                    <span class="oi oi-person" aria-hidden="true" style="color: blueviolet;"></span> Rejestracja
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="login" >
+                    <span class="oi oi-account-login" aria-hidden="true" style="color: blueviolet;"></span> Logowanie
+                </NavLink>
+            </div>
+        </nav>
+    </div>
+}
 @code {
+    public static IServiceProvider ServiceProviders
+       =>
+#if WINDOWS10_0_17763_0_OR_GREATER
+			MauiWinUIApplication.Current.Services;
+#elif ANDROID
+    MauiApplication.Current.Services;
+#elif IOS || MACCATALYST
+		   MauiUIApplicationDelegate.Current.Services;
+#else
+            null;
+#endif
+    private void logout()
+    {
+        var auth = ServiceProviders.GetRequiredService<AuthServiceSetUser>();
+
+        var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity());
+
+        auth.CurrentUser = authenticatedUser;
+        App.Current.MainPage = new MainPage();
+    }
+    
+
     private bool collapseNavMenu = true;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;

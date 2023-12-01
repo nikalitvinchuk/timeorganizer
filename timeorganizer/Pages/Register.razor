@@ -1,7 +1,10 @@
 ﻿@page "/register"
-@using timeorganizer.Service
+@using timeorganizer.Services
 @inject RegisterService registerservice
-
+@inject AuthServiceSetUser auth
+@if (!auth.CurrentUser.Identity.IsAuthenticated)
+{
+	
 <div class="container">
 	<h2> Rejestracja</h2>
 	<p>Podaj Email</p>
@@ -17,3 +20,9 @@
 	<a href="/Login" class="button">Zaloguj</a>
 
 </div>
+}
+else
+{
+<div>jestes juz zalogowany!!</div>
+}
+

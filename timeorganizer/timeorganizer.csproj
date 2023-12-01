@@ -55,7 +55,6 @@
 
     <ItemGroup>
       <None Remove="Pages\Index.razor.css" />
-      <None Remove="Pages\LoggedPages\Home.razor.css" />
       <None Remove="Pages\LoggedPages\Kalendarz.razor.css" />
       <None Remove="Pages\LoggedPages\Notatki.razor.css" />
       <None Remove="Pages\LoggedPages\Statystyki.razor.css" />
@@ -66,7 +65,6 @@
 
     <ItemGroup>
       <Content Include="Pages\Index.razor.css" />
-      <Content Include="Pages\LoggedPages\Home.razor.css" />
       <Content Include="Pages\LoggedPages\Kalendarz.razor.css" />
       <Content Include="Pages\LoggedPages\Notatki.razor.css" />
       <Content Include="Pages\LoggedPages\Statystyki.razor.css" />
@@ -85,18 +83,6 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
 
 	</ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="MainPageLogged.xaml.cs">
-        <DependentUpon>MainPageLogged.xaml</DependentUpon>
-      </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <MauiXaml Update="MainPageLogged.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
-    </ItemGroup>
 
     <ItemGroup>
       <Folder Include="PageViewModel\" />
