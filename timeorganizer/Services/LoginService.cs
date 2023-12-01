@@ -60,8 +60,8 @@ namespace timeorganizer.Services
                 //-------------------------OBSŁUGA SESJI-----------------------------
                 string sessionToken = Guid.NewGuid().ToString(); //unikalny token sesji (GUID)
 				DateTime dateCreated = DateTime.Now;
-                //DateTime expirationDate = DateTime.Now.AddMinutes(3);
-                DateTime expirationDate = DateTime.Now.AddSeconds(10);
+                DateTime expirationDate = DateTime.Now.AddMinutes(3);
+                //DateTime expirationDate = DateTime.Now.AddSeconds(10);
 
                 //dodanie tokena do PAMIECI ABY BYL DO NIEGO DOSTEP -JB 
                 await SecureStorage.Default.SetAsync("token", sessionToken);

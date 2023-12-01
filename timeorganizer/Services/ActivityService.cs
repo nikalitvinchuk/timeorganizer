@@ -83,8 +83,8 @@ namespace timeorganizer.Services
 					{
 						Debug.WriteLine("Pobrano sesję użytkownika: " + userId);
 
-                        //session.ExpirationDate = DateTime.Now.AddMinutes(3);
-                        session.ExpirationDate = DateTime.Now.AddSeconds(10);
+                        session.ExpirationDate = DateTime.Now.AddMinutes(3);
+                        //session.ExpirationDate = DateTime.Now.AddSeconds(10);
                         LastActivity = DateTime.Now;
 						Debug.WriteLine("w change mamy lastactivity: " + LastActivity);
 						await _context.UpdateItemAsync<UserSessions>(session);
