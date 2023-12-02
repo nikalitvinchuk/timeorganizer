@@ -71,7 +71,7 @@
             
             
 
-            <button class="btn btn-primary mt-3" @onclick="@(() => taskService.addTask.AddTaskCommand.Execute(true))">Utwórz główne zadanie</button>
+            <button class="btn btn-primary mt-3" @onclick="@dd2">Utwórz główne zadanie</button>
            
         </div>
     </div>
@@ -80,8 +80,23 @@
     </div>
 </div>
 @code{
+    protected override void OnAfterRender(bool firstRender)
+    {
+
+        if (firstRender)
+        {
+            dd();
+            StateHasChanged();
+        }
+    }
     public async void dd()
     {
+        await taskService.showTask.FilterTasks();
+        StateHasChanged();
+    }
+    public async void dd2()
+    {
+        await taskService.addTask.AddTask();
         await taskService.showTask.FilterTasks();
         StateHasChanged();
     }

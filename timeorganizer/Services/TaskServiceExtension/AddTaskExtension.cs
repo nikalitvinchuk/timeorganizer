@@ -20,7 +20,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 
 		public string Modified;
 		public DateTime Termin { get => _termin; set => _termin = value; }
-		public ICommand AddTaskCommand { private set; get; }
+		//public ICommand AddTaskCommand { private set; get; }
 
 		private readonly DatabaseLogin _context;
 
@@ -29,7 +29,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 		public AddTaskExtension()
 		{
 			_context = new DatabaseLogin();
-			AddTaskCommand = new Command(AddTask);
+			//AddTaskCommand = new Command(AddTask);
 		}
 		private async Task<int> Getid()
 		{
@@ -46,8 +46,8 @@ namespace timeorganizer.Services.TaskServiceExtension
 			}
 
 		}
-
-		private async void AddTask(object obj)
+		
+		public async Task AddTask()
 		{
 			if (_userId == 0) _userId = await Getid();
 
