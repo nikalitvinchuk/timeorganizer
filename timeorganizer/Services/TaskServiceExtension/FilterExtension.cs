@@ -1,19 +1,22 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 
 namespace timeorganizer.Services.TaskServiceExtension
 {
 
-	public partial class FilterExtension : ObservableObject
-	{
+	public partial class FilterExtension : ObservableObject, INotifyPropertyChanged
+    {
 
 		private string _name, _description, _typ, _status, _created;
 		private int _priority, _prcomplited, _userId;
 		private DateTime _createD = DateTime.Now;
-		private ObservableCollection<Tasks> _filtered = new();
 
 		public int Id { get; set; }
 		public string Name { get => _name; set => _name = value; }
@@ -29,23 +32,50 @@ namespace timeorganizer.Services.TaskServiceExtension
 		public bool IsDone { get; set; }
 		public int Priority { get => _priority; set => _priority = value; }
 		public int RealizedPercent { get; set; }
-		public ObservableCollection<Tasks> TasksCollection { get => _filtered; set => _filtered = value; }
-		public ObservableCollection<TaskComponents> SubTasksCollection { get; set; }
-		public ICommand ShowTasks { private set; get; }
+
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged22;
+        protected void RaisePropertyChanged(string propertyName)
+            => PropertyChanged22?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        /// <summary>
+        /// Set a property and raise a property changed event if it has changed
+        /// </summary>
+        protected bool SetProperty<T>(ref T property, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(property, value))
+            {
+                return false;
+            }
+
+            property = value;
+            RaisePropertyChanged(propertyName);
+            return true;
+        }
+        private ObservableCollection<Tasks> _collection = new();
+        public ObservableCollection<Tasks> TasksCollection
+        {
+            get => _collection;
+            set => SetProperty(ref _collection, value);
+        }
+        
+        public ObservableCollection<TaskComponents> SubTasksCollection { get; set; }
 		public ICommand MoveTask { private set; get; }
 
-		private readonly DatabaseLogin _context;
+        private readonly DatabaseLogin _context;
 		public FilterExtension()
 		{
-			_filtered = new();
 			_context = new DatabaseLogin();
-			ShowTasks = new RelayCommand(FilterTasks);
-		}
+			//FilterTasks();
+        }
+
 		private async Task<int> Getid()
 		{
-			string _tokenvalue = await SecureStorage.Default.GetAsync("token");
-			var getids = await _context.GetFileteredAsync<UserSessions>(t => t.Token == _tokenvalue);
-			if (getids.Any(t => t.Token == _tokenvalue))
+            var _tokenvalue = await SecureStorage.Default.GetAsync("token");
+            var getids = await _context.GetFileteredAsync<UserSessions>(t => t.Token == _tokenvalue);
+            if (getids.Any(t => t.Token == _tokenvalue))
 			{
 				var getid = getids.First(t => t.Token == _tokenvalue);
 				return getid.UserId;
@@ -54,17 +84,21 @@ namespace timeorganizer.Services.TaskServiceExtension
 		}
 
 		[ObservableProperty]
-		private bool _isBusy;
+		public bool _isBusy;
 
-		public async void FilterTasks()
+		public async Task FilterTasks()
 		{
-			var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
-
-			if (_userId == 0) { _userId = await Getid(); }
+			
 			await ExecuteAsync(async () =>
 			{
-				OnPropertyChanged(nameof(TasksCollection));
-				var filters = new Dictionary<string, object>
+                var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
+                if (_userId == 0)
+                {
+
+                    _userId = await Getid();
+                }
+                var filters = new Dictionary<string, object>
 				{
 					{ "Userid", _userId }
 				};
@@ -74,16 +108,16 @@ namespace timeorganizer.Services.TaskServiceExtension
 				if (!string.IsNullOrWhiteSpace(_typ)) filters.Add("Type", _typ);
 				if (!string.IsNullOrWhiteSpace(_status)) filters.Add("Status", _status);
 				if (!string.IsNullOrWhiteSpace(_created)) filters.Add("Created", _created);
-				//Tasks SubTask = new() {
-				//    Name = "TestN",
-				//    Description = "Test",
-				//    UserId = _userId
-				//};
-				//await _context.AddItemAsync<Tasks>(SubTask);
-				TasksCollection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters)));
-				await Task.Delay(1000);
-				filters.Clear();
-				OnPropertyChanged(nameof(TasksCollection));
+                //Tasks SubTask = new() {
+                //    Name = "TestN",
+                //    Description = "Test",
+                //    UserId = _userId
+                //};
+                //await _context.AddItemAsync<Tasks>(SubTask);
+                _collection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters)));
+				
+
+                filters.Clear();
 				await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
 			});
 		}
@@ -99,8 +133,6 @@ namespace timeorganizer.Services.TaskServiceExtension
 			}
 			catch (Exception ex)
 			{
-				await App.Current.MainPage.DisplayAlert("Nastąpiło wylogowanie", ex.Message, "Ok");
-				App.Current.MainPage = new MainPage();
 
 			}
 			finally

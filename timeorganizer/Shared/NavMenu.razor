@@ -102,7 +102,7 @@ else
         var auth = ServiceProviders.GetRequiredService<AuthServiceSetUser>();
 
         var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity());
-
+        SecureStorage.Remove("token");
         auth.CurrentUser = authenticatedUser;
         App.Current.MainPage = new MainPage();
     }

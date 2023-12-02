@@ -30,7 +30,7 @@
     </div>
 </div>
 
-<button @onclick="@(() => taskService.showTask.ShowTasks.Execute(true))" style="margin: 10px auto; display: block;">Filtruj</button>
+<button @onclick="@dd" style="margin: 10px auto; display: block;">Filtruj</button>
 
 @code {
     private async void RedirectToDetails(int taskId) {
@@ -39,8 +39,10 @@
         NavigationManager.NavigateTo("/subtask");
     }
 }
-
-@foreach (var task in taskService.showTask.TasksCollection) {
+        
+            
+        
+        @foreach (var task in taskService.showTask.TasksCollection) {
     <div class="d-flex flex-row border p-2" style="cursor: pointer;">
         <p class="mr-3 mb-0">@task.Name</p>
         <p class="mr-3 mb-0">@task.Description</p>
@@ -50,7 +52,6 @@
         <button @onclick="@(e => RedirectToDetails(@task.Id))">Szczegóły zadania</button>
     </div>
 }
-
 
 <div class="container">
     <div class="row">
@@ -78,3 +79,11 @@
         <a href="home" class="button">Wróć</a>
     </div>
 </div>
+@code{
+    public async void dd()
+    {
+        await taskService.showTask.FilterTasks();
+        StateHasChanged();
+    }
+   
+}
