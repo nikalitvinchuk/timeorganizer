@@ -2,9 +2,9 @@
 @using timeorganizer.Services
 @using timeorganizer.Helpers
 
-<div id="container1">
+<div class="container">
     <div>
-<h2> Zadania</h2>
+        <h2> Zadania</h2><button @onclick="@(e => Przenies())">Dodaj zadanie</button>
 @inject ToDoService taskService
 @inject NavigationManager NavigationManager
 <div style="display: grid; grid-template-columns: auto 1fr;" class="d-flex flex-row">
@@ -30,18 +30,8 @@
     </div>
 </div>
 
-<button @onclick="@dd" style="margin: 10px auto; display: block;">Filtruj</button>
-
-@code {
-    private async void RedirectToDetails(int taskId) {
-        taskService.AddSTask.TaskId = taskId;
-        await taskService.AddSTask.GetTask();
-        NavigationManager.NavigateTo("/subtask");
-    }
-}
-        
-            
-        
+        <button @onclick="@filterTask" style="margin: 10px auto; display: block;">Filtruj</button>
+  
         @foreach (var task in taskService.showTask.TasksCollection) {
     <div class="d-flex flex-row border p-2" style="cursor: pointer;">
         <p class="mr-3 mb-0">@task.Name</p>
@@ -52,50 +42,33 @@
         <button @onclick="@(e => RedirectToDetails(@task.Id))">Szczegóły zadania</button>
     </div>
 }
+        @code {
+            private async void RedirectToDetails(int taskId) {
+                taskService.AddSTask.TaskId = taskId;
+                await taskService.AddSTask.GetTask();
+                NavigationManager.NavigateTo("/subtask");
+            }
+            private void Przenies(){
+                NavigationManager.NavigateTo("/addtask");
+            }
+        }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <label class="form-label">Podaj tytuł swojego zadania</label>
-            <input class="form-control" @bind="@taskService.addTask.Name" placeholder="Np. Nauka Języka Angielskiego" />
-
-            <label class="form-label mt-3">Opisz swoje zadania</label>
-            <input class="form-control" @bind="@taskService.addTask.Description" placeholder="Określ konkrety, które chcesz zrealizować." />
-
-            <label class="form-label mt-3">Określ typ zadania</label>
-            <input class="form-control" @bind="@taskService.addTask.Typ" placeholder="Wprowadź typ zadania: home/work/hobby/other" />
-
-            <label class="form-label mt-3">Podaj Termin wykonania zadania</label>
-            
-            <input class="datepicker" type="date" data-date-format="dd/mm/yyyy" @bind="@taskService.addTask.Termin">
-            
-            
-
-            <button class="btn btn-primary mt-3" @onclick="@dd2">Utwórz główne zadanie</button>
-           
-        </div>
-    </div>
-</div>
         <a href="home" class="button">Wróć</a>
     </div>
 </div>
 @code{
-    protected override void OnAfterRender(bool firstRender)
-    {
-
-        if (firstRender)
-        {
-            dd();
+    
+    protected override void OnAfterRender(bool firstRender){
+        if (firstRender){
+            filterTask();
             StateHasChanged();
         }
     }
-    public async void dd()
-    {
+    public async void filterTask() {
         await taskService.showTask.FilterTasks();
         StateHasChanged();
     }
-    public async void dd2()
-    {
+    public async void refreshOnAddTask(){
         await taskService.addTask.AddTask();
         await taskService.showTask.FilterTasks();
         StateHasChanged();

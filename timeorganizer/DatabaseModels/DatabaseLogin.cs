@@ -80,9 +80,6 @@ namespace timeorganizer.DatabaseModels
 
         public async ValueTask DisposeAsync() => await _connection?.CloseAsync(); // zamkniecie polaczenia z baza
 
-
-
-
         public Expression<Func<TTable, bool>> CreatePredicateToFiltred<TTable>(IDictionary<string, object> parameters)
         {
             var param = Expression.Parameter(typeof(TTable), "p");

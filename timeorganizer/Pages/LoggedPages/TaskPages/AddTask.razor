@@ -1,0 +1,48 @@
+﻿@page "/addtask"
+@using timeorganizer.Services
+@using timeorganizer.Helpers
+
+@inject ToDoService taskService
+@inject NavigationManager NavigationManager
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <label class="form-label">Podaj tytuł swojego zadania</label>
+            <input class="form-control" @bind="@taskService.addTask.Name" placeholder="Np. Nauka Języka Angielskiego" />
+
+            <label class="form-label mt-3">Opisz swoje zadania</label>
+            <input class="form-control" @bind="@taskService.addTask.Description" placeholder="Określ konkrety, które chcesz zrealizować." />
+
+            <label class="form-label mt-3">Określ typ zadania</label>
+            <input class="form-control" @bind="@taskService.addTask.Typ" placeholder="Wprowadź typ zadania: home/work/hobby/other" />
+
+            <label class="form-label mt-3">Podaj Termin wykonania zadania</label>
+
+            <input class="datepicker" type="date" data-date-format="dd/mm/yyyy" @bind="@taskService.addTask.Termin">
+            <button class="btn btn-primary mt-3" @onclick="@AddT">Utwórz zadanie</button>
+            <button class="btn btn-primary mt-3" @onclick="@Powroc">Powrót</button>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    public async void AddT() {
+        if (taskService.addTask.stan == 1)
+        {
+            await taskService.addTask.AddTask();
+            await taskService.showTask.FilterTasks();
+            StateHasChanged();
+        }
+        else {
+            await taskService.AddSTask.AddSubTask();
+            taskService.addTask.stan = 1;
+            NavigationManager.NavigateTo("/subtask");
+        }
+    }
+    private void Powroc() {
+        NavigationManager.NavigateTo("/todo");
+    }
+}
+
+

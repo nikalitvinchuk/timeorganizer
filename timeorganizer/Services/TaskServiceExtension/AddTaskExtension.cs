@@ -1,15 +1,15 @@
-﻿using System.Windows.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using timeorganizer.DatabaseModels;
 
 namespace timeorganizer.Services.TaskServiceExtension
 {//dodawanie nowych zadań
-	public partial class AddTaskExtension
+	public partial class AddTaskExtension : ObservableObject
 	{
 
 		private string _name, _desc, _type, _status;
 		private int _userId, _relizedpr;
 		private DateTime _termin = DateTime.Now;
-
+		public int stan = 1; //Określi czy dodać zadanie czy pod zadanie
 		public string Name { get => _name; set => _name = value; }
 		public string Description { get => _desc; set => _desc = value; }
 		public string Typ { get => _type; set => _type = value; }
@@ -55,42 +55,24 @@ namespace timeorganizer.Services.TaskServiceExtension
 			Modified = DateTime.Now.ToString("dd.MM.yyyy, HH:mm");
 			Tasks Task = new()
 			{
-				Name = Name
-				,
-				Description = Description
-				,
-				Type = Typ
-				,
-				UserId = _userId
-				,
-				status = Status
-				,
-				RealizedPercent = Progress
-				,
+				Name = Name,
+				Description = Description,
+				Type = Typ,
+				UserId = _userId,
+				status = Status,
+				RealizedPercent = Progress,
 				Updated = null,
 				Created = DateTime.Now.ToLongDateString(),
 				Termin = Termin.ToString("dd.MM.yyyy")
-			};
-			TaskComponents SubTask = new()
-			{
-				Name = Name
-				,
-				Description = "Test"
-				,
-				TaskId = 12
-				,
-				UserId = 9
 			};
 
 			await ExecuteAsync(async () =>
 			{
 				if (await SecureStorage.Default.GetAsync("token") is null)
 					throw new Exception("ERROR");
-
 				var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
 
-
-				List<string> list = new() { Name, Description, Typ, Status, UserId.ToString(), Progress.ToString() };
+				List<string> list = new() { Name, Description, Typ};
 				int i = 0;
 				string nazwa = "";
 				int j = 1;
@@ -123,102 +105,40 @@ namespace timeorganizer.Services.TaskServiceExtension
 								_ => "",
 							};
 							await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
-							await App.Current.MainPage.DisplayAlert("Za długie", $"Pole {nazwa} jest za długie. Pole może mieć maksymalnie wartość 200 znaków", "Ok");
+							await App.Current.MainPage.DisplayAlert("Za długie", $"Pole {nazwa} jest za długie. Pole może mieć maksymalnie wartość 100 znaków", "Ok");
 							break;
 						}
 						j++;
 					}
 				}
-
 				if (i == 0)
 				{
 					await _context.AddItemAsync<Tasks>(Task);
-					TaskComponents SubTask = new()
-					{
-						Name = Name
-				,
-						Description = "Test"
-				,
-						TaskId = 12
-				,
-						UserId = 9
-					};
-					await _context.AddItemAsync<TaskComponents>(SubTask);
 					await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
-					await App.Current.MainPage.DisplayAlert("Succes", "Dodano zadanie do bazy", "Ok");
-
-				}
-
+                    Name = string.Empty;
+                    Description = string.Empty;
+                    Typ = string.Empty;
+                    await App.Current.MainPage.DisplayAlert("Succes", "Dodano zadanie do bazy", "Ok");
+                    
+                }
 			});
 		}
-		//private async void AddTaskComponent(object obj)
-		//{
-		//    TaskComponents TC = new()
-		//    {
-		//        Name = NameU
-		//        ,
-		//        Description = DescriptionU
-		//        ,
-		//        TaskId = TaskId //?????
-		//        ,
-		//        UserId = _userIdU //?????
-		//        ,
-		//        Status = StatusU
-		//        ,
-		//        TaskComplited = false
-		//        ,
-		//        IsActive = true
-		//        ,
-		//        LastUpdated = DateTime.Now
-		//    };
 
-		//    await ExecuteAsync(async () =>
-		//    {
-		//        List<string> list = new List<string> { NameU, DescriptionU, StatusU };
-		//        int i = 1;
-		//        foreach (var wartosc in list)
-		//        {
-		//            if (string.IsNullOrEmpty(wartosc))
-		//            {
-		//                i = 1; break;
-		//            }
-		//            else
-		//                i = 0;
-		//        }
-		//        if (i == 1)
-		//        {
-		//            await App.Current.MainPage.DisplayAlert("Failed", "Jedno z lub wiele pól podzadania jest puste", "Ok");
-		//        }
-		//        else
-		//            await _context.AddItemAsync<TaskComponents>(TC);
-		//    });
-		//}
-		private async Task ExecuteAsync(Func<Task> operation)
+        [ObservableProperty]
+        public bool _isBusy;
+        private async Task ExecuteAsync(Func<Task> operation)
 		{
-			var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
-
-			try
-			{
-				await operation?.Invoke();
-			}
-			catch (Exception ex)
-			{
-
-				if (ex.Message == "ERROR")
-				{
-					await App.Current.MainPage.DisplayAlert("Nastąpiło wylogowanie", ex.Message, "Ok");
-					App.Current.MainPage = new MainPage();
-				}
-				else
-				{
-					//await activityViewModel.ChangeExpirationDateCommand();
-
-					await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
-				}
-			}
-			finally
-			{
-			}
-		}
+            var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+            IsBusy = true;
+            try {
+                await operation?.Invoke();
+            }
+            catch (Exception ex) {
+                await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
+            }
+            finally {
+                IsBusy = false;
+            }
+        }
 	}
 }

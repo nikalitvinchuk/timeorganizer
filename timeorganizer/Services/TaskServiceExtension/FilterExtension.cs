@@ -11,11 +11,11 @@ using timeorganizer.DatabaseModels;
 namespace timeorganizer.Services.TaskServiceExtension
 {
 
-	public partial class FilterExtension : ObservableObject, INotifyPropertyChanged
+	public partial class FilterExtension : ObservableObject
     {
 
 		private string _name, _description, _typ, _status, _created;
-		private int _priority, _prcomplited, _userId;
+		public int _priority, _prcomplited, _userId;
 		private DateTime _createD = DateTime.Now;
 
 		public int Id { get; set; }
@@ -26,44 +26,18 @@ namespace timeorganizer.Services.TaskServiceExtension
 		public int UserId;
 		public string Created { get => _created; set => _created = value; }
 		public DateTime CreatedD { get => _createD; set => _createD = value; }
-
 		public string Updated;
 		public string Status { get => _status; set => _status = value; }
 		public bool IsDone { get; set; }
 		public int Priority { get => _priority; set => _priority = value; }
 		public int RealizedPercent { get; set; }
 
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged22;
-        protected void RaisePropertyChanged(string propertyName)
-            => PropertyChanged22?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-        /// <summary>
-        /// Set a property and raise a property changed event if it has changed
-        /// </summary>
-        protected bool SetProperty<T>(ref T property, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(property, value))
-            {
-                return false;
-            }
-
-            property = value;
-            RaisePropertyChanged(propertyName);
-            return true;
-        }
         private ObservableCollection<Tasks> _collection = new();
         public ObservableCollection<Tasks> TasksCollection
         {
             get => _collection;
             set => SetProperty(ref _collection, value);
         }
-        
-        public ObservableCollection<TaskComponents> SubTasksCollection { get; set; }
-		public ICommand MoveTask { private set; get; }
-
         private readonly DatabaseLogin _context;
 		public FilterExtension()
 		{
@@ -93,11 +67,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 			{
                 var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
 
-                if (_userId == 0)
-                {
-
-                    _userId = await Getid();
-                }
+                _userId = await Getid();
                 var filters = new Dictionary<string, object>
 				{
 					{ "Userid", _userId }
@@ -108,12 +78,6 @@ namespace timeorganizer.Services.TaskServiceExtension
 				if (!string.IsNullOrWhiteSpace(_typ)) filters.Add("Type", _typ);
 				if (!string.IsNullOrWhiteSpace(_status)) filters.Add("Status", _status);
 				if (!string.IsNullOrWhiteSpace(_created)) filters.Add("Created", _created);
-                //Tasks SubTask = new() {
-                //    Name = "TestN",
-                //    Description = "Test",
-                //    UserId = _userId
-                //};
-                //await _context.AddItemAsync<Tasks>(SubTask);
                 _collection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters)));
 				
 
@@ -122,28 +86,18 @@ namespace timeorganizer.Services.TaskServiceExtension
 			});
 		}
 
-		private async Task ExecuteAsync(Func<Task> operation)
-		{
+		private async Task ExecuteAsync(Func<Task> operation){
 			var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
-
 			IsBusy = true;
-			try
-			{
+			try{
 				await operation?.Invoke();
 			}
-			catch (Exception ex)
-			{
-
-			}
-			finally
-			{
+			catch (Exception ex){
+                await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
+            }
+			finally{
 				IsBusy = false;
 			}
-
 		}
-
-
-
 	}
-
 }

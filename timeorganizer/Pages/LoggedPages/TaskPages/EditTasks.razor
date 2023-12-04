@@ -1,0 +1,55 @@
+﻿@page "/edittask"
+@using timeorganizer.Services
+@using timeorganizer.Helpers
+
+@inject ToDoService taskService
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Termin</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(taskService.EditTask.typ == 0) {
+            <tr>
+                <label class="form-label">Tytuł</label>
+                <input class="form-control" @bind="@taskService.EditTask.EditZadanie.Name" placeholder="Np. Nauka Języka Angielskiego" />
+
+                <label class="form-label mt-3">Opis</label>
+                <input class="form-control" @bind="@taskService.EditTask.EditZadanie.Description" placeholder="Określ konkrety, które chcesz zrealizować." />
+
+                <label class="form-label mt-3">Typ</label>
+                <input class="form-control" @bind="@taskService.EditTask.EditZadanie.Type" placeholder="Wprowadź typ zadania: home/work/hobby/other" />
+
+                <label class="form-label mt-3">Termin</label>
+@* Dodan
+                <input class="datepicker" type="date" data-date-format="dd/mm/yyyy" @bind="@taskService.addTask.Termin"> *@
+            </tr>
+        }
+        
+
+    </tbody>
+
+</table>
+
+
+<div class="container">
+     <button class="btn btn-primary mt-3" @onclick="@Edytuj">Edytuj</button>
+</div>
+
+@code {
+
+    public async void Edytuj() {
+        await taskService.EditTask.Update();
+        await taskService.AddSTask.GetTask();
+        StateHasChanged();
+    }
+
+}
+
+
+

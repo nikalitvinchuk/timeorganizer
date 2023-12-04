@@ -17,25 +17,18 @@ namespace timeorganizer.Services.TaskServiceExtension
 		public int UserId { get => _userId; set => _userId = value; }
 		public bool TaskComplited;
 		public bool IsActive;
-		public ObservableCollection<Tasks> Zadanie { get; set; }
-		public ICommand AddSubTaskCommand { private set; get; }
-		public ICommand GetTaskComm { private set; get; }
+		public Tasks Zadanie { get; set; }
+		public Collection<TaskComponents> PodZadanie { get; set; }
 		private readonly DatabaseLogin _context;
-
-		public AddSubTaskExtension()
-		{
+		public AddSubTaskExtension(){
 			_context = new DatabaseLogin();
-			AddSubTaskCommand = new Command(AddSubTask);
 		}
-		public async Task<int> GetTask()
-		{
-			OnPropertyChanged(nameof(Zadanie));
-			await ExecuteAsync(async () =>
-			{
-				var temp = await _context.GetItemByKeyAsync<Tasks>(_tid);
-				Zadanie = new ObservableCollection<Tasks> { temp };
+		public async Task<int> GetTask(){
+			await ExecuteAsync(async () => { 
+				Zadanie = await _context.GetItemByKeyAsync<Tasks>(_tid);
+                var temp = await _context.GetFileteredAsync<TaskComponents>(e => e.TaskId == Zadanie.Id);
+                PodZadanie = new ObservableCollection<TaskComponents>(temp);
 			});
-			OnPropertyChanged(nameof(Zadanie));
 			return 0;
 		}
 		private async void Getid()
@@ -51,59 +44,26 @@ namespace timeorganizer.Services.TaskServiceExtension
 		[ObservableProperty]
 		private bool _isBusy;
 		//                  FUNKCJA DODAWANIA PODZADANIA - powinno byæ w osobnym modelu -JB
-		private async void AddSubTask(object obj)
+		public async Task AddSubTask()
 		{
 			Getid();
 			TaskComponents TC = new()
 			{
-				Name = Name
-				,
-				Description = Description
-				,
-				TaskId = TaskId
-				,
-				UserId = _userId
-				,
-				Status = Status
-				,
-				TaskComplited = false
-				,
-				IsActive = true
-				,
+				Name = Name,
+				Description = Description,
+				TaskId = TaskId,
+				UserId = _userId,
+				Status = Status,
+				TaskComplited = false,
+				IsActive = true,
 				Created = DateTime.Now.ToLongDateString(), // Przy dodadawniu powinno byc Created a nie Updated
 				LastUpdated = null
 			};
-
 			await ExecuteAsync(async () =>
 			{
-				List<string> list = new List<string> { Name, Description, Status };
-				int i = 1;
-				string nazwa;
-				foreach (var wartosc in list)
-				{
-					if (string.IsNullOrEmpty(wartosc))
-					{
-						i = 1;
-#pragma warning disable CS8509
-						nazwa = wartosc switch
-						{
-							nameof(Name) => "Nazwa zadania"
-							,
-							nameof(Description) => "Opis zadania"
-						};
-					}
-					else
-						i = 0;
-				}
-				if (i == 1)
-				{
-					//await activityViewModel.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityViewModel 
-					await App.Current.MainPage.DisplayAlert("Failed", "Jedno z lub wiele pól podzadania jest puste", "Ok");
-				}
-				else
-					//await activityViewModel.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityViewModel 
-					await _context.AddItemAsync<TaskComponents>(TC);
-			});
+				await _context.AddItemAsync<TaskComponents>(TC);
+                await App.Current.MainPage.DisplayAlert("Uda³o siê", "Uda³o siê", "Ok");
+            });
 		}
 		private async Task ExecuteAsync(Func<Task> operation)
 		{
