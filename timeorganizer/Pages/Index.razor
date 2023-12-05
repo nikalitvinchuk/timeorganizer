@@ -7,23 +7,57 @@
     // ZALOGOWANY
     <div id="container">
         <div>
+        @inject ToDoService taskService
+        @inject NavigationManager NavigationManager
             <img src="" alt="logo" />
             <h2> Witaj!</h2>
             <h3> Nadchodzące zadania:</h3>
 
-            @* <div>  <a href="settings" img src="" alt="Ustawienia" /> <a href="todo" img src="" alt="Zadania" /> </div>
-
-        <div>  <a href="Kontakt" img src="Kontakt" alt="Kontakt" /><a href="" img src="" alt="Kalendarz" /> </div> *@
-
-            @* <div>  <img src="Kontakt" alt="Kontakt" /><img src="" alt="Kalendarz" /> </div> *@
-
-            @* <div>  <img src="Notatnik" alt="Notatnikt" /><img src="statystyki" alt="Statystyki" /> </div> *@
-
             <h2>Statystyki:</h2>
 
-            <p>Wykonane zaddania</p>
+            <p>Do zrobienia zadania</p>
+            
 
-            <p>Niewykonane zadania</p>
+            @foreach (var task in taskService.showTask.TasksCollection)
+            {
+                <div class="d-flex flex-row border p-2" style="cursor: pointer;">
+                    <p class="mr-3 mb-0">@task.Name</p>
+                    <p class="mr-3 mb-0">@task.Description</p>
+                    <p class="mr-3 mb-0">@task.Type</p>
+                    <p class="mr-3 mb-0">@task.status</p>
+                    <p class="mr-3 mb-0">@task.Termin</p>
+                    <button @onclick="@(e => RedirectToDetails(@task.Id))">Szczegóły zadania</button>
+                </div>
+                @code {
+            private async void RedirectToDetails(int taskId)
+            {
+                taskService.AddSTask.TaskId = taskId;
+                await taskService.AddSTask.GetTask();
+                NavigationManager.NavigateTo("/subtask");
+            }
+            private void Przenies()
+            {
+                NavigationManager.NavigateTo("/addtask");
+            }
+        }
+}
+            @code {
+            protected override void OnAfterRender(bool firstRender)
+            {
+                taskService.showTask.Status = "Act";
+                if (firstRender)
+                {
+                    filterTask();
+                    StateHasChanged();
+                }
+            }
+            public async void filterTask()
+            {
+                await taskService.showTask.FilterTasks();
+                StateHasChanged();
+            }
+        }
+
             <p>Postęp</p>
 
         </div>

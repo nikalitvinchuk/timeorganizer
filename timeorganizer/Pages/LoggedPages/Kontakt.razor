@@ -10,5 +10,5 @@
     <p>Opisz nam problem w aplikacji który napotkałeś</p>
     <input @bind="@contactService.ReportValue" placeholder="Report" id="reportbutton" />
     <button @onclick="@(() => contactService.MessageCommand.Execute(true))">Wyślij</button>
-    <a href="home" class="button">Wróć</a>
+    <a href="/" class="button">Wróć</a>
 </div>
