@@ -42,7 +42,6 @@ namespace timeorganizer.Services.TaskServiceExtension
 		public FilterExtension()
 		{
 			_context = new DatabaseLogin();
-			//FilterTasks();
         }
 
 		private async Task<int> Getid()
