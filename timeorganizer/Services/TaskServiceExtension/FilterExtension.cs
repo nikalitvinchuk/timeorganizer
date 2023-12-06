@@ -14,9 +14,9 @@ namespace timeorganizer.Services.TaskServiceExtension
 	public partial class FilterExtension : ObservableObject
     {
 
-		private string _name, _description, _typ, _status, _created;
+		private string _name, _description, _typ, _status, _created, _termin;
 		public int _priority, _prcomplited, _userId;
-		private DateTime _createD = DateTime.Now;
+		private DateTime? _terminD;
 
 		public int Id { get; set; }
 		public string Name { get => _name; set => _name = value; }
@@ -24,8 +24,8 @@ namespace timeorganizer.Services.TaskServiceExtension
 		public string Typ { get => _typ; set => _typ = value; }
 
 		public int UserId;
-		public string Created { get => _created; set => _created = value; }
-		public DateTime CreatedD { get => _createD; set => _createD = value; }
+		public string Termin { get => _termin; set => _termin= value; }
+		public DateTime? TerminD { get => _terminD; set => _terminD= value; }
 		public string Updated;
 		public string Status { get => _status; set => _status = value; }
 		public bool IsDone { get; set; }
@@ -47,7 +47,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 
 		private async Task<int> Getid()
 		{
-            var _tokenvalue = await SecureStorage.Default.GetAsync("token");
+			var _tokenvalue = await SecureStorage.Default.GetAsync("token");
             var getids = await _context.GetFileteredAsync<UserSessions>(t => t.Token == _tokenvalue);
             if (getids.Any(t => t.Token == _tokenvalue))
 			{
@@ -62,7 +62,8 @@ namespace timeorganizer.Services.TaskServiceExtension
 
 		public async Task FilterTasks()
 		{
-			
+			_termin = _terminD?.ToString("dd.MM.yyyy");
+
 			await ExecuteAsync(async () =>
 			{
                 var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
@@ -77,7 +78,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 				if (!string.IsNullOrWhiteSpace(_description)) filters.Add("Description", _description);
 				if (!string.IsNullOrWhiteSpace(_typ)) filters.Add("Type", _typ);
 				if (!string.IsNullOrWhiteSpace(_status)) filters.Add("Status", _status);
-				if (!string.IsNullOrWhiteSpace(_created)) filters.Add("Created", _created);
+				if (!string.IsNullOrWhiteSpace(_termin)) filters.Add("Termin", _termin);
                 _collection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters)));
 				
 

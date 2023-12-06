@@ -6,7 +6,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 	public partial class AddTaskExtension : ObservableObject
 	{
 
-		private string _name, _desc, _type, _status;
+		private string _name, _desc, _type, _status, _termin2;
 		private int _userId, _relizedpr;
 		private DateTime _termin = DateTime.Now;
 		public int stan = 1; //Określi czy dodać zadanie czy pod zadanie
@@ -20,6 +20,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 
 		public string Modified;
 		public DateTime Termin { get => _termin; set => _termin = value; }
+		public string Termin2 { get => _termin2; set => _termin2 = value; }
 		//public ICommand AddTaskCommand { private set; get; }
 
 		private readonly DatabaseLogin _context;
@@ -28,7 +29,8 @@ namespace timeorganizer.Services.TaskServiceExtension
 
 		public AddTaskExtension()
 		{
-			_context = new DatabaseLogin();
+			Termin2 = DateTime.Now.ToString("dd.MM.yyyy");
+            _context = new DatabaseLogin();
 			//AddTaskCommand = new Command(AddTask);
 		}
 		private async Task<int> Getid()

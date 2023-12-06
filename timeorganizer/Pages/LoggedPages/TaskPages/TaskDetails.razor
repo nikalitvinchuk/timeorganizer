@@ -7,7 +7,7 @@
 @inject ToDoService taskService
 <button class="btn btn-primary mt-3" @onclick="@MoveToAdd">Dodaj Etapy Zadania</button>
 <button class="btn btn-primary mt-3" @onclick="@(e => MoveToEdit(@taskService.AddSTask.Zadanie.Id, 0))">Edytuj zadanie</button>
-
+<button class="btn btn-primary mt-3" @onclick="@Powroc">Powrót</button>
 <table class="table">
     <thead>
         <tr>
@@ -26,9 +26,7 @@
             <td>@taskService.AddSTask.Zadanie.status</td>
             <td>@taskService.AddSTask.Zadanie.Termin</td>
          </tr>
-
     </tbody>
-
 </table>
 <table>
     <thead>
@@ -48,7 +46,7 @@
             <td>@subTasks.Name</td>
             <td>@subTasks.Description</td>
             <td>@subTasks.TaskId</td>
-                <td><button class="btn btn-primary mt-3" @onclick="@(e => MoveToEdit(@subTasks.Id, 1))">Edytuj Etap</button></td>
+            <td><button class="btn btn-primary mt-3" @onclick="@(e => MoveToEdit(@subTasks.Id, 1))">Edytuj Etap</button></td>
         </tr>
 
     </tbody>
@@ -85,7 +83,9 @@
         NavigationManager.NavigateTo("/edittask");
         StateHasChanged();
     }
-
+    private void Powroc() {
+        NavigationManager.NavigateTo("/todo");
+    }
 }
 
 

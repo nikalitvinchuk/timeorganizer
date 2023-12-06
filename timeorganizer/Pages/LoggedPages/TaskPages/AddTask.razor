@@ -17,8 +17,7 @@
             <input class="form-control" @bind="@taskService.addTask.Typ" placeholder="Wprowadź typ zadania: home/work/hobby/other" />
 
             <label class="form-label mt-3">Podaj Termin wykonania zadania</label>
-
-            <input class="datepicker" type="date" data-date-format="dd/mm/yyyy" @bind="@taskService.addTask.Termin">
+            <InputDate Type="InputDateType.Date" class="form-eliment jds-d-inline-block jds-max-width150" @bind-Value="taskService.addTask.Termin"> </InputDate>
             <button class="btn btn-primary mt-3" @onclick="@AddT">Utwórz zadanie</button>
             <button class="btn btn-primary mt-3" @onclick="@Powroc">Powrót</button>
 
