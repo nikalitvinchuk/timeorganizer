@@ -1,0 +1,43 @@
+﻿@page "/EditNotes/{Id:int}"
+@using timeorganizer.Services
+
+@inject NoteService noteService
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <label class="form-label">Tytuł notatki</label>
+            @*<input class="form-control" @bind="@noteService.EditNotes.Title" />*@
+
+            <label class="form-label mt-3">Treść notatki</label>
+            @*<textarea class="form-control" @bind="@noteService.EditNotes.Content"></textarea>*@
+
+            <label class="form-label mt-3">Data utworzenia</label>
+            @*<input class="datepicker" type="date" data-date-format="dd/mm/yyyy" @bind="@noteService.EditNotes.Created">*@
+
+            @*<button class="btn btn-primary mt-3" @onclick="@UpdateNote">Aktualizuj notatkę</button>*@
+            <button class="btn btn-primary mt-3" @onclick="@Cancel">Anuluj</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int noteId { get; set; }
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    noteService.EditNotesService = await noteService.GetNoteById(noteId);
+    //}
+
+    //public async void UpdateNote()
+    //{
+    //    await noteService.EditNotes.UpdateNote();
+    //    StateHasChanged();
+    //}
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/Notatki");
+    }
+}

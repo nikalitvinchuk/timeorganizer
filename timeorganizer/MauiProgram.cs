@@ -32,6 +32,7 @@ namespace timeorganizer
             builder.Services.AddAuthorizationCore();
             builder.Services.TryAddScoped<AuthenticationStateProvider, AuthService>();
             builder.Services.AddSingleton<AuthServiceSetUser>();
+            builder.Services.AddSingleton<NoteService>();
 
 
             builder.Services.AddOptions();

@@ -1,0 +1,62 @@
+﻿@page "/Notatki"
+@using timeorganizer.Services
+
+@inject NoteService noteService
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Lista Notatek</h2>
+
+            @if (noteService.ShowNotesTitle.NotesColletion != null && noteService.ShowNotesTitle.NotesColletion.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tytuł</th>
+                            <th>Treść</th>
+                            <th>Data utworzenia</th>
+                            <th>Akcje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var note in noteService.ShowNotesTitle.NotesColletion)
+                        {
+                            <tr>
+                                <td>@note.Title</td>
+                                <td>@note.Content</td>
+                                <td>@note.Created</td>
+                                @*<td>
+                                    <a class="btn btn-primary" href="/editnotes/@note.Id">Edytuj</a>
+                                    <button class="btn btn-danger" @onclick="() => DeleteNote(note.Id)">Usuń</button>
+                                </td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>Brak notatek.</p>
+            }
+
+            <a class="btn btn-success" href="/addnotes">Dodaj nową notatkę</a>
+        </div>
+    </div>
+</div>
+
+@*@code {
+    private async Task DeleteNote(int Id)
+    {
+        if (await noteService.ShowNotesTitle.DeleteNoteById(Id))
+        {
+             StateHasChanged();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await noteService.ShowNotesTitle.GetNotesList();
+    }
+}*@
