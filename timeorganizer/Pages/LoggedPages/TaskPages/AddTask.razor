@@ -27,17 +27,9 @@
 
 @code {
     public async void AddT() {
-        if (taskService.addTask.stan == 1)
-        {
             await taskService.addTask.AddTask();
             await taskService.showTask.FilterTasks();
             StateHasChanged();
-        }
-        else {
-            await taskService.AddSTask.AddSubTask();
-            taskService.addTask.stan = 1;
-            NavigationManager.NavigateTo("/subtask");
-        }
     }
     private void Powroc() {
         NavigationManager.NavigateTo("/todo");

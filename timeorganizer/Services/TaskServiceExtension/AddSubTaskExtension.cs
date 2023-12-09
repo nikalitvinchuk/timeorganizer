@@ -16,12 +16,8 @@ namespace timeorganizer.Services.TaskServiceExtension
 		public string Description { get => _desc; set => _desc = value; }
 		public string Status { get => _status; set => _status = value; }
 		public int TaskId { get => _tid; set => _tid = value; }
-		public int UserId { get => _userId; set => _userId = value; }
-
-		//public bool TaskComplited;
-		//public bool IsActive;
 		public Tasks Zadanie { get; set; } // zmienna Zadanie jest typu klasy Tasks która to klasa jest naszym modelem tabeli
-        public Collection<TaskComponents> PodZadanie { get; set; } // Collection<> zmienna któa pozwala przechowywaæ wiele pozycji danego typu, w tym wypadku naszej klasy modelu tabeli pod zadañ TaskComponents
+        public Collection<TaskComponents> PodZadanie { get; set; } // Collection<> zmienna któa pozwala przechowywaæ wiele pozycji danego typu, w tym wyhttps://0.0.0.0/loginpadku naszej klasy modelu tabeli pod zadañ TaskComponents
 		private readonly DatabaseLogin _context; //zmienna _context typu DatabaseLogin (jest to klasa umo¿yliwiaj¹ca wykonywanie operacji na naszej bazie, posiada stworzone przez kubê funkcjê pozwalaj¹ce wykonywaæ konkretne operacje na bazie z zakresu CRUD) 
 		//konstruktor wewn¹trz któego tworzymy obiekt klast DatabaseLogin i przypisujemy go do zmienne _context, umo¿liwa to wywo³anie operacji na bazie w kodzie za pomoc¹	   _context.NazwaFunkcji
 		public AddSubTaskExtension(){
@@ -31,7 +27,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 		public async Task GetTask(){
 			await ExecuteAsync(async () => { 
 				Zadanie = await _context.GetItemByKeyAsync<Tasks>(_tid);
-                var temp = await _context.GetFileteredAsync<TaskComponents>(e => e.TaskId == Zadanie.Id);
+                var temp = await _context.GetFileteredAsync<TaskComponents>(e => e.TaskId == Zadanie.Id && (e.Status == "Aktywne" || e.Status == "Ukonczone"));
                 PodZadanie = new ObservableCollection<TaskComponents>(temp);
 			});
 			//zwraca zero poniewa¿ funkcja nie jest void wiêc musi posiadaæ w sobie return a jej wynik nie przypisujemy do ¿adnego konkretnej zmiennej poniewa¿ robimy to wewn¹trz metody, funkcja jest typu int wiêc zwracmy liczbê w tym wypadku 0
@@ -64,8 +60,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 				Description = Description,
 				TaskId = TaskId,
 				UserId = _userId,
-				Status = Status,
-				TaskComplited = false,
+				Status = "Aktywne",
 				IsActive = true,
 				Created = DateTime.Now.ToLongDateString(), 
 				LastUpdated = null
@@ -74,6 +69,8 @@ namespace timeorganizer.Services.TaskServiceExtension
 			{
 				await _context.AddItemAsync<TaskComponents>(TC);
                 await App.Current.MainPage.DisplayAlert("Uda³o siê", "Uda³o siê", "Ok");
+				Name = "";
+				Description = "";
             });
 		}
 		//funkcja dziêki której mo¿emy wywo³aæ jakiœ fragment kodu a jeœli ten napotka jakiœ b³¹d w sobie to zamiast zacinaæ ca³¹ aplikacjê to wyœwietli nam b³¹d i poka¿e treœæ b³êdu
@@ -81,15 +78,15 @@ namespace timeorganizer.Services.TaskServiceExtension
 		{
 			//var activityViewModel = new ActivityViewModel(); //inicjalizacja do póŸniejszego wywo³ania ChangeExpirationDate
 			IsBusy = true;
-			try			{
+			try{
 				await operation?.Invoke();
 			}
-			catch (Exception ex)			{
+			catch (Exception ex){
 				//await activityViewModel.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityViewModel 
 				await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
 			}
 
-			finally			{
+			finally{
 				IsBusy = false;
 			}
 		}

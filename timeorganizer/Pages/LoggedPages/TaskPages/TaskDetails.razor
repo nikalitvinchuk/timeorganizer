@@ -1,11 +1,11 @@
 ﻿@page "/subtask"
 @using timeorganizer.Services
 @using timeorganizer.Helpers
-
+<h1>Szczaegóły</h1>
 
 @inject NavigationManager NavigationManager
 @inject ToDoService taskService
-<button class="btn btn-primary mt-3" @onclick="@MoveToAdd">Dodaj Etapy Zadania</button>
+<button class="btn btn-primary mt-3" @onclick="@MoveToAddTC">Dodaj Etapy Zadania</button>
 <button class="btn btn-primary mt-3" @onclick="@(e => MoveToEdit(@taskService.AddSTask.Zadanie.Id, 0))">Edytuj zadanie</button>
 <button class="btn btn-primary mt-3" @onclick="@Powroc">Powrót</button>
 <table class="table">
@@ -23,7 +23,7 @@
             <td>@taskService.AddSTask.Zadanie.Name</td>
             <td>@taskService.AddSTask.Zadanie.Description</td>
             <td>@taskService.AddSTask.Zadanie.Type</td>
-            <td>@taskService.AddSTask.Zadanie.status</td>
+            <td>@taskService.AddSTask.Zadanie.Status</td>
             <td>@taskService.AddSTask.Zadanie.Termin</td>
          </tr>
     </tbody>
@@ -35,7 +35,6 @@
             <th>Description</th>
             <th>Type</th>
             <th>Status</th>
-            <th>Termin</th>
         </tr>
     </thead>
 
@@ -46,24 +45,14 @@
             <td>@subTasks.Name</td>
             <td>@subTasks.Description</td>
             <td>@subTasks.TaskId</td>
+            <td>@subTasks.Status</td>
             <td><button class="btn btn-primary mt-3" @onclick="@(e => MoveToEdit(@subTasks.Id, 1))">Edytuj Etap</button></td>
         </tr>
 
     </tbody>
 }
 </table>
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
 
-            <label class="form-label">Podaj tytuł swojego pod zadnaia</label>
-            <input @bind="@taskService.AddSTask.Name" placeholder="Name" />
-
-            <label class="form-label mt-3">Opisz swoje zadania</label>
-            <input @bind="@taskService.AddSTask.Description" placeholder="Description" />
-        </div>
-    </div>
-</div>
 
 @code {
     protected override async void OnAfterRender(bool firstRender) {
@@ -71,10 +60,9 @@
             await taskService.AddSTask.GetTask();
             StateHasChanged();
         }
-    }
-    public void MoveToAdd() {
-        NavigationManager.NavigateTo("/addtask");
-        taskService.addTask.stan = 1;
+    } 
+    public void MoveToAddTC() {
+        NavigationManager.NavigateTo("/addtaskcom");
         StateHasChanged();
     }
     public async void MoveToEdit(int tid, int typ) {

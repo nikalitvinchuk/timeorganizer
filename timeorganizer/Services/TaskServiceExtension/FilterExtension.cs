@@ -17,20 +17,18 @@ namespace timeorganizer.Services.TaskServiceExtension
 		private string _name, _description, _typ, _status, _created, _termin;
 		public int _priority, _prcomplited, _userId;
 		private DateTime? _terminD;
+		private List<string> _statStr = new() { null, "Ukonczono", "Aktywne" };
 
-		public int Id { get; set; }
 		public string Name { get => _name; set => _name = value; }
 		public string Description { get => _description; set => _description = value; }
 		public string Typ { get => _typ; set => _typ = value; }
+		public List<string> StatusStr { get => _statStr; set => _statStr = value; }
 
 		public int UserId;
 		public string Termin { get => _termin; set => _termin= value; }
 		public DateTime? TerminD { get => _terminD; set => _terminD= value; }
 		public string Updated;
-		public string Status { get => _status; set => _status = value; }
-		public bool IsDone { get; set; }
-		public int Priority { get => _priority; set => _priority = value; }
-		public int RealizedPercent { get; set; }
+        public string Status { get => _status; set => _status = value; }
 
         private ObservableCollection<Tasks> _collection = new();
         public ObservableCollection<Tasks> TasksCollection
@@ -62,8 +60,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 		public async Task FilterTasks()
 		{
 			_termin = _terminD?.ToString("dd.MM.yyyy");
-
-			await ExecuteAsync(async () =>
+                await ExecuteAsync(async () =>
 			{
                 var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
 
@@ -72,15 +69,19 @@ namespace timeorganizer.Services.TaskServiceExtension
 				{
 					{ "Userid", _userId }
 				};
-				if (Id != 0) filters.Add("Id", Id);
 				if (!string.IsNullOrWhiteSpace(_name)) filters.Add("Name", _name);
 				if (!string.IsNullOrWhiteSpace(_description)) filters.Add("Description", _description);
 				if (!string.IsNullOrWhiteSpace(_typ)) filters.Add("Type", _typ);
-				if (!string.IsNullOrWhiteSpace(_status)) filters.Add("Status", _status);
+				if (!string.IsNullOrWhiteSpace(_status)) {
+					filters.Add("Status", _status);
+				}
+				else {
+                    _status = "Aktywne";
+                    filters.Add("Status", _status);
+                }
+				
 				if (!string.IsNullOrWhiteSpace(_termin)) filters.Add("Termin", _termin);
                 _collection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters)));
-				
-
                 filters.Clear();
 				await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
 			});
