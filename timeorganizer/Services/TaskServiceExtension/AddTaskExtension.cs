@@ -6,10 +6,9 @@ namespace timeorganizer.Services.TaskServiceExtension
 	public partial class AddTaskExtension : ObservableObject
 	{
 
-		private string _name, _desc, _type, _status;
+		private string _name, _desc, _type, _status, _termin2;
 		private int _userId, _relizedpr;
 		private DateTime _termin = DateTime.Now;
-		public int stan = 1; //Określi czy dodać zadanie czy pod zadanie
 		public string Name { get => _name; set => _name = value; }
 		public string Description { get => _desc; set => _desc = value; }
 		public string Typ { get => _type; set => _type = value; }
@@ -20,6 +19,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 
 		public string Modified;
 		public DateTime Termin { get => _termin; set => _termin = value; }
+		public string Termin2 { get => _termin2; set => _termin2 = value; }
 		//public ICommand AddTaskCommand { private set; get; }
 
 		private readonly DatabaseLogin _context;
@@ -28,7 +28,8 @@ namespace timeorganizer.Services.TaskServiceExtension
 
 		public AddTaskExtension()
 		{
-			_context = new DatabaseLogin();
+			Termin2 = DateTime.Now.ToString("dd.MM.yyyy");
+            _context = new DatabaseLogin();
 			//AddTaskCommand = new Command(AddTask);
 		}
 		private async Task<int> Getid()
@@ -51,7 +52,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 		{
 			if (_userId == 0) _userId = await Getid();
 
-			Status = "Act";
+			Status = "Aktywne";
 			Modified = DateTime.Now.ToString("dd.MM.yyyy, HH:mm");
 			Tasks Task = new()
 			{
@@ -59,7 +60,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 				Description = Description,
 				Type = Typ,
 				UserId = _userId,
-				status = Status,
+				Status = Status,
 				RealizedPercent = Progress,
 				Updated = null,
 				Created = DateTime.Now.ToLongDateString(),

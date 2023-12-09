@@ -24,7 +24,7 @@
                     <p class="mr-3 mb-0">@task.Name</p>
                     <p class="mr-3 mb-0">@task.Description</p>
                     <p class="mr-3 mb-0">@task.Type</p>
-                    <p class="mr-3 mb-0">@task.status</p>
+                    @* <p class="mr-3 mb-0">@task.status</p> *@
                     <p class="mr-3 mb-0">@task.Termin</p>
                     <button @onclick="@(e => RedirectToDetails(@task.Id))">Szczegóły zadania</button>
                 </div>
@@ -44,7 +44,7 @@
             @code {
             protected override void OnAfterRender(bool firstRender)
             {
-                taskService.showTask.Status = "Act";
+                taskService.showTask.Status = "Aktywne";
                 if (firstRender)
                 {
                     filterTask();

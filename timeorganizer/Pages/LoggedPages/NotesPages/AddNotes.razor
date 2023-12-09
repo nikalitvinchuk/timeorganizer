@@ -1,0 +1,37 @@
+﻿@page "/AddNotes"
+@using timeorganizer.Services
+
+@inject NoteService noteService
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <label class="form-label">Podaj tytuł swojej notatki</label>
+            <input class="form-control" @bind="@noteService.AddNotes.Title" placeholder="Np. Ważne informacje" />
+
+            <label class="form-label mt-3">Treść notatki</label>
+            <textarea class="form-control" @bind="@noteService.AddNotes.Content" placeholder="Dodaj treść notatki"></textarea>
+
+            @*<label class="form-label mt-3">Data utworzenia</label>
+            <input class="datepicker" type="date" data-date-format="dd/mm/yyyy" @bind="@noteService.AddNotes.Modified">
+
+            <button class="btn btn-primary mt-3" @onclick="@AddNote">Dodaj notatkę</button>*@
+            <button class="btn btn-primary mt-3" @onclick="@Back">Powrót</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    //public async void AddNote()
+    //{
+    //    await noteService.AddNotes.AddNote();
+    //    //await Services.NoteServiceExtension.AddNotesExtension NoteService.AddNotes.AddNote();
+    //    StateHasChanged();
+    //}
+
+    private void Back()
+    {
+        NavigationManager.NavigateTo("/Notatki");
+    }
+}

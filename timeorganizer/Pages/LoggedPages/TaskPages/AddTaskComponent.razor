@@ -1,0 +1,33 @@
+﻿@page "/addtaskcom"
+@using timeorganizer.Services
+@using timeorganizer.Helpers
+<h1>Dodaj Etap Zadania</h1>
+@inject ToDoService taskService
+@inject NavigationManager NavigationManager
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <label class="form-label">Podaj tytuł swojego Etapu Zadania</label>
+            <input class="form-control" @bind="@taskService.AddSTask.Name" placeholder="Np. Nauka Języka Angielskiego" />
+
+            <label class="form-label mt-3">Opisz swoje Etapu Zadania</label>
+            <input class="form-control" @bind="@taskService.AddSTask.Description" placeholder="Określ konkrety, które chcesz zrealizować." />
+
+            <button class="btn btn-primary mt-3" @onclick="@AddT">Utwórz zadanie</button>
+            <button class="btn btn-primary mt-3" @onclick="@Powroc">Powrót</button>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    public async void AddT() {
+            await taskService.AddSTask.AddSubTask();
+            NavigationManager.NavigateTo("/subtask");
+    }
+    private void Powroc() {
+        NavigationManager.NavigateTo("/subtask");
+    }
+}
+
+

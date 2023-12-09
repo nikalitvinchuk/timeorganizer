@@ -1,8 +1,11 @@
 ﻿@page "/edittask"
 @using timeorganizer.Services
 @using timeorganizer.Helpers
-
+<h1>Edycja</h1>
 @inject ToDoService taskService
+@inject NavigationManager NavigationManager
+<button class="btn btn-primary mt-3" @onclick="@Powroc">Powrót</button>
+<button class="btn btn-primary mt-3" @onclick="@Usun">Usuń</button>
 <table class="table">
     <thead>
         <tr>
@@ -26,8 +29,16 @@
                 <input class="form-control" @bind="@taskService.EditTask.EditZadanie.Type" placeholder="Wprowadź typ zadania: home/work/hobby/other" />
 
                 <label class="form-label mt-3">Termin</label>
-@* Dodan
-                <input class="datepicker" type="date" data-date-format="dd/mm/yyyy" @bind="@taskService.addTask.Termin"> *@
+                <InputDate Type="InputDateType.Date" class="form-eliment jds-d-inline-block jds-max-width150" 
+                @bind-Value="taskService.EditTask.Termin"> </InputDate>
+            </tr>
+        }
+        @if (taskService.EditTask.typ == 1) {
+            <tr>
+                <label class="form-label">Tytuł</label>
+                <input class="form-control" @bind="@taskService.EditTask.EditEtap.Name" placeholder="Np. Nauka Języka Angielskiego" />
+                <label class="form-label mt-3">Opis</label>
+                <input class="form-control" @bind="@taskService.EditTask.EditEtap.Description" placeholder="Określ konkrety, które chcesz zrealizować." />
             </tr>
         }
         
@@ -44,11 +55,32 @@
 @code {
 
     public async void Edytuj() {
-        await taskService.EditTask.Update();
-        await taskService.AddSTask.GetTask();
+        if (taskService.EditTask.typ == 0) {
+            await taskService.EditTask.Update();
+            await taskService.EditTask.GetTask(taskService.EditTask.EditZadanie.Id);
+        }
+        else if (taskService.EditTask.typ == 1) {
+            await taskService.EditTask.Update();
+            await taskService.EditTask.GetTask(taskService.EditTask.EditEtap.Id);
+        }
+
         StateHasChanged();
     }
-
+    public async void Usun(){
+        if (taskService.EditTask.typ == 0)
+        {
+            await taskService.EditTask.Usun();
+            NavigationManager.NavigateTo("/todo");
+        }
+        else if (taskService.EditTask.typ == 1)
+        {
+            await taskService.EditTask.Usun();
+            NavigationManager.NavigateTo("/todo");
+            }
+        }
+    private void Powroc() {
+        NavigationManager.NavigateTo("/subtask");
+    }
 }
 
 
