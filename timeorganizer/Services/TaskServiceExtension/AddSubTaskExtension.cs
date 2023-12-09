@@ -1,7 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using HealthKit;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 using timeorganizer.DatabaseModels;
 
 
