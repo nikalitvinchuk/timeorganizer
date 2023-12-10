@@ -1,12 +1,16 @@
 ﻿@page "/subtask"
+@using timeorganizer.DatabaseModels
 @using timeorganizer.Services
 @using timeorganizer.Helpers
 <h1>Szczaegóły</h1>
 
 @inject NavigationManager NavigationManager
 @inject ToDoService taskService
-<button class="btn btn-primary mt-3" @onclick="@MoveToAddTC">Dodaj Etapy Zadania</button>
-<button class="btn btn-primary mt-3" @onclick="@(e => MoveToEdit(@taskService.AddSTask.Zadanie.Id, 0))">Edytuj zadanie</button>
+@if (taskService.AddSTask.OTask.Status == "Aktywne") {
+    <button class="btn btn-primary mt-3" @onclick="@MoveToAddTC">Dodaj Etapy Zadania</button>
+    <button class="btn btn-primary mt-3" @onclick="@(e => MoveToEdit(@taskService.AddSTask.OTask.Id, 0))">Edytuj zadanie</button>
+    <button class="btn btn-primary mt-3" @onclick="@(e => FinaMainTask())">Ukończ zadanie</button>
+}
 <button class="btn btn-primary mt-3" @onclick="@Powroc">Powrót</button>
 <table class="table">
     <thead>
@@ -20,11 +24,11 @@
     </thead>
     <tbody>
         <tr>
-            <td>@taskService.AddSTask.Zadanie.Name</td>
-            <td>@taskService.AddSTask.Zadanie.Description</td>
-            <td>@taskService.AddSTask.Zadanie.Type</td>
-            <td>@taskService.AddSTask.Zadanie.Status</td>
-            <td>@taskService.AddSTask.Zadanie.Termin</td>
+            <td>@taskService.AddSTask.OTask.Name</td>
+            <td>@taskService.AddSTask.OTask.Description</td>
+            <td>@taskService.AddSTask.OTask.Type</td>
+            <td>@taskService.AddSTask.OTask.Status</td>
+            <td>@taskService.AddSTask.OTask.Termin</td>
          </tr>
     </tbody>
 </table>
@@ -38,7 +42,7 @@
         </tr>
     </thead>
 
-@foreach (var subTasks in taskService.AddSTask.PodZadanie) {
+@foreach (var subTasks in taskService.AddSTask.TComponent) {
 
     <tbody>
         <tr>
@@ -46,7 +50,10 @@
             <td>@subTasks.Description</td>
             <td>@subTasks.TaskId</td>
             <td>@subTasks.Status</td>
-            <td><button class="btn btn-primary mt-3" @onclick="@(e => MoveToEdit(@subTasks.Id, 1))">Edytuj Etap</button></td>
+                @if (taskService.AddSTask.OTask.Status != "Ukończono"){
+                    <td><button class="btn btn-primary mt-3" @onclick="@(e => MoveToEdit(@subTasks.Id, 1))">Edytuj Etap</button></td>
+                    <td><button class="btn btn-primary mt-3" @onclick="@(e => FinaComponent(@subTasks))">Ukończ</button></td>
+                } 
         </tr>
 
     </tbody>
@@ -61,16 +68,31 @@
             StateHasChanged();
         }
     } 
+
     public void MoveToAddTC() {
         NavigationManager.NavigateTo("/addtaskcom");
         StateHasChanged();
     }
+
     public async void MoveToEdit(int tid, int typ) {
         taskService.EditTask.typ = typ;
         await taskService.EditTask.GetTask(tid);
         NavigationManager.NavigateTo("/edittask");
         StateHasChanged();
     }
+
+    private async void FinaMainTask() {
+        await taskService.EditTask.CheckFinComp(@taskService.AddSTask.OTask);
+    }
+
+    private async void FinaComponent<TTable>(TTable Component) where TTable : class, new() {
+        if(@taskService.AddSTask.OTask.Status != "Ukończono") {
+            (Component as dynamic).Status = "Ukończono";
+            await taskService.EditTask.Update(Component);
+            StateHasChanged();
+        }
+    }
+
     private void Powroc() {
         NavigationManager.NavigateTo("/todo");
     }

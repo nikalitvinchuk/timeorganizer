@@ -17,7 +17,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 		private string _name, _description, _typ, _status, _created, _termin;
 		public int _priority, _prcomplited, _userId;
 		private DateTime? _terminD;
-		private List<string> _statStr = new() { null, "Ukonczono", "Aktywne" };
+		private List<string> _statStr = new() { null, "Ukończono", "Aktywne" };
 
 		public string Name { get => _name; set => _name = value; }
 		public string Description { get => _description; set => _description = value; }
@@ -75,11 +75,6 @@ namespace timeorganizer.Services.TaskServiceExtension
 				if (!string.IsNullOrWhiteSpace(_status)) {
 					filters.Add("Status", _status);
 				}
-				else {
-                    _status = "Aktywne";
-                    filters.Add("Status", _status);
-                }
-				
 				if (!string.IsNullOrWhiteSpace(_termin)) filters.Add("Termin", _termin);
                 _collection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters)));
                 filters.Clear();

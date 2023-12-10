@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.AspNetCore.Components;
-using SQLitePCL;
-using System.Collections.ObjectModel;
+using SQLite;
+using System.Data;
+using System.Linq.Expressions;
 using timeorganizer.DatabaseModels;
 
 namespace timeorganizer.Services;
@@ -18,7 +18,7 @@ public partial class EditTaskService : ObservableObject {
     public TaskComponents EditEtap = new();
     public DateTime Termin { get => _termin; set => _termin = value; }
     private readonly DatabaseLogin _context;
-    private NavigationManager _navigationManager;
+
     public EditTaskService() {
         _context = new();
     }
@@ -31,69 +31,59 @@ public partial class EditTaskService : ObservableObject {
                     _termin = parsedTermin;
                 }
             });
-        }else if(_typ == 1) {
+        }
+        else if (_typ == 1) {
             await ExecuteAsync(async () => {
                 EditEtap = await _context.GetItemByKeyAsync<TaskComponents>(_id);
             });
         }
     }
+    public async Task CheckFinComp(Tasks task) {
+        await ExecuteAsync(async () => {
+                var row = await _context.GetFileteredAsync<TaskComponents>(e => e.Status == "Ukończono" && e.TaskId == task.Id);
+                int liczba = row.Count();
+                row= await _context.GetFileteredAsync<TaskComponents>(e => e.Status != "Rem" && e.TaskId == task.Id);
+            if (liczba == row.Count()) {
+                bool confirmation = await App.Current.MainPage.DisplayAlert("Potwierdzenie", "Ukończenie tego zadania będzię się wiązało z brakiem możliwości pozostałych podzadań", "Ok", "Anuluj");
 
-    public async Task Update() {
-        if (_typ == 0) {
-            await ExecuteAsync(async () => {
-                EditZadanie.Termin = _termin.ToString("dd.MM.yyyy");
-                await _context.UpdateItemAsync<Tasks>(EditZadanie);
-                await App.Current.MainPage.DisplayAlert("Sukcess", "Zmieniono dane", "Ok");
-            });
-        }else if (_typ == 1) {
-            await ExecuteAsync(async () => {
-                await _context.UpdateItemAsync<TaskComponents>(EditEtap);
-                await App.Current.MainPage.DisplayAlert("Sukcess", "Zmieniono dane", "Ok");
-            });
-        }
+                if (confirmation) {
+                    task.Status = "Ukończono";
+                    await _context.UpdateItemAsync(task);
+                    await App.Current.MainPage.DisplayAlert("Sukcess", "Zadanie oznaczone jako ukończone", "Ok");
+                }
+
+            }
+        });
     }
-    public async Task Usun() {
-        if (_typ == 0) {
-            await ExecuteAsync(async () => {
+        public async Task Update<TTable>(TTable T) where TTable : class, new() {
+        await ExecuteAsync(async () => {
+            await _context.UpdateItemAsync(T);
+            await App.Current.MainPage.DisplayAlert("Sukcess", "Zmieniono dane", "Ok");
+        });
+    }
+    public async Task Usun<TTable>(TTable T) where TTable : class, new() {
+        await ExecuteAsync(async () => {
+            bool confirmation = await App.Current.MainPage.DisplayAlert("Potwierdzenie", "Czy na pewno chcesz to usunąć?\n Ta operacja jest nieodwracalna", "Ok", "Anuluj");
 
-                bool potwierdzenine = await App.Current.MainPage.DisplayAlert("Potwierdzenie", "Czy na pewno chcesz to usunąć?\n Ta operacja jest nie odwracalna", "Ok", "Anuluj");
-
-                if (potwierdzenine) {
-                    List<TaskComponents> etapy;
-                    etapy = (List<TaskComponents>)await _context.GetFileteredAsync<TaskComponents>(e => e.TaskId == EditZadanie.Id);
-                    foreach (var element in etapy) {
-                        element.Status = "Rem";
-                        await _context.UpdateItemAsync<TaskComponents>(element);
+            if (confirmation) {
+                if (T is Tasks task) {
+                    List<TaskComponents> etapy = (List<TaskComponents>)await _context.GetFileteredAsync<TaskComponents>(e => e.TaskId == task.Id);
+                    foreach (var etap in etapy) {
+                        etap.Status = "Rem";
+                        await _context.UpdateItemAsync(etap);
                     }
-                    EditZadanie.Status = "Rem";
-                    await _context.UpdateItemAsync<Tasks>(EditZadanie);
-                    await App.Current.MainPage.DisplayAlert("Sukcess", "Usunięto", "Ok");
-                }
-                else {
-                    await App.Current.MainPage.DisplayAlert("", "Anulowano", "Ok");
                 }
 
-            });
-        }
-        else if (_typ == 1) {
-            await ExecuteAsync(async () => {
-                bool potwierdzenine = await App.Current.MainPage.DisplayAlert("Potwierdzenie", "Czy na pewno chcesz to usunąć?\n Ta operacja jest nie odwracalna", "Ok", "Anuluj");
-
-                if (potwierdzenine) {
-                    EditEtap.Status = "Rem";
-                    await _context.UpdateItemAsync<TaskComponents>(EditEtap);
-                    await App.Current.MainPage.DisplayAlert("Sukcess", "Usunięto", "Ok");
-                }
-                else {
-                    await App.Current.MainPage.DisplayAlert("", "Anulowano", "Ok");
-                }
-
-            });
-        }
+                (T as dynamic).Status = "Rem";
+                await _context.UpdateItemAsync(T);
+                await App.Current.MainPage.DisplayAlert("Sukcess", "Usunięto", "Ok");
+            }
+            else {
+                await App.Current.MainPage.DisplayAlert("", "Anulowano", "Ok");
+            }
+        });
     }
-    //public async Task Ukoncz(int _tid) {
 
-    //}
     [ObservableProperty]
     public bool _isBusy;
     private async Task ExecuteAsync(Func<Task> operation) {
