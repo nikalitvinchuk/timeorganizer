@@ -1,18 +1,110 @@
 ﻿@page "/settings"
 @using timeorganizer.Services
 @using timeorganizer.Helpers
+@inject SettingsService service
+
 <div id="container">
-	<h2>Ustawienia</h2>
+<h2>Ustawienia</h2>
+@if(service.option == -1) // DOMYSLNY WIDOK
+{
+
+
+
 	<br />
-	<button>Zmień login</button>
+		<button id="button-menu" @onclick="@(e => changeoption(1))">Zmień Email</button>
 	<br />
-	<button>Zmień hasło</button>
+		<button id="button-menu" @onclick="@(e => changeoption(2))">Zmień hasło</button>
+		<br />
+		<button id="button-menu" @onclick="@(e => changeoption(3))">Zmień Email i Hasło </button>
 	<br />
-	<button>Usuń konto</button>
+		<button id="button-menu" @onclick="@(e => changeoption(4))">Usuń konto</button>
 	<br />
 
 	<a href="/" class="button">Wróć</a>
 
+}
+@if (service.option == 1) // ZMIANA EMAIL
+{
 
+
+		<br />
+		<input @bind="service.Email" placeholder="Podaj email"/>
+		<br />
+		<input @bind="service.CurrentPassword" placeholder="Podaj haslo" />
+		<br />
+		<button type="button" class="btn btn-success btn-rounded  btn-block btn-lg" data-mdb-ripple-color="#ffffff" style="background-color:#26d9a3" @onclick="summit">Zatwierdz zmiany</button>
+		<button type="button" class="btn btn-danger btn-rounded btn-block btn-lg" @onclick="@(e=> changeoption(-1))">Wróć</button>
+
+
+}
+@if (service.option == 2) // ZMIANA HASLA
+{
+
+
+		<br />
+		<input @bind="service.Password" placeholder="Podaj nowe haslo" />
+		<br />
+		<input @bind="service.ConfirmPassword" placeholder="Powtorz nowe haslo" />
+		<br />
+		<input @bind="service.CurrentPassword" placeholder="Podaj obecne haslo" />
+		<br />
+		<button type="button" class="btn btn-success btn-rounded  btn-block btn-lg" data-mdb-ripple-color="#ffffff" style="background-color:#26d9a3" @onclick="summit">Zatwierdz zmiany</button>
+
+		<button type="button" class="btn btn-danger btn-rounded btn-block btn-lg" @onclick="@(e=> changeoption(-1))">Wróć</button>
+
+
+}
+@if (service.option == 3) //ZMIANA LOGIN I HASLO
+{
+
+
+		<br />
+		<input @bind="service.Email" placeholder="Email"/>
+		<br />
+		<input @bind="service.Password" placeholder="Nowe Haslo"/>
+		<br />
+		<input @bind="service.ConfirmPassword" placeholder="Powtorz haslo"/>
+		<br />
+		<input @bind="service.CurrentPassword" placeholder="Obecne haslo"/>
+		<br />
+		<button type="button" class="btn btn-success btn-rounded  btn-block btn-lg" data-mdb-ripple-color="#ffffff" style="background-color:#26d9a3" @onclick="summit">Zatwierdz zmiany</button>
+
+		<button type="button" class="btn btn-danger btn-rounded btn-block btn-lg" @onclick="@(e=> changeoption(-1))">Wróć</button>
+
+}
+@if (service.option == 4) // USUN KONTO
+{
+
+		<br />
+		<input @bind="service.CurrentPassword" placeholder="Podaj haslo" />
+		<br />
+		<button type="button" class="btn btn-success btn-rounded  btn-block btn-lg" data-mdb-ripple-color="#ffffff" style="background-color:#26d9a3" @onclick="summit">Zatwierdz zmiany</button>
+
+		<button type="button" class="btn btn-danger btn-rounded btn-block btn-lg" @onclick="@(e=> changeoption(-1))">Wróć</button>
+
+}
 </div>
+
+
+@code{
+	private void changeoption(int i)
+	{
+		service.Email = null;
+		service.Password = null;
+		service.CurrentPassword = null;
+		service.ConfirmPassword = null;
+		service.option = i;
+		StateHasChanged();
+	}
+	private async void summit()
+	{
+		await service.Change();
+		service.Email = null;
+		service.Password = null;
+		service.CurrentPassword = null;
+		service.ConfirmPassword = null;
+		StateHasChanged();
+	}
+}
+
 

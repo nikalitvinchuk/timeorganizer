@@ -42,8 +42,10 @@ namespace timeorganizer.Services.NoteServiceExtension
 				};
 					if (!string.IsNullOrWhiteSpace(_title)) filters.Add("Title", _title);
 					if (_id != 0) filters.Add("UserId", _userId);
-
-                    _notes = new ObservableCollection<Notes>(await _context.GetFileteredAsync(_context.CreatePredicateToFiltred<Notes>(filters)));
+                    var filters1 = new Dictionary<object, string>
+                {
+                };
+                    _notes = new ObservableCollection<Notes>(await _context.GetFileteredAsync(_context.CreatePredicateToFiltred<Notes>(filters,filters1)));
 					filters.Clear();
 					OnPropertyChanged(nameof(NotesColletion));
 
