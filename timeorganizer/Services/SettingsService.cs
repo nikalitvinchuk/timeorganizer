@@ -1,6 +1,8 @@
 ﻿
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Primitives;
 //using Mopups.PreBaked.PopupPages.Login;
 //using Mopups.Services;
 using System.Windows.Input;
@@ -15,10 +17,6 @@ namespace timeorganizer.Services
 		public SettingsService()
 		{
 			_context = new DatabaseLogin();
-			ChangePassword = new RelayCommand(ChangePasswordCommand_execute);
-			ChangeEmail = new RelayCommand(ChangeEmailCommand_execute);
-			ChangeEmailAndPassword = new RelayCommand(ChangeAllCommand_execute);
-			DeleteAccount = new RelayCommand(DeleteAccountCommand);
 		}
 		private string _email, _password, _passwordconfirm, _currentpassword;
 		private int _id; // zmienna ustalona z user session z pomoca SecureStorge
@@ -29,15 +27,12 @@ namespace timeorganizer.Services
 		public string ConfirmPassword { get => _passwordconfirm; set => _passwordconfirm = value; }
 		public string CurrentPassword { get => _currentpassword; set => _currentpassword = value; }
 
-		[ObservableProperty]
+		public int option = -1;
+
+        [ObservableProperty]
 		private bool _IsBusy = false;
 		// KOMENDY DO WYWOLANIA W DANEJ KOMENDZIE - NA DANA METODE POWINNO OTWIERAC SIE NOWE OKNO Z ODPOWIEDNIMI
 		// POLAMI DO UZUPELNIENIA 
-		public ICommand ChangePassword { private set; get; }
-		public ICommand ChangeEmail { private set; get; }
-		public ICommand ChangeEmailAndPassword { private set; get; }
-
-		public ICommand DeleteAccount { private set; get; }
 
 		// WALIDACJA HASEL
 
@@ -73,6 +68,7 @@ namespace timeorganizer.Services
 			if (_password != _passwordconfirm) { await App.Current.MainPage.DisplayAlert("Błąd", "Hasła niezgodne", "Ok"); return false; }
 
 			return true;
+			
 		}
 
 		// WALIDACJA EMAIL
@@ -89,7 +85,7 @@ namespace timeorganizer.Services
 		}
 
 		// ZMIANA EMAIL
-		private async void ChangeEmailCommand_execute()
+		private async Task ChangeEmailCommand_execute()
 		{
 
 			var activityViewModel = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
@@ -105,9 +101,10 @@ namespace timeorganizer.Services
 					user.Email = _email;
 					user.DataModified = (DateTime.Now).ToLongDateString();
 					await _context.UpdateItemAsync<Users>(user);
-					//await MopupService.Instance.PopAsync(true);
 					await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
 					await App.Current.MainPage.DisplayAlert("Success", "Dane zostały poprawnie zmienione", "Ok");
+					option = -1;
+					_email = null;
 				}
 				else
 				{
@@ -118,7 +115,7 @@ namespace timeorganizer.Services
 
 		}
 		// ZMIANA HASLA
-		private async void ChangePasswordCommand_execute()
+		private async Task ChangePasswordCommand_execute()
 
 		{
 			var activityViewModel = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
@@ -135,13 +132,18 @@ namespace timeorganizer.Services
 					//await MopupService.Instance.PopAsync(true);
 					await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
 					await App.Current.MainPage.DisplayAlert("Success", "Dane zostały poprawnie zmienione", "Ok");
+                    option = -1;
+					_password = null;
+					_passwordconfirm = null;
+					_currentpassword =null;
+
 				}
 			}
 			);
 
 		}
 		// USUWANIE KONTA
-		private async void DeleteAccountCommand()
+		private async Task DeleteAccountCommand()
 		{
 			var activityViewModel = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
 			bool answer = await App.Current.MainPage.DisplayAlert("Usuwanie Konta", "Czy chcesz usunąć swoje konto?", "Tak", "Nie");
@@ -152,18 +154,20 @@ namespace timeorganizer.Services
 					if (_id == 0) _id = await Getid();
 					Users user = new Users();
 					user = await _context.GetItemByKeyAsync<Users>(_id);
-					if (_passwordconfirm == user.Password)
+					if (_currentpassword == user.Password)
 					{
 						await _context.DeleteItemAsync<Users>(user);
 					}
-					await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
-					App.Current.MainPage = new MainPage();
+					SecureStorage.RemoveAll();
+                    option = -1;
+                    App.Current.MainPage = new MainPage();
+					_currentpassword = null;
 				}
 				);
 			}
 		}
 		// ZMIANA HASLA I EMAIL
-		private async void ChangeAllCommand_execute()
+		private async Task ChangeAllCommand_execute()
 		{
 			var activityViewModel = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
 			await ExecuteAsync(async () =>
@@ -180,15 +184,41 @@ namespace timeorganizer.Services
 					await _context.UpdateItemAsync(user);
 					// await MopupService.Instance.PopAsync(true);
 					await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+					
 					await App.Current.MainPage.DisplayAlert("Success", "Dane zostały poprawnie zmienione", "Ok");
-				}
+                    option = -1;
+					_email = null;
+					_password = null;
+					_passwordconfirm = null;
+					_currentpassword = null;
+                }
 				else
 				{
 					await App.Current.MainPage.DisplayAlert("Błąd", "Niepoprawy format email", "Ok");
+					
 				}
 			}
 			);
 
+		}
+		public async Task Change()
+		{
+			if (option == 1)
+			{
+				await ChangeEmailCommand_execute();
+			}
+			if (option == 2)
+			{
+				await ChangePasswordCommand_execute();
+			}
+			if (option == 3)
+			{
+				await ChangeAllCommand_execute();
+			}
+			if (option == 4)
+			{
+				await DeleteAccountCommand();
+			}
 		}
 
 		private async Task ExecuteAsync(Func<Task> operation)
