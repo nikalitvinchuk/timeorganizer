@@ -65,23 +65,54 @@ namespace timeorganizer.Services.TaskServiceExtension
                 var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
 
                 _userId = await Getid();
-                var filters = new Dictionary<string, object>
-				{
-					{ "Userid", _userId }
-				};
-				if (!string.IsNullOrWhiteSpace(_name)) filters.Add("Name", _name);
-				if (!string.IsNullOrWhiteSpace(_description)) filters.Add("Description", _description);
-				if (!string.IsNullOrWhiteSpace(_typ)) filters.Add("Type", _typ);
-				if (!string.IsNullOrWhiteSpace(_status)) {
-					filters.Add("Status", _status);
-				}
-				else {
-                    _status = "Aktywne";
-                    filters.Add("Status", _status);
-                }
+                
+
+                var filters1 = new Dictionary<object,string>
+                {
+                    { _userId,"Equal" }
 				
-				if (!string.IsNullOrWhiteSpace(_termin)) filters.Add("Termin", _termin);
-                _collection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters)));
+                };
+                var filters = new Dictionary<string,object>
+                {
+					{"Userid",_userId }
+                };
+
+				if (!string.IsNullOrWhiteSpace(_name))
+				{
+                    filters.Add("Name", _name);
+                    filters1.Add(_name, "Equal");
+				}
+				if (!string.IsNullOrWhiteSpace(_description)) { 
+					filters1.Add(_description, "Equal");
+                    filters.Add("Description", _description);
+                }
+
+				if (!string.IsNullOrWhiteSpace(_typ))
+				{
+                    filters.Add("Type", _typ);
+                    filters1.Add(_typ, "Equal");
+				}
+				if (!string.IsNullOrWhiteSpace(_status)) {
+                    filters.Add("Status", _status);
+                    filters1.Add( _status, "Equal");
+				}
+				else
+				{
+                    filters.Add("Status", "Rem");
+                    filters1.Add("Rem", "NotEqual");
+                }
+				if (!string.IsNullOrWhiteSpace(_termin))
+				{
+                    filters.Add("Termin", _termin);
+                    filters1.Add(_termin, "Equal");
+				}
+
+
+
+
+
+
+                _collection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters,filters1)));
                 filters.Clear();
 				await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
 			});

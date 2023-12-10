@@ -25,17 +25,17 @@ a {
 }
 
 button {
-	width: 70%;
-	background-color: blueviolet;
-	color: white;
-	padding: 10px 20px;
-	margin-bottom: 10px;
-	border: none;
-	border-radius: 25px;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
+    width: 70%;
+    background-color: blueviolet;
+    color: white;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-a {
-	color: blueviolet;
+a{
+    text-align: center;
 }
