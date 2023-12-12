@@ -1,14 +1,80 @@
-﻿@page "/Kalendarz"
+﻿Kalendarz.razor:
+@page "/Kalendarz"
 @using timeorganizer.Services
-
+@using timeorganizer.Helpers
+@inject CalendarService calendarService
 
 <div id="container">
+    <div class="calendar-container">
+        <h3>Oto Twój kalendarz</h3>
 
-	<h3> Oto Twój kalendarz z zadaniami na konkretne dni</h3>
+        <div>
+            <button @onclick="GoToPreviousMonth" class="monthbutton">Prev month</button>
+            <span>@selectedDate.ToString("MMMM yyyy")</span>
+            <button @onclick="GoToNextMonth" class="monthbutton">Next month</button>
+        </div>
 
-	<p>Dodajesz zadania poprzez zakładkę Zadania</p>
-	
+        <table>
+            <thead>
+                <tr>
+                    <th>Pon</th>
+                    <th>Wt</th>
+                    <th>Śr</th>
+                    <th>Czw</th>
+                    <th>Pt</th>
+                    <th class="weekend">Sob</th>
+                    <th class="weekend">Niedz</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < 6; i++)
+                {
+                    <tr>
+                        @for (int j = 0; j < 7; j++)
+                        {
+                            var firstDayOfMonth = new DateTime(selectedDate.Year, selectedDate.Month, 1);
+                            var offset = (int)firstDayOfMonth.DayOfWeek - 1; // Korekta o jeden dzień
+                            if (offset < 0) offset = 6;
+                            var day = firstDayOfMonth.AddDays(i * 7 + j - offset);
 
-	<a href="/" class="button">Wróć</a>
+                            <td class="@((day.Date == DateTime.Today.Date && day.Month == selectedDate.Month) ? "current-day" : "") @((day.Month == selectedDate.Month && (j == 5 || j == 6)) ? "weekend" : "")" @onclick="() => HandleCellClick(day)">
+                            @(day.Month == selectedDate.Month ? day.Day.ToString() : "")
+                            </td>
 
+
+
+
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="clicked-date">
+            @if (clickedDate != DateTime.MinValue)
+            {
+                <p>Kliknięta data: @clickedDate.ToShortDateString()</p>
+            }
+        </div>
+    </div>
+    <a href="/" class="button">Wróć</a>
 </div>
+
+@code {
+    DateTime selectedDate = DateTime.Today;
+    DateTime clickedDate;
+
+    void GoToPreviousMonth()
+    {
+        selectedDate = selectedDate.AddMonths(-1);
+    }
+
+    void GoToNextMonth()
+    {
+        selectedDate = selectedDate.AddMonths(1);
+    }
+    void HandleCellClick(DateTime clickedDate)
+    {
+        this.clickedDate = clickedDate;
+        calendarService.DateValue = clickedDate;
+    }
+}

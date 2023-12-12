@@ -119,8 +119,8 @@ namespace timeorganizer.Services
 				{
 					DateTime timeNow = DateTime.Now;
 
-					Debug.WriteLine("ExpirationDate " + session.ExpirationDate);
-					Debug.WriteLine("Czas teraz " + timeNow);
+					// Debug.WriteLine("ExpirationDate " + session.ExpirationDate);
+					// Debug.WriteLine("Czas teraz " + timeNow);
 
 					if (timeNow >= session.ExpirationDate)
 					{
