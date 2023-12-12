@@ -3,31 +3,25 @@
 @using timeorganizer.Helpers
 
 <div class="container">
-    <div>
-        <h2> Zadania</h2><button @onclick="@(e => Przenies(0))">Dodaj zadanie</button>
+        <h2> Nowe zadanie</h2><button @onclick="@(e => Przenies(0))">Dodaj </button>
 @inject ToDoService taskService
 @inject NavigationManager NavigationManager
-<div style="display: grid; grid-template-columns: auto 1fr;" class="d-flex flex-row">
 
-    <div style="grid-row: 3; grid-column: 1;">
+    <br /><br /><h2>Wybierz kategorię i kliknij przycisk "Filtruj"</h2>
         <label>Typ</label>
         <input @bind="@taskService.showTask.Typ" />
-    </div>
-            <div style="grid-row: 4; grid-column: 1;">
-                <label>Status zadania</label>
+
+                <label>Status zadania</label> 
                 <InputSelect @bind-Value="taskService.showTask.Status">
                     @foreach (var status in taskService.showTask.StatusStr) {
                         <option value="@status">@status</option>
                     }
-                </InputSelect>
-            </div>
-    <div style="grid-row: 5; grid-column: 1;">
-        <label>Data</label>
-        <InputDate Type="InputDateType.Date" class="form-eliment jds-d-inline-block jds-max-width150" @bind-Value="taskService.showTask.TerminD"> </InputDate>
-    </div>
-</div>
+                </InputSelect> 
 
-        <button @onclick="@filterTask" style="margin: 10px auto; display: block;">Filtruj</button>
+        <label>Data</label> 
+        <InputDate Type="InputDateType.Date" class="form-eliment jds-d-inline-block jds-max-width150" @bind-Value="taskService.showTask.TerminD"> </InputDate>
+
+    <button @onclick="@filterTask" style="margin: 10px auto; display: block;">Filtruj</button>
   
         @foreach (var task in taskService.showTask.TasksCollection) {
     <div class="d-flex flex-row border p-2" style="cursor: pointer;">
@@ -51,7 +45,7 @@
         }
 
         <a href="/" class="button">Wróć</a>
-    </div>
+
 </div>
 @code{
     

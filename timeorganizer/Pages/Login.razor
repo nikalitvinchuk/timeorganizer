@@ -10,7 +10,7 @@
 		<p>Podaj login</p>
 		<input @bind="@login.LoginValue" />
 		<p>Podaj hasło</p>
-		<input @bind="@login.PassValue" type="password" />
+		<input @bind="@login.PassValue" type="password" /> <br/>
 		<button class="btn btn-primary" @onclick="@(() => login.LoginCommand.Execute(true))"> Login </button>
 		<a href="/Register" class="button">Rejestracja</a>
 		<a href="/" class="button">WROC</a>
