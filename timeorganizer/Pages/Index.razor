@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using timeorganizer.Services
+@* @using System.Windows.Maui.Controls; // biblioteka odpowiadająca za utworzenie diagramu kołowego *@
 @inject AuthServiceSetUser service
 
 @if (service.CurrentUser.Identity.IsAuthenticated)
@@ -11,11 +12,13 @@
         @inject NavigationManager NavigationManager
             
             <h2> Witaj!</h2>
-            <h3> Nadchodzące zadania:</h3>
+            <p>Postęp</p>
+            <div class="progress">
+                
+                <div class="progress-bar bg-secondary" style="width:70%">Ukończone zadania</div>
+            </div>
 
-            <h2>Statystyki:</h2>
-
-            <p>Do zrobienia zadania</p>
+            <p>Aktualne zadania</p>
             
 
             @foreach (var task in taskService.showTask.TasksCollection)
@@ -58,8 +61,37 @@
             }
         }
 
-            <p>Postęp</p>
+            
+            @* <p> diagram kołowy</p>
+            <StackLayout>
+    <ChartView>
+        <PieChart>
+            <PieSeries ItemsSource="{Binding Data}" x:Name="pieSeries" ValueBinding="Value" ColorBinding="Color"/>
+        </PieChart>
+    </ChartView>
+</StackLayout>
 
+@code {
+    public List<DataPoint> Data { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Data = new List<DataPoint>
+        {
+            new DataPoint { Value = 30, Color = Color.Blue, Label = "Category 1" },
+            new DataPoint { Value = 20, Color = Color.Red, Label = "Category 2" },
+            new DataPoint { Value = 50, Color = Color.Green, Label = "Category 3" }
+        };
+    }
+
+    public class DataPoint
+    {
+        public double Value { get; set; }
+        public Color Color { get; set; }
+        public string Label { get; set; }
+    }
+} *@
+            
         </div>
     </div>
 }
