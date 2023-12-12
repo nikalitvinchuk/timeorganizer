@@ -6,7 +6,6 @@
 @if (!auth.CurrentUser.Identity.IsAuthenticated)
 {
 	<div class="container">
-		<img src="user2.png" />
 		<h2> Logowanie </h2>
 		<p>Podaj login</p>
 		<input @bind="@login.LoginValue" />

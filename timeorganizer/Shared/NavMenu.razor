@@ -4,13 +4,18 @@
 @inject AuthServiceSetUser service
 @inject ToDoService taskService
 <div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">timeorganizer</a>
+    <div class="container-fluid" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center;">
+            
+            <img src="tologo.PNG" style="width: 50px; height: 50px; margin-left: 10px;" />
+            <a class="navbar-brand" href=""><p class="font-weight-bold" style="margin: 10px; ">Time Organizer</p></a>
+        </div>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </div>
+
 @if (service.CurrentUser.Identity.IsAuthenticated)
 {
     <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
