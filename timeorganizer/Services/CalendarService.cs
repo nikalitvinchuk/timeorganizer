@@ -1,5 +1,7 @@
 ﻿
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
@@ -8,8 +10,8 @@ namespace timeorganizer.Services
 {
     public class CalendarService : ObservableObject
     {
+        public int _userId;
         private DateTime _dateValue;
-
         public DateTime DateValue
         {
             get => _dateValue;
@@ -17,21 +19,60 @@ namespace timeorganizer.Services
             {
                 _dateValue = value;
                 Debug.WriteLine($"Wartość DateValue została zaktualizowana: {_dateValue}");
+                ReadTasks();
             }
         }
 
-        public ICommand DateCommand { get; private set; }
+
+        private ObservableCollection<Tasks> _collection = new();
+        public ObservableCollection<Tasks> TasksCollection
+        {
+            get => _collection;
+            set => SetProperty(ref _collection, value);
+        }
+
         private readonly DatabaseLogin _context;
 
         public CalendarService()
         {
             _context = new DatabaseLogin();
-            DateCommand = new Command(ReadTasks);
         }
 
-        private async void ReadTasks(object obj)
+        private async Task<int> Getid()
         {
+            var _tokenvalue = await SecureStorage.Default.GetAsync("token");
+            var getids = await _context.GetFileteredAsync<UserSessions>(t => t.Token == _tokenvalue);
+            if (getids.Any(t => t.Token == _tokenvalue))
+            {
+                var getid = getids.First(t => t.Token == _tokenvalue);
+                return getid.UserId;
+            }
+            else { return 0; }
+        }
+        public async Task ReadTasks()
+        {
+            
+                _userId = await Getid();
 
+                var filters1 = new Dictionary<object, string>
+                {
+                    { _userId,"Equal" }
+
+                };
+                var filters = new Dictionary<string, object>
+                {
+                    {"Userid",_userId }
+                };
+                if (DateValue != default)
+                {
+                    filters.Add("Termin", DateValue.ToString("dd.MM.yyyy"));
+                    filters1.Add(DateValue.ToString("dd.MM.yyyy"), "Equal");
+                }
+
+                _collection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters, filters1)));
+            filters.Clear();
+
+           
         }
     }
 }

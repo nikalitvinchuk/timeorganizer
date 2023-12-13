@@ -51,8 +51,17 @@
         <div class="clicked-date">
             @if (clickedDate != DateTime.MinValue)
             {
-                <p>Kliknięta data: @clickedDate.ToShortDateString()</p>
+                <p>Wybrana data: @clickedDate.ToShortDateString()</p>
             }
+        </div>
+
+        <div class="filtered-tasks">
+            <ol>
+            @foreach (var task in calendarService.TasksCollection)
+            {
+                    <li>@task.Name - @task.Description</li>
+            }
+            </ol>
         </div>
     </div>
     <a href="/" class="button">Wróć</a>
@@ -71,9 +80,11 @@
     {
         selectedDate = selectedDate.AddMonths(1);
     }
-    void HandleCellClick(DateTime clickedDate)
+    async Task HandleCellClick(DateTime clickedDate)
     {
         this.clickedDate = clickedDate;
         calendarService.DateValue = clickedDate;
+        await calendarService.ReadTasks();
+        StateHasChanged();
     }
 }
