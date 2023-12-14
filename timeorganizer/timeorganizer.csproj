@@ -56,8 +56,13 @@
     <ItemGroup>
       <None Remove="Pages\Index.razor.css" />
       <None Remove="Pages\LoggedPages\Kalendarz.razor.css" />
+      <None Remove="Pages\LoggedPages\NotesPages\AddNotes.razor.css" />
 	  <None Remove="Pages\LoggedPages\NotesPages\Notatki.razor.css" />
       <None Remove="Pages\LoggedPages\Statystyki.razor.css" />
+      <None Remove="Pages\LoggedPages\TaskPages\AddTask.razor.css" />
+      <None Remove="Pages\LoggedPages\TaskPages\AddTaskComponent.razor.css" />
+      <None Remove="Pages\LoggedPages\TaskPages\EditTasks.razor.css" />
+      <None Remove="Pages\LoggedPages\TaskPages\TaskDetails.razor.css" />
       <None Remove="Pages\LoggedPages\TaskPages\ToDoPage.razor.css" />
       <None Remove="Pages\Login.razor.css" />
       <None Remove="Resources\Images\user2.png" />
@@ -66,8 +71,13 @@
     <ItemGroup>
       <Content Include="Pages\Index.razor.css" />
       <Content Include="Pages\LoggedPages\Kalendarz.razor.css" />
+      <Content Include="Pages\LoggedPages\NotesPages\AddNotes.razor.css" />
       <Content Include="Pages\LoggedPages\NotesPages\Notatki.razor.css" />
       <Content Include="Pages\LoggedPages\Statystyki.razor.css" />
+      <Content Include="Pages\LoggedPages\TaskPages\AddTask.razor.css" />
+      <Content Include="Pages\LoggedPages\TaskPages\AddTaskComponent.razor.css" />
+      <Content Include="Pages\LoggedPages\TaskPages\EditTasks.razor.css" />
+      <Content Include="Pages\LoggedPages\TaskPages\TaskDetails.razor.css" />
       <Content Include="Pages\LoggedPages\TaskPages\ToDoPage.razor.css" />
       <Content Include="Pages\Login.razor.css" />
       <Content Include="Services\Calendar.cs" />

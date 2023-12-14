@@ -2,7 +2,9 @@
 @using timeorganizer.DatabaseModels
 @using timeorganizer.Services
 @using timeorganizer.Helpers
-<h1>Szczaegóły</h1>
+
+<div class="container">
+<h1>Szczagóły</h1>
 
 @inject NavigationManager NavigationManager
 @inject ToDoService taskService
@@ -59,6 +61,7 @@
     </tbody>
 }
 </table>
+</div>
 
 
 @code {

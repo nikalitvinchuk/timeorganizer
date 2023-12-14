@@ -36,3 +36,11 @@ th, td {
     font-weight: bold;
     color: blueviolet;
 }
+
+a.button {
+    color: blueviolet;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}

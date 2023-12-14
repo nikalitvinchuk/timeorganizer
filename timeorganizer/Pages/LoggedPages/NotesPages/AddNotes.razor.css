@@ -1,4 +1,4 @@
-#container {
+﻿.container {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -11,24 +11,10 @@
 
 h2 {
     color: blueviolet;
+    text-align: center;
 }
 
-#button-menu {
-    width: 70%;
-    background-color: blueviolet;
-    color: white;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-a {
-    color: blueviolet;
-}
-
-input {
+input, textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -47,4 +33,23 @@ button {
     border: none;
     border-radius: 25px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
+@* table {
+    border: 1px solid;
+    border-collapse: collapse;
+    width: 100%;
+    background-color: #cfaff3;
+    border-color: #cccccc; 
+}
+
+th, td {
+    border: 1px solid;
+    padding: 8px;
+    border-color: #cccccc; 
+}
+
+th {
+    background-color: #c9aff3;
+    font-weight: bold;
+} *@

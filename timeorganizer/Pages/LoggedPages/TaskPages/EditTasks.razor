@@ -1,13 +1,18 @@
 ﻿@page "/edittask"
 @using timeorganizer.Services
 @using timeorganizer.Helpers
+
+<div class="container">
+
 <h1>Edycja</h1>
 @inject ToDoService taskService
 @inject NavigationManager NavigationManager
+
 <button class="btn btn-primary mt-3" @onclick="@Powroc">Powrót</button>
 <button class="btn btn-primary mt-3" @onclick="@Usun">Usuń</button>
 <table class="table">
-    <thead>
+    <div class="row">
+   @*  <thead> *@
         <tr>
             <th>Name</th>
             <th>Description</th>
@@ -15,8 +20,9 @@
             <th>Status</th>
             <th>Termin</th>
         </tr>
-    </thead>
-    <tbody>
+    @* </thead> *@
+    </div>
+    @* <tbody> *@
         @if (taskService.EditTask.typ == 0) {
             <tr>
                 <label class="form-label">Tytuł</label>
@@ -43,12 +49,12 @@
         }
 
 
-    </tbody>
+    @* </tbody> *@
 
 </table>
 
 
-<div class="container">
+@* <div class="container"> *@
     <button class="btn btn-primary mt-3" @onclick="@Edytuj">Edytuj</button>
 </div>
 

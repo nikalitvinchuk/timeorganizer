@@ -1,4 +1,4 @@
-#container {
+﻿.container {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -7,25 +7,6 @@
     box-sizing: border-box;
     align-items: center;
     justify-content: center;
-}
-
-h2 {
-    color: blueviolet;
-}
-
-#button-menu {
-    width: 70%;
-    background-color: blueviolet;
-    color: white;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-a {
-    color: blueviolet;
 }
 
 input {
@@ -47,4 +28,5 @@ button {
     border: none;
     border-radius: 25px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
