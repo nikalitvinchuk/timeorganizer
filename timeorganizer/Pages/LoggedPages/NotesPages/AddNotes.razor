@@ -13,25 +13,22 @@
             <label class="form-label mt-3">Treść notatki</label>
             <textarea class="form-control" @bind="@noteService.AddNotes.Content" placeholder="Dodaj treść notatki"></textarea>
 
-            @*<label class="form-label mt-3">Data utworzenia</label>
-            <input class="datepicker" type="date" data-date-format="dd/mm/yyyy" @bind="@noteService.AddNotes.Modified">
-
-            <button class="btn btn-primary mt-3" @onclick="@AddNote">Dodaj notatkę</button>*@
+            <button class="btn btn-primary mt-3" @onclick="@Add">Dodaj notatkę</button>
             <button class="btn btn-primary mt-3" @onclick="@Back">Powrót</button>
         </div>
     </div>
 </div>
 
 @code {
-    //public async void AddNote()
-    //{
-    //    await noteService.AddNotes.AddNote();
-    //    //await Services.NoteServiceExtension.AddNotesExtension NoteService.AddNotes.AddNote();
-    //    StateHasChanged();
-    //}
-
+   
     private void Back()
     {
+        NavigationManager.NavigateTo("/Notatki");
+    }
+    private async void Add()
+    {
+        await noteService.AddNotes.AddNote();
+        await noteService.ShowNotesTitle.GetNotes();
         NavigationManager.NavigateTo("/Notatki");
     }
 }

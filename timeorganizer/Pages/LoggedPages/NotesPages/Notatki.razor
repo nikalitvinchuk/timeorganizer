@@ -46,17 +46,18 @@
     </div>
 </div>
 
-@*@code {
-    private async Task DeleteNote(int Id)
+@code{
+    protected override void OnAfterRender(bool firstRender)
     {
-        if (await noteService.ShowNotesTitle.DeleteNoteById(Id))
+        if (firstRender)
         {
-             StateHasChanged();
+            filternote();
+            StateHasChanged();
         }
     }
-
-    protected override async Task OnInitializedAsync()
+    private async void filternote()
     {
-        await noteService.ShowNotesTitle.GetNotesList();
+        await noteService.ShowNotesTitle.GetNotes();
+        StateHasChanged();
     }
-}*@
+}

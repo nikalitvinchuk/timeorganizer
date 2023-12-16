@@ -14,13 +14,13 @@ namespace timeorganizer.Services.NoteServiceExtension
 		public int UserId { get => _userId; set => _userId = value; }
 
 		public string Modified;
-		public ICommand AddNoteCommand { private set; get; }
+
 
 		private readonly DatabaseLogin _context;
 		public AddNotesExtension()
 		{
 			_context = new DatabaseLogin();
-			AddNoteCommand = new Command(AddNote);
+
 		}
 		private async Task<int> Getid()
 		{
@@ -44,7 +44,7 @@ namespace timeorganizer.Services.NoteServiceExtension
 		[ObservableProperty]
 		private bool _isBusy;
 
-		private async void AddNote(object obj)
+		public async Task AddNote()
 		{
 			//var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
 

@@ -28,7 +28,7 @@ namespace timeorganizer.Services.NoteServiceExtension
 		public string Title { get => _title; set => _title = value; }
 		public string Content { get => _content; set => _content = value; } //max 255 znaków 
 		public int Id { get => _id; set => _id = value; }
-		private async Task<ObservableCollection<Notes>> GetNotes()
+		public async Task GetNotes()
 		{
 			//var activityViewModel = new ActivityViewModel();
 			try
@@ -51,11 +51,10 @@ namespace timeorganizer.Services.NoteServiceExtension
 
 				});
 				//await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
-				return NotesColletion;
+
 			}
 			catch (Exception ex)
 			{
-				return NotesColletion;
 			}
 
 		}
