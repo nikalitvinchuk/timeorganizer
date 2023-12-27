@@ -27,7 +27,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 		public async Task GetTask(){
 			await ExecuteAsync(async () => { 
 				OTask = await _context.GetItemByKeyAsync<Tasks>(_tid);
-                var temp = await _context.GetFileteredAsync<TaskComponents>(e => e.TaskId == OTask.Id && (e.Status == "Aktywne" || e.Status == "Ukonczone"));
+                var temp = await _context.GetFileteredAsync<TaskComponents>(e => e.TaskId == OTask.Id && (e.Status == "Aktywne" || e.Status == "Ukoñczono"));
                 TComponent = new ObservableCollection<TaskComponents>(temp);
 			});
 		}

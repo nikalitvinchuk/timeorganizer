@@ -29,6 +29,7 @@
                     <p class="mr-3 mb-0">@task.Type</p>
                     @* <p class="mr-3 mb-0">@task.status</p> *@
                     <p class="mr-3 mb-0">@task.Termin</p>
+                    <p class="mr-3 mb-0">@task.RealizedPercent</p>
                     <button @onclick="@(e => RedirectToDetails(@task.Id))">Szczegóły zadania</button>
                 </div>
                 @code {

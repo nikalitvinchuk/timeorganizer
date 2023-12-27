@@ -38,6 +38,15 @@ public partial class EditTaskService : ObservableObject {
             });
         }
     }
+    public async Task UpdateRealized(int _id) {
+        await ExecuteAsync(async () => {
+            var TCFin = await _context.GetFileteredAsync<TaskComponents>(e => e.Status== "Ukończono" && e.TaskId==_id);
+            var TCAll = await _context.GetFileteredAsync<TaskComponents>(e => e.Status != "Rem" && e.TaskId == _id);
+            Tasks Task = await _context.GetItemByKeyAsync<Tasks>(_id);
+            Task.RealizedPercent = (int)(((double)TCFin.Count() / TCAll.Count()) * 100);
+            await _context.UpdateItemAsync(Task);
+        });
+    }
     public async Task CheckFinComp(Tasks task) {
         await ExecuteAsync(async () => {
                 var row = await _context.GetFileteredAsync<TaskComponents>(e => e.Status == "Ukończono" && e.TaskId == task.Id);
@@ -45,7 +54,6 @@ public partial class EditTaskService : ObservableObject {
                 row= await _context.GetFileteredAsync<TaskComponents>(e => e.Status != "Rem" && e.TaskId == task.Id);
             if (liczba == row.Count()) {
                 bool confirmation = await App.Current.MainPage.DisplayAlert("Potwierdzenie", "Ukończenie tego zadania będzię się wiązało z brakiem możliwości pozostałych podzadań", "Ok", "Anuluj");
-
                 if (confirmation) {
                     task.Status = "Ukończono";
                     await _context.UpdateItemAsync(task);
