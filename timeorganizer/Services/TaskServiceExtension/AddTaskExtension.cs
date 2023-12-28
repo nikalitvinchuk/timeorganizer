@@ -53,8 +53,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 			if (_userId == 0) _userId = await Getid();
 			Status = "Aktywne";
 			Modified = DateTime.Now.ToString("dd.MM.yyyy, HH:mm");
-			Tasks Task = new()
-			{
+			Tasks Task = new() {
 				Name = Name,
 				Description = Description,
 				Type = Typ,
@@ -63,6 +62,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 				RealizedPercent = Progress,
 				Updated = null,
 				Created = DateTime.Now.ToLongDateString(),
+				TerminDateTime = Termin.Date,
 				Termin = Termin.ToString("dd.MM.yyyy")
 			};
 

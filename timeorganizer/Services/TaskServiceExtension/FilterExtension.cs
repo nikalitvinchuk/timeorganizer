@@ -59,7 +59,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 
 		public async Task FilterTasks()
 		{
-			_termin = _terminD?.ToString("dd.MM.yyyy");
+            _termin = _terminD?.ToString("dd.MM.yyyy");
                 await ExecuteAsync(async () =>
 			{
                 var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
@@ -106,13 +106,8 @@ namespace timeorganizer.Services.TaskServiceExtension
                     filters.Add("Termin", _termin);
                     filters1.Add(_termin, "Equal");
 				}
-
-
-
-
-
-
-                _collection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters,filters1)));
+				
+				_collection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters,filters1)));
                 filters.Clear();
 				await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
 			});

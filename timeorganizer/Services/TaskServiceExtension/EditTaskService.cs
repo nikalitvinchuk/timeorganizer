@@ -43,7 +43,10 @@ public partial class EditTaskService : ObservableObject {
             var TCFin = await _context.GetFileteredAsync<TaskComponents>(e => e.Status== "Ukończono" && e.TaskId==_id);
             var TCAll = await _context.GetFileteredAsync<TaskComponents>(e => e.Status != "Rem" && e.TaskId == _id);
             Tasks Task = await _context.GetItemByKeyAsync<Tasks>(_id);
-            Task.RealizedPercent = (int)(((double)TCFin.Count() / TCAll.Count()) * 100);
+            if (TCFin.Count()!=0) 
+                Task.RealizedPercent = (int)(((double)TCFin.Count() / TCAll.Count()) * 100);
+            else 
+                Task.RealizedPercent = 0;
             await _context.UpdateItemAsync(Task);
         });
     }
@@ -56,6 +59,7 @@ public partial class EditTaskService : ObservableObject {
                 bool confirmation = await App.Current.MainPage.DisplayAlert("Potwierdzenie", "Ukończenie tego zadania będzię się wiązało z brakiem możliwości pozostałych podzadań", "Ok", "Anuluj");
                 if (confirmation) {
                     task.Status = "Ukończono";
+                    task.UkonczonoDateTime = DateTime.Now.Date;
                     await _context.UpdateItemAsync(task);
                     await App.Current.MainPage.DisplayAlert("Sukcess", "Zadanie oznaczone jako ukończone", "Ok");
                 }
@@ -106,5 +110,12 @@ public partial class EditTaskService : ObservableObject {
         finally {
             IsBusy = false;
         }
-    }
+	}
+
+
+	private const string DbName = "Timeorgranizer.db3";
+	private static string DbPath => Path.Combine(FileSystem.AppDataDirectory, DbName);
+    public void usunabaze() {
+		File.Delete(DbPath);
+	}
 }

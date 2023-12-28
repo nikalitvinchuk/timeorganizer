@@ -40,8 +40,10 @@ namespace timeorganizer.DatabaseModels
         public async Task<IEnumerable<TTable>> GetFileteredAsync<TTable>(Expression<Func<TTable, bool>> predicate) where TTable : class, new() //wyszukiwanie w tabeli - przekazujemy funckje
         {
             var table = await GetTableAsync<TTable>();
-            var tt = await table.Where(predicate).ToListAsync();
-            return tt;
+			var list = await table.ToListAsync();
+			var compiled = list.Where(predicate.Compile());
+			return compiled;
+
         }
 
         private async Task<TResult> Execute<TTable, TResult>(Func<Task<TResult>> action) where TTable : class, new()

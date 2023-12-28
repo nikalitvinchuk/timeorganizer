@@ -34,6 +34,7 @@ namespace timeorganizer
             builder.Services.AddSingleton<AuthServiceSetUser>();
             builder.Services.AddSingleton<NoteService>();
             builder.Services.AddSingleton<CalendarService>();
+            builder.Services.AddSingleton<SummaryServic>();
 
 
             builder.Services.AddOptions();

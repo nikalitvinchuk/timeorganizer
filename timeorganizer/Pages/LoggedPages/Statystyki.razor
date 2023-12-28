@@ -1,11 +1,53 @@
 ﻿@page "/Statystyki"
 @using timeorganizer.Services
+@inject SummaryServic summaryService
 <div id="container">
 	
 	<h3> Tutaj możesz śledzić swoje postępy</h3>
+	<h4>Podaj rok dla tórekgo chcesz wyświetlać dane</h4>
 
-	
+	<input class="form-control" @bind="year" placeholder="Rok" @oninput="RefreshStat" />
 
+	@foreach( var year in summaryService.TasksColYear) {
+		<h2>@((year as dynamic).Year)</h2>
+		<h2>Miesiące roku</h2>
+		@foreach (var item in summaryService.TasksColMon)
+		{
+			if ((year as dynamic).Year == (item as dynamic).Year){
+				<p class="mr-3 mb-0">Miesiąc:	@((item as dynamic).Month)</p>
+				<p class="mr-3 mb-0">Ilość zadań ukończonych:		@((item as dynamic).Count)</p>
+				<p class="mr-3 mb-0">Ilość zadań ukończonych w całości :		@((item as dynamic).Count100Realized)</p>
+				<p class="mr-3 mb-0">Ilość zadań ukończonych nie w 100% :		@((item as dynamic).CountNot100)</p>
+				<p class="mr-3 mb-0">Procent pełnej kompletności zadań		@((item as dynamic).Count100precent)%</p>
+			}
+		}
+		<h2>Tygodnie roku</h2>
+
+		@foreach (var item in summaryService.TasksColWeek){
+			if ((year as dynamic).Year == (item as dynamic).Year){
+				<p class="mr-3 mb-0">Tydzień roku:	@((item as dynamic).Week)</p>
+				<p class="mr-3 mb-0">@((item as dynamic).StartDate) -  @((item as dynamic).EndDate)</p>
+				<p class="mr-3 mb-0">Ilość zadań ukończonych:		@((item as dynamic).Count)</p>
+				<p class="mr-3 mb-0">Ilość zadań ukończonych w całości :		@((item as dynamic).Count100Realized)</p>
+				<p class="mr-3 mb-0">Ilość zadań ukończonych nie w 100% :		@((item as dynamic).CountNot100)</p>
+				<p class="mr-3 mb-0">Procent pełnej kompletności zadań		@((item as dynamic).Count100precent)%</p>
+			}
+		}
+	}
 	<a href="/" class="button">Wróć</a>
+
+	@code{
+		int year = DateTime.Now.Date.Year;
+		protected override async void OnAfterRender(bool firstRender) {
+			if (firstRender) {
+				await summaryService.TaskSummary(year);
+				StateHasChanged();
+			}
+		}
+		private async void RefreshStat(ChangeEventArgs e) {
+			await summaryService.TaskSummary(year);
+			StateHasChanged();
+		}
+	};
 
 </div>
