@@ -59,7 +59,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 				Type = Typ,
 				UserId = _userId,
 				Status = Status,
-				RealizedPercent = Progress,
+				RealizedPercent = 0,
 				Updated = null,
 				Created = DateTime.Now.ToLongDateString(),
 				TerminDateTime = Termin.Date,
