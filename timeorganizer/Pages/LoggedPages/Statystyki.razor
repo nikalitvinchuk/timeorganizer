@@ -6,7 +6,7 @@
 	<h3> Tutaj możesz śledzić swoje postępy</h3>
 	<h4>Podaj rok dla tórekgo chcesz wyświetlać dane</h4>
 
-	<input class="form-control" @bind="year" placeholder="Rok" @oninput="RefreshStat" />
+	<input class="form-control" @bind="year" placeholder="Rok" @onfocusout="RefreshStat" />
 
 	@foreach( var year in summaryService.TasksColYear) {
 		<h2>@((year as dynamic).Year)</h2>
@@ -39,12 +39,13 @@
 	@code{
 		int year = DateTime.Now.Date.Year;
 		protected override async void OnAfterRender(bool firstRender) {
+
 			if (firstRender) {
 				await summaryService.TaskSummary(year);
 				StateHasChanged();
 			}
 		}
-		private async void RefreshStat(ChangeEventArgs e) {
+		private async void RefreshStat() {
 			await summaryService.TaskSummary(year);
 			StateHasChanged();
 		}

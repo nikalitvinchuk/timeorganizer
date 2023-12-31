@@ -94,6 +94,11 @@
     private async void FinaComponent<TTable>(TTable Component ) where TTable : class, new() {
         if(@taskService.AddSTask.OTask.Status != "Ukończono") {
             (Component as dynamic).Status = "Ukończono";
+            if (await SubTasks() == 0)
+            {
+                (Component as dynamic).RealizedPercent = 100;
+            }
+
             await taskService.EditTask.Update(Component);
 
             await taskService.EditTask.UpdateRealized((Component as dynamic).TaskId);
@@ -104,6 +109,10 @@
 
     private void Powroc() {
         NavigationManager.NavigateTo("/todo");
+    }
+    private async Task<int> SubTasks()
+    {
+        return await taskService.showTask.GetSubTaskCount(@taskService.AddSTask.OTask.Id);
     }
 }
 

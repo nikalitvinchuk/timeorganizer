@@ -112,6 +112,11 @@ namespace timeorganizer.Services.TaskServiceExtension
 				await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
 			});
 		}
+		public async Task<int> GetSubTaskCount(int id)
+		{
+			var tmp = await _context.GetFileteredAsync<TaskComponents>(t => t.TaskId == id);
+			return tmp.Count();
+		}
 
 		private async Task ExecuteAsync(Func<Task> operation){
 			var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate

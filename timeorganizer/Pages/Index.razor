@@ -2,24 +2,24 @@
 @using timeorganizer.Services
 @* @using System.Windows.Maui.Controls; // biblioteka odpowiadająca za utworzenie diagramu kołowego *@
 @inject AuthServiceSetUser service
-
 @if (service.CurrentUser.Identity.IsAuthenticated)
 {
     // ZALOGOWANY
-    <div id="container">
+    <div id="container" >
         <div>
         @inject ToDoService taskService
+        @inject StatisticService Statistic
         @inject NavigationManager NavigationManager
             
             <h2> Witaj!</h2>
             <p>Postęp</p>
-            <div class="progress">
-                
-                <div class="progress-bar bg-secondary" style="width:70%">Ukończone zadania</div>
+            <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+
+                <div class="progress-bar bg-primary" style="width: @Statistic.ComplitedPrecent;">Ukończone zadania: @Statistic.Realized</div>
             </div>
 
             <p>Aktualne zadania</p>
-            
+          
 
             @foreach (var task in taskService.showTask.TasksCollection)
             {
@@ -51,7 +51,9 @@
                 taskService.showTask.Status = "Aktywne";
                 if (firstRender)
                 {
+
                     filterTask();
+                    GetStatistic();
                     StateHasChanged();
                 }
             }
@@ -59,6 +61,10 @@
             {
                 await taskService.showTask.FilterTasks();
                 StateHasChanged();
+            }
+            public async void GetStatistic()
+            {
+                await Statistic.GetUserRealizedTasks();
             }
         }
 

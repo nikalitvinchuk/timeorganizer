@@ -1,16 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Maui.Controls.Compatibility.Platform.UWP;
-using Microsoft.UI.Xaml.Automation.Peers;
-using Microsoft.UI.Xaml.Controls;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using timeorganizer.DatabaseModels;
-using Windows.UI;
 
 namespace timeorganizer.Services
 {
@@ -23,10 +21,11 @@ namespace timeorganizer.Services
         {
             _context = new DatabaseLogin();
         }
-        public float ComplitedPrecent;
-        public float Total;
-        public float Realized;
-        public float Inprogress;
+        public string ComplitedPrecent { get; set; }
+        public double Total { get; set; }
+        public double Realized { get; set; }
+        public double Inprogress { get; set; }
+        public double Active { get; set; }
         [ObservableProperty]
         private bool _IsBusy = false;
         private async Task<int> Getid()
@@ -53,10 +52,11 @@ namespace timeorganizer.Services
                 int _inprogress = TaskList.Where(t => t.RealizedPercent > 0 && t.RealizedPercent < 100 && t.Status != "Rem").Count();
 
                 Total = _all;
-                ComplitedPrecent = _realized / _all;
+                var tmp = (double)_realized / _all * 100;
+                ComplitedPrecent = Convert.ToInt32(tmp).ToString() + '%';
                 Inprogress = _inprogress;
                 Realized = _realized;
-
+                Active = _all - _realized - _inprogress;
 
             });
             return;

@@ -33,7 +33,7 @@ namespace timeorganizer.Services
 		public ActivityService()
 		{
 			_context = new DatabaseLogin();
-			timer = new System.Timers.Timer(1000); //wywołanie co sekunde 
+			timer = new System.Timers.Timer(5000); //wywołanie co sekunde 
 
 		}
 		
