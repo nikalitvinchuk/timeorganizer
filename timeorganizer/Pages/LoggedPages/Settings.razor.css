@@ -14,7 +14,8 @@ h2 {
 }
 
 #button-menu {
-    width: 70%;
+    width: 90%;
+    height: 15%;
     background-color: blueviolet;
     color: white;
     padding: 10px 20px;
@@ -39,7 +40,7 @@ input {
 }
 
 button {
-    width: 70%;
+    width: 90%;
     background-color: blueviolet;
     color: white;
     padding: 10px 20px;
@@ -47,4 +48,9 @@ button {
     border: none;
     border-radius: 25px;
     cursor: pointer;
+}
+.oi {
+    width: 2rem;
+    font-size: 1.1rem;
+    vertical-align: text-top;
 }

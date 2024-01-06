@@ -6,17 +6,14 @@
 {
 	
 <div class="container">
-	<h2> Rejestracja</h2>
-	<p>Podaj Email</p>
-	<input @bind="@registerservice.Email" />
-	<p>Podaj Login</p>
-	<input @bind="@registerservice.Login" />
-	<p>Podaj hasło</p>
-	<input @bind="@registerservice.Password" />
-	<p>Powtórz hasło</p>
-	<input @bind="@registerservice.PasswordVerification" />
+	<img src="vizualization2.png">
+	<h2> SIGN UP</h2> 
+	<input @bind="@registerservice.Email" placeholder="Podaj email" />
+	<input @bind="@registerservice.Login" placeholder="Podaj login"/>
+	<input @bind="@registerservice.Password" placeholder="Podaj login"/>
+	<input @bind="@registerservice.PasswordVerification" placeholder="Powtórz hasło"/>
 
-	<button class="btn btn-primary" @onclick="@(() => registerservice.RegisterCommand.Execute(true))"> Zapisz</button>
+	<button class="btn btn-primary" @onclick="@(() => registerservice.RegisterCommand.Execute(true))"> Zapisz</button> <br/>
 	<a href="/Login" class="button">Zaloguj</a>
 
 </div>

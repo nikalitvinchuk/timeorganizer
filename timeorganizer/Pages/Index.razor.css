@@ -12,9 +12,10 @@
 h1, p {
     color: blueviolet;
 }
-a {
+.buttongl {
     text-decoration: none; color: white;
-    width: 70%;
+    width: 100%;
+    height: 10%;
     background-color: blueviolet;
     padding: 10px 20px;
     margin-bottom: 10px;
@@ -35,7 +36,11 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
-a{
-    text-align: center;
+#buttonsignup {
+    background-color: #CC33FF;
+}
+img {
+    width: 100%;
+    margin-top: 10%;
+    margin-bottom: 10%;
 }
