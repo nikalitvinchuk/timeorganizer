@@ -18,9 +18,10 @@ namespace timeorganizer.Services
 		{
 			_context = new DatabaseLogin();
 		}
-		private string _email, _password, _passwordconfirm, _currentpassword;
+		private string _email, _password, _passwordconfirm, _currentpassword, _login;
 		private int _id; // zmienna ustalona z user session z pomoca SecureStorge
 
+		public string Login { get => _login; set => SetProperty(ref _login, value); }
 		public string Email { get => _email; set => _email = value; }
 		//public string Login { get => _login; set => _login = value; } - LOGIN NIEMOZLIWY DO ZMIANY 
 		public string Password { get => _password; set => _password = value; }

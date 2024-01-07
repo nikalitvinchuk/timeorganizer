@@ -10,7 +10,7 @@
 	<h2> SIGN UP</h2> 
 	<input @bind="@registerservice.Email" placeholder="Podaj email" />
 	<input @bind="@registerservice.Login" placeholder="Podaj login"/>
-	<input @bind="@registerservice.Password" placeholder="Podaj login"/>
+	<input @bind="@registerservice.Password" placeholder="Podaj hasło"/>
 	<input @bind="@registerservice.PasswordVerification" placeholder="Powtórz hasło"/>
 
 	<button class="btn btn-primary" @onclick="@(() => registerservice.RegisterCommand.Execute(true))"> Zapisz</button> <br/>
