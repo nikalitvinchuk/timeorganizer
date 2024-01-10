@@ -36,7 +36,9 @@ public partial class SummaryServic : ObservableObject {
     public async Task TaskSummary(int FilteredYear) {
         await ExecuteAsync(async () =>
         {
-			_userId = await Getid();
+            var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania 
+
+            _userId = await Getid();
             int targetYear = FilteredYear;
 			var tasks = await _context.GetFileteredAsync<Tasks>(e => e.UserId == _userId && e.Status == "Ukończono" && e.UkonczonoDateTime.Date.Year == targetYear);
 			var tasksByMonth = tasks.GroupBy(e => new { e.UkonczonoDateTime.Year, e.UkonczonoDateTime.Month }).Select(g => new {
@@ -71,11 +73,13 @@ public partial class SummaryServic : ObservableObject {
 			_taskColWeek = tasksByWeek.Cast<object>().ToList();
 			_taskColYear = tasksByYear.Cast<object>().ToList();
 
-
-		});
+            activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
+        });
     }
 	private static DateTime GetDaysOfWeek(int weekNumber, int year) {
-		DateTime jan1 = new(year, 1, 1);
+        var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
+        DateTime jan1 = new(year, 1, 1);
 		DateTime firstMonday = jan1.AddDays((DayOfWeek.Monday - jan1.DayOfWeek + 7) % 7);
 		int days = (weekNumber - 1) * 7;
 
@@ -103,5 +107,6 @@ public partial class SummaryServic : ObservableObject {
         finally {
             IsBusy = false;
         }
+        await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService 
     }
 }

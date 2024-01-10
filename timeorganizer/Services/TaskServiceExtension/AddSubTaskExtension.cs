@@ -25,12 +25,16 @@ namespace timeorganizer.Services.TaskServiceExtension
 		}
 		//Funkcja stworzona w celu uzyskania listy zadañ z bazy i przypisanie do zmiennych
 		public async Task GetTask(){
-			await ExecuteAsync(async () => { 
+
+            var activityservice = new ActivityService(); //inicjalizacja do póŸniejszego wywo³ania ChangeExpirationDate
+
+            await ExecuteAsync(async () => { 
 				OTask = await _context.GetItemByKeyAsync<Tasks>(_tid);
                 var temp = await _context.GetFileteredAsync<TaskComponents>(e => e.TaskId == OTask.Id && (e.Status == "Aktywne" || e.Status == "Ukoñczono"));
                 TComponent = new ObservableCollection<TaskComponents>(temp);
 			});
-		}
+            await activityservice.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityService 
+        }
         //Funkcja stworzona w celu uzyskania id obecnie zalogowanego u¿ytkownika
         private async void Getid()
 		{
@@ -52,7 +56,9 @@ namespace timeorganizer.Services.TaskServiceExtension
 
 		public async Task AddSubTask()
 		{
-			if (OTask.Status != "Aktywne") {
+            var activityservice = new ActivityService(); //inicjalizacja do póŸniejszego wywo³ania ChangeExpirationDate
+
+            if (OTask.Status != "Aktywne") {
 				await App.Current.MainPage.DisplayAlert("B³¹d", "Nie mo¿na dodaæ etapu", "Ok");
 			}
 			else {
@@ -74,18 +80,19 @@ namespace timeorganizer.Services.TaskServiceExtension
 					Description = "";
 				});
 			}
-		}
+            await activityservice.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityService 
+        }
 		//funkcja dziêki której mo¿emy wywo³aæ jakiœ fragment kodu a jeœli ten napotka jakiœ b³¹d w sobie to zamiast zacinaæ ca³¹ aplikacjê to wyœwietli nam b³¹d i poka¿e treœæ b³êdu
 		private async Task ExecuteAsync(Func<Task> operation)
 		{
-			//var activityViewModel = new ActivityViewModel(); //inicjalizacja do póŸniejszego wywo³ania ChangeExpirationDate
-			IsBusy = true;
+            var activityservice = new ActivityService(); //inicjalizacja do póŸniejszego wywo³ania ChangeExpirationDate
+            IsBusy = true;
 			try{
 				await operation?.Invoke();
 			}
 			catch (Exception ex){
-				//await activityViewModel.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityViewModel 
-				await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
+                await activityservice.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityService 
+                await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
 			}
 
 			finally{

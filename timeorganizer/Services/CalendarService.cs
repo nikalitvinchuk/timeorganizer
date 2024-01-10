@@ -51,8 +51,9 @@ namespace timeorganizer.Services
         }
         public async Task ReadTasks()
         {
-            
-                _userId = await Getid();
+			var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
+			_userId = await Getid();
 
                 var filters1 = new Dictionary<object, string>
                 {
@@ -71,8 +72,9 @@ namespace timeorganizer.Services
 
                 _collection = new ObservableCollection<Tasks>(await _context.GetFileteredAsync<Tasks>(_context.CreatePredicateToFiltred<Tasks>(filters, filters1)));
             filters.Clear();
+			await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService 
 
-           
-        }
+
+		}
     }
 }

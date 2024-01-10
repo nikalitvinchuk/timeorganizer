@@ -46,9 +46,9 @@ namespace timeorganizer.Services.NoteServiceExtension
 
 		public async Task AddNote()
 		{
-			//var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+            var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
 
-			try
+            try
 			{
 				if (_userId == 0) _userId = await Getid();
 				if (_userId != 0)
@@ -108,14 +108,14 @@ namespace timeorganizer.Services.NoteServiceExtension
 
 					});
 				}
-				//await activityViewModel.ChangeExpirationDateCommand();
+				
 			}
 			catch (Exception ex)
 			{
 				//await activityViewModel.ChangeExpirationDateCommand();
 			}
-			// wystarczy w 1 miejscu na koncu funkcji. 
-		}
+            await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService 
+        }
 
 		private async Task ExecuteAsync(Func<Task> operation)
 		{

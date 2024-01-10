@@ -41,6 +41,8 @@ namespace timeorganizer.Services
         }
         public async Task GetUserRealizedTasks()
         {
+            var activityservice = new ActivityService(); //inicjalizacja do późnie
+
             int _userid = await Getid();
             if (_userid == 0) { return; }
             await ExecuteAsync(async () =>
@@ -59,6 +61,7 @@ namespace timeorganizer.Services
                 Active = _all - _realized - _inprogress;
 
             });
+            await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
             return;
         }
         private async Task ExecuteAsync(Func<Task> operation)

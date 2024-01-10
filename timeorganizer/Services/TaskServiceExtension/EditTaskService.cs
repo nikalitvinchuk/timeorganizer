@@ -39,6 +39,8 @@ public partial class EditTaskService : ObservableObject {
         }
     }
     public async Task UpdateRealized(int _id) {
+        var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
         await ExecuteAsync(async () => {
             var TCFin = await _context.GetFileteredAsync<TaskComponents>(e => e.Status== "Ukończono" && e.TaskId==_id);
             var TCAll = await _context.GetFileteredAsync<TaskComponents>(e => e.Status != "Rem" && e.TaskId == _id);
@@ -49,8 +51,11 @@ public partial class EditTaskService : ObservableObject {
                 Task.RealizedPercent = 0;
             await _context.UpdateItemAsync(Task);
         });
+        await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService 
     }
     public async Task CheckFinComp(Tasks task) {
+
+        var activityservice = new ActivityService();
         await ExecuteAsync(async () => {
                 var row = await _context.GetFileteredAsync<TaskComponents>(e => e.Status == "Ukończono" && e.TaskId == task.Id);
                 int liczba = row.Count();
@@ -66,6 +71,7 @@ public partial class EditTaskService : ObservableObject {
 
             }
         });
+        await activityservice.ChangeExpirationDateCommand();
     }
         public async Task Update<TTable>(TTable T) where TTable : class, new() {
         await ExecuteAsync(async () => {
@@ -74,6 +80,8 @@ public partial class EditTaskService : ObservableObject {
         });
     }
     public async Task Usun<TTable>(TTable T) where TTable : class, new() {
+        var activityservice = new ActivityService();
+
         await ExecuteAsync(async () => {
             bool confirmation = await App.Current.MainPage.DisplayAlert("Potwierdzenie", "Czy na pewno chcesz to usunąć?\n Ta operacja jest nieodwracalna", "Ok", "Anuluj");
 
@@ -94,6 +102,7 @@ public partial class EditTaskService : ObservableObject {
                 await App.Current.MainPage.DisplayAlert("", "Anulowano", "Ok");
             }
         });
+        await activityservice.ChangeExpirationDateCommand();
     }
 
     [ObservableProperty]

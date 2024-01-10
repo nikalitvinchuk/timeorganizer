@@ -41,7 +41,10 @@ public partial class EditNotesService : ObservableObject
     {
         //await ExecuteAsync(async () =>
         {
+            var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             await _context.UpdateItemAsync<Notes>(EditNote);
+            await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService 
+
             await App.Current.MainPage.DisplayAlert("Sukces", "Zmieniono dane", "Ok");
         }//);
     }

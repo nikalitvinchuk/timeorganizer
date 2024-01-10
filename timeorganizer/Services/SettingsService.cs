@@ -52,7 +52,9 @@ namespace timeorganizer.Services
 		}
 		private async Task<bool> validatepassword()
 		{
-			if (string.IsNullOrWhiteSpace(_currentpassword)) return false;
+            var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
+            if (string.IsNullOrWhiteSpace(_currentpassword)) return false;
 			if (_currentpassword.Length == 0) return false;
 			if (string.IsNullOrWhiteSpace(_password)) return false;
 			if (_password.Length == 0) return false;
@@ -67,8 +69,8 @@ namespace timeorganizer.Services
 			if (!Helpers.Passwordhash.Veryfypass(_currentpassword, user.Password)) { await App.Current.MainPage.DisplayAlert("Błąd", "Błędne stare hasło, spróbuj ponownie", "Ok"); return false; }
 			if (Helpers.Passwordhash.Veryfypass(_password, user.Password)) { await App.Current.MainPage.DisplayAlert("Błąd", "Nowe i stare hasło są identyczne, spróbuj ponownie", "Ok"); return false; }
 			if (_password != _passwordconfirm) { await App.Current.MainPage.DisplayAlert("Błąd", "Hasła niezgodne", "Ok"); return false; }
-
-			return true;
+            activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
+            return true;
 			
 		}
 
@@ -146,7 +148,6 @@ namespace timeorganizer.Services
 		// USUWANIE KONTA
 		private async Task DeleteAccountCommand()
 		{
-			var activityViewModel = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
 			bool answer = await App.Current.MainPage.DisplayAlert("Usuwanie Konta", "Czy chcesz usunąć swoje konto?", "Tak", "Nie");
 			if (answer)
 			{
@@ -166,7 +167,7 @@ namespace timeorganizer.Services
 				}
 				);
 			}
-		}
+        }
 		// ZMIANA HASLA I EMAIL
 		private async Task ChangeAllCommand_execute()
 		{

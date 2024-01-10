@@ -50,7 +50,10 @@ namespace timeorganizer.Services.TaskServiceExtension
 		
 		public async Task AddTask()
 		{
-			if (_userId == 0) _userId = await Getid();
+
+            var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
+            if (_userId == 0) _userId = await Getid();
 			Status = "Aktywne";
 			Modified = DateTime.Now.ToString("dd.MM.yyyy, HH:mm");
 			Tasks Task = new() {
@@ -123,7 +126,8 @@ namespace timeorganizer.Services.TaskServiceExtension
                     
                 }
 			});
-		}
+            await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService 
+        }
 
         [ObservableProperty]
         public bool _isBusy;

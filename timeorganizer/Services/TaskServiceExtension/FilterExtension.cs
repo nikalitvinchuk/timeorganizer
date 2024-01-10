@@ -130,6 +130,7 @@ namespace timeorganizer.Services.TaskServiceExtension
 			finally{
 				IsBusy = false;
 			}
-		}
+            await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
+        }
 	}
 }

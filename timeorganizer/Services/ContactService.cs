@@ -65,7 +65,6 @@ namespace timeorganizer.Services
 			if (!isValidInput())
 			{
 				//wyswietli komunikat w zaleznoœci od wystepuj¹cego b³edu w podaniu danych
-				await activityservice.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityService 
 				return;
 			}
 			if (_userId == 0) _userId = await Getid();
@@ -82,7 +81,6 @@ namespace timeorganizer.Services
 				};
 
 				await _context.AddItemAsync<Message>(newMessage);
-				await activityservice.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityService 
 				await Application.Current.MainPage.DisplayAlert("Thank You", "Report was sent", "OK");
 
 				EmailValue = "";
@@ -92,11 +90,11 @@ namespace timeorganizer.Services
 			{
 				Debug.WriteLine($"Wyst¹pi³ b³¹d podczas dodawania wiadomoœci do bazy danych: {ex.Message}");
 			}
-		}
+            await activityservice.ChangeExpirationDateCommand(); //przed³u¿anie sesji - funkcja z ActivityService 
+        }
 
 		private bool isValidInput()
 		{
-			var activityservice = new ActivityService(); //inicjalizacja do póŸniejszego wywo³ania ChangeExpirationDate
 			EmailError = string.IsNullOrEmpty(EmailValue) || !isValidEmail(EmailValue);
 			ReportError = string.IsNullOrEmpty(ReportValue) || ReportValue.Length < 15;
 
