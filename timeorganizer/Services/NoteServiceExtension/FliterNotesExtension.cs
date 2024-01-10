@@ -76,7 +76,7 @@ namespace timeorganizer.Services.NoteServiceExtension
 				catch (Exception ex)
 				{
 				}
-				activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
+				await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
             }
 			return note;
 		}

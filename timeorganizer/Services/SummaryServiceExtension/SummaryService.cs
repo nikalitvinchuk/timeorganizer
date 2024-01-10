@@ -73,7 +73,7 @@ public partial class SummaryServic : ObservableObject {
 			_taskColWeek = tasksByWeek.Cast<object>().ToList();
 			_taskColYear = tasksByYear.Cast<object>().ToList();
 
-            activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
+            await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService
         });
     }
 	private static DateTime GetDaysOfWeek(int weekNumber, int year) {
