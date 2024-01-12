@@ -17,7 +17,7 @@
             <input class="form-control" @bind="@taskService.addTask.Typ" placeholder="Wprowadź typ zadania: home/work/hobby/other" />
 
             <label class="form-label mt-3">Podaj Termin wykonania zadania</label>
-            <InputDate Type="InputDateType.Date" class="form-eliment jds-d-inline-block jds-max-width150" @bind-Value="taskService.addTask.Termin"> </InputDate>
+            <InputDate Type="InputDateType.Date" class="form-eliment jds-d-inline-block jds-max-width150" @bind-Value="taskService.addTask.Termin" style="width: 100%; height: 40px;"> </InputDate>
             <button class="btn btn-primary mt-3" @onclick="@AddT">Utwórz zadanie</button>
             <button class="btn btn-primary mt-3" @onclick="@Powroc">Powrót</button>
 

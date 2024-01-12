@@ -3,37 +3,56 @@
 @using timeorganizer.Helpers
 
 <div class="container">
-        <h2> Nowe zadanie</h2><button @onclick="@(e => Przenies(0))">Dodaj </button>
+    <!--Przycisk do dodawania zadan-->
+    <button @onclick="@(e => Przenies(0))" class="add-task-button">
+            <span class="oi oi-plus" aria-hidden="true"></span>
+        </button> 
 @inject ToDoService taskService
 @inject NavigationManager NavigationManager
+   
 
-    <br /><br /><h2>Wybierz kategorię i kliknij przycisk "Filtruj"</h2>
-        <label>Typ</label>
-        <input @bind="@taskService.showTask.Typ" />
-
-                <label>Status zadania</label> 
-                <InputSelect @bind-Value="taskService.showTask.Status">
-                    @foreach (var status in taskService.showTask.StatusStr) {
-                        <option value="@status">@status</option>
-                    }
-                </InputSelect> 
-
-        <label>Data</label> 
-        <InputDate Type="InputDateType.Date" class="form-eliment jds-d-inline-block jds-max-width150" @bind-Value="taskService.showTask.TerminD"> </InputDate>
-
-    <button @onclick="@filterTask" style="margin: 10px auto; display: block;">Filtruj</button>
-  
+    <h2>Twoje Zadania</h2>
         @foreach (var task in taskService.showTask.TasksCollection) {
-    <div class="d-flex flex-row border p-2" style="cursor: pointer;">
-        <p class="mr-3 mb-0">@task.Name</p>
-        <p class="mr-3 mb-0">@task.Description</p>
-        <p class="mr-3 mb-0">@task.Type</p>
-        <p class="mr-3 mb-0">@task.Status</p>
-        <p class="mr-3 mb-0">@task.Termin</p>
-        <p class="mr-3 mb-0">@task.RealizedPercent</p>
-        <button @onclick="@(e => RedirectToDetails(@task.Id))">Szczegóły zadania</button>
+        <div class="task-tile">
+            <p class="task-title">@task.Name</p>
+            <p class="task-description">@task.Description</p>
+            <div class="task-details">
+                <p class="task-type">Typ: @task.Type</p>
+                <!--<p class="task-status">Status: @task.Status</p>-->
+                <p class="task-due-date">Termin: @task.Termin</p>
+                <p class="task-progress">Realizacja: @task.RealizedPercent%</p>
+            </div>
+        <button @onclick="@(e => RedirectToDetails(@task.Id))" class="buttondetails">Szczegóły zadania</button>
+        </div>
+        }
+
+    <!--FILTROWANIE ZADAŃ-->
+    <br/>
+
+    <h2><span class="oi oi-magnifying-glass" aria-hidden="true"></span> Filtrowanie zadań</h2>
+
+    <div class="d-flex flex-row align-items-center">
+        <div class="form-group mr-2">
+            <label class="form-label">Typ</label>
+            <input @bind="@taskService.showTask.Typ" class="form-control" />
+        </div>
+
+        <div class="form-group mr-2">
+            <label class="form-label">Status</label>
+            <InputSelect @bind-Value="taskService.showTask.Status" class="form-control">
+                @foreach (var status in taskService.showTask.StatusStr)
+                {
+                    <option value="@status">@status</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group mr-2">
+            <label class="form-label">Data</label>
+            <InputDate Type="InputDateType.Date" class="form-control" @bind-Value="taskService.showTask.TerminD"> </InputDate>
+        </div>
     </div>
-}
+        <button @onclick="@filterTask" style="margin: 10px auto; display: block;">Filtruj</button> <br/>
+
         @code {
             private async void RedirectToDetails(int taskId) {
                 taskService.AddSTask.TaskId = taskId;
@@ -44,7 +63,6 @@
                 NavigationManager.NavigateTo("/addtask");
             }
         }
-
         <a href="/" class="button">Wróć</a>
 
 </div>

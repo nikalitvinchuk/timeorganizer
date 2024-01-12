@@ -17,20 +17,21 @@
 
                 <div class="progress-bar bg-primary" style="width: @Statistic.ComplitedPrecent;">Ukończone zadania: @Statistic.Realized</div>
             </div>
-
-            <p>Aktualne zadania</p>
+            
+            <h3>Aktualne zadania</h3>
           
 
             @foreach (var task in taskService.showTask.TasksCollection)
             {
-                <div class="d-flex flex-row border p-2" style="cursor: pointer;">
-                    <p class="mr-3 mb-0">@task.Name</p>
-                    <p class="mr-3 mb-0">@task.Description</p>
-                    <p class="mr-3 mb-0">@task.Type</p>
-                    @* <p class="mr-3 mb-0">@task.status</p> *@
-                    <p class="mr-3 mb-0">@task.Termin</p>
-                    <p class="mr-3 mb-0">@task.RealizedPercent</p>
-                    <button @onclick="@(e => RedirectToDetails(@task.Id))">Szczegóły zadania</button>
+                <div class="task-tile">
+                    <p class="task-title">@task.Name</p>
+                    <p class="task-description">@task.Description</p>
+                    <div class="task-details">
+                        <p class="task-type">Typ: @task.Type</p>
+                        <p class="task-due-date">Termin: @task.Termin</p>
+                        <p class="task-progress">Realizacja: @task.RealizedPercent%</p>
+                    </div>
+                    <button @onclick="@(e => RedirectToDetails(@task.Id))" class="buttondetails">Szczegóły zadania</button>
                 </div>
                 @code {
             private async void RedirectToDetails(int taskId)

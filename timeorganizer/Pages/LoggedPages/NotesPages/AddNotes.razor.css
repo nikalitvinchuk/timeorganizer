@@ -21,7 +21,6 @@ input, textarea {
     border: 1px solid gray;
     border-radius: 10px;
     box-sizing: border-box;
-    background-color: #beaff3;
 }
 
 button {
@@ -32,8 +31,6 @@ button {
     margin-bottom: 10px;
     border: none;
     border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 @* table {
     border: 1px solid;
