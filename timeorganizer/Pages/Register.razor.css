@@ -32,9 +32,13 @@ input {
     border: 1px solid gray;
     border-radius: 10px;
     box-sizing: border-box;
-    background-color: #beaff3;
 }
 
 a {
     color: blueviolet;
+}
+
+img {
+    width: 80%;
+    margin-top: 10%;
 }

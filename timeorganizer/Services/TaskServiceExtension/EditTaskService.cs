@@ -38,22 +38,40 @@ public partial class EditTaskService : ObservableObject {
             });
         }
     }
+    public async Task UpdateRealized(int _id) {
+        var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
+        await ExecuteAsync(async () => {
+            var TCFin = await _context.GetFileteredAsync<TaskComponents>(e => e.Status== "Ukończono" && e.TaskId==_id);
+            var TCAll = await _context.GetFileteredAsync<TaskComponents>(e => e.Status != "Rem" && e.TaskId == _id);
+            Tasks Task = await _context.GetItemByKeyAsync<Tasks>(_id);
+            if (TCFin.Count()!=0) 
+                Task.RealizedPercent = (int)(((double)TCFin.Count() / TCAll.Count()) * 100);
+            else 
+                Task.RealizedPercent = 0;
+            await _context.UpdateItemAsync(Task);
+        });
+        await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService 
+    }
     public async Task CheckFinComp(Tasks task) {
+
+        var activityservice = new ActivityService();
         await ExecuteAsync(async () => {
                 var row = await _context.GetFileteredAsync<TaskComponents>(e => e.Status == "Ukończono" && e.TaskId == task.Id);
                 int liczba = row.Count();
                 row= await _context.GetFileteredAsync<TaskComponents>(e => e.Status != "Rem" && e.TaskId == task.Id);
             if (liczba == row.Count()) {
                 bool confirmation = await App.Current.MainPage.DisplayAlert("Potwierdzenie", "Ukończenie tego zadania będzię się wiązało z brakiem możliwości pozostałych podzadań", "Ok", "Anuluj");
-
                 if (confirmation) {
                     task.Status = "Ukończono";
+                    task.UkonczonoDateTime = DateTime.Now.Date;
                     await _context.UpdateItemAsync(task);
                     await App.Current.MainPage.DisplayAlert("Sukcess", "Zadanie oznaczone jako ukończone", "Ok");
                 }
 
             }
         });
+        await activityservice.ChangeExpirationDateCommand();
     }
         public async Task Update<TTable>(TTable T) where TTable : class, new() {
         await ExecuteAsync(async () => {
@@ -62,6 +80,8 @@ public partial class EditTaskService : ObservableObject {
         });
     }
     public async Task Usun<TTable>(TTable T) where TTable : class, new() {
+        var activityservice = new ActivityService();
+
         await ExecuteAsync(async () => {
             bool confirmation = await App.Current.MainPage.DisplayAlert("Potwierdzenie", "Czy na pewno chcesz to usunąć?\n Ta operacja jest nieodwracalna", "Ok", "Anuluj");
 
@@ -82,6 +102,7 @@ public partial class EditTaskService : ObservableObject {
                 await App.Current.MainPage.DisplayAlert("", "Anulowano", "Ok");
             }
         });
+        await activityservice.ChangeExpirationDateCommand();
     }
 
     [ObservableProperty]
@@ -98,5 +119,12 @@ public partial class EditTaskService : ObservableObject {
         finally {
             IsBusy = false;
         }
-    }
+	}
+
+
+	private const string DbName = "Timeorgranizer.db3";
+	private static string DbPath => Path.Combine(FileSystem.AppDataDirectory, DbName);
+    public void usunabaze() {
+		File.Delete(DbPath);
+	}
 }

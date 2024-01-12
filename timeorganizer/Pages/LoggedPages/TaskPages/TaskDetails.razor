@@ -4,7 +4,7 @@
 @using timeorganizer.Helpers
 
 <div class="container">
-<h1>Szczagóły</h1>
+<h1>Szczegóły</h1>
 
 @inject NavigationManager NavigationManager
 @inject ToDoService taskService
@@ -20,8 +20,9 @@
             <th>Name</th>
             <th>Description</th>
             <th>Type</th>
-            <th>Status</th>
+            <th>Status</th>-->
             <th>Termin</th>
+            <th>% ukończenia</th>
         </tr>
     </thead>
     <tbody>
@@ -31,6 +32,7 @@
             <td>@taskService.AddSTask.OTask.Type</td>
             <td>@taskService.AddSTask.OTask.Status</td>
             <td>@taskService.AddSTask.OTask.Termin</td>
+            <td>@taskService.AddSTask.OTask.RealizedPercent %</td>
          </tr>
     </tbody>
 </table>
@@ -52,10 +54,10 @@
             <td>@subTasks.Description</td>
             <td>@subTasks.TaskId</td>
             <td>@subTasks.Status</td>
-                @if (taskService.AddSTask.OTask.Status != "Ukończono"){
+                    @if (taskService.AddSTask.OTask.Status != "Ukończono" && subTasks.Status != "Ukończono") {
                     <td><button class="btn btn-primary mt-3" @onclick="@(e => MoveToEdit(@subTasks.Id, 1))">Edytuj Etap</button></td>
                     <td><button class="btn btn-primary mt-3" @onclick="@(e => FinaComponent(@subTasks))">Ukończ</button></td>
-                } 
+                    }
         </tr>
 
     </tbody>
@@ -67,6 +69,7 @@
 @code {
     protected override async void OnAfterRender(bool firstRender) {
         if (firstRender) {
+            await taskService.EditTask.UpdateRealized(@taskService.AddSTask.OTask.Id);
             await taskService.AddSTask.GetTask();
             StateHasChanged();
         }
@@ -88,16 +91,28 @@
         await taskService.EditTask.CheckFinComp(@taskService.AddSTask.OTask);
     }
 
-    private async void FinaComponent<TTable>(TTable Component) where TTable : class, new() {
+    private async void FinaComponent<TTable>(TTable Component ) where TTable : class, new() {
         if(@taskService.AddSTask.OTask.Status != "Ukończono") {
             (Component as dynamic).Status = "Ukończono";
+            if (await SubTasks() == 0)
+            {
+                (Component as dynamic).RealizedPercent = 100;
+            }
+
             await taskService.EditTask.Update(Component);
+
+            await taskService.EditTask.UpdateRealized((Component as dynamic).TaskId);
+            await taskService.AddSTask.GetTask();
             StateHasChanged();
         }
     }
 
     private void Powroc() {
         NavigationManager.NavigateTo("/todo");
+    }
+    private async Task<int> SubTasks()
+    {
+        return await taskService.showTask.GetSubTaskCount(@taskService.AddSTask.OTask.Id);
     }
 }
 

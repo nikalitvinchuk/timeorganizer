@@ -4,24 +4,32 @@
 @inject SettingsService service
 
 <div id="container">
-<h2>Ustawienia</h2>
+<h2>KONTO</h2>
+	Email: <span>@service.Email</span>
+	Login: <span>@service.Login</span>
+<br />
+
+<h2>USTAWIENIA</h2>
 @if(service.option == -1) // DOMYSLNY WIDOK
 {
-
-
-
-	<br />
-		<button id="button-menu" @onclick="@(e => changeoption(1))">Zmień Email</button>
-	<br />
-		<button id="button-menu" @onclick="@(e => changeoption(2))">Zmień hasło</button>
+			<button class="button-menu" @onclick="@(e => changeoption(1))">
+				<span class="oi oi-envelope-closed" aria-hidden="true"></span> Zmień Email
+			</button>
+			<button class="button-menu" @onclick="@(e => changeoption(2))">
+				<span class="oi oi-lock-locked" aria-hidden="true"></span>Zmień hasło
+			</button>
+			<button class="button-menu" @onclick="@(e => changeoption(3))">
+				<span class="oi oi-lock-locked" aria-hidden="true"></span>Zmień Email i Hasło
+			</button>
+			<button class="button-menu" @onclick="@(e => changeoption(4))">
+				<span class="oi oi-trash" aria-hidden="true"></span>Usuń konto
+			</button>
 		<br />
-		<button id="button-menu" @onclick="@(e => changeoption(3))">Zmień Email i Hasło </button>
-	<br />
-		<button id="button-menu" @onclick="@(e => changeoption(4))">Usuń konto</button>
-	<br />
 
-	<a href="/" class="button">Wróć</a>
-
+	<div id="footer">
+			<a href="/" class="button"><button class="button-back">Wróć</button></a>
+            <a href="kontakt" class="button"><button class="button-help">Pomoc</button></a>
+	</div>
 }
 @if (service.option == 1) // ZMIANA EMAIL
 {

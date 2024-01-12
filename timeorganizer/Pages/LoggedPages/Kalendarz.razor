@@ -36,7 +36,7 @@
                             if (offset < 0) offset = 6;
                             var day = firstDayOfMonth.AddDays(i * 7 + j - offset);
 
-                            <td class="@((day.Date == DateTime.Today.Date && day.Month == selectedDate.Month) ? "current-day" : "") @((day.Month == selectedDate.Month && (j == 5 || j == 6)) ? "weekend" : "")" @onclick="() => HandleCellClick(day)">
+                            <td class="@((day.Date == DateTime.Today.Date && day.Month == selectedDate.Month) ? "current-day" : "") @((day.Month == selectedDate.Month && (j == 5 || j == 6)) ? "weekend" : "") @(HasTasks(day) ? "has-tasks" : "")"  @onclick="() => HandleCellClick(day)">
                             @(day.Month == selectedDate.Month ? day.Day.ToString() : "")
                             </td>
 
@@ -80,6 +80,7 @@
     {
         selectedDate = selectedDate.AddMonths(1);
     }
+    //przerobic, tak zeby funkcja ładowała się od początku - NIKA
     async Task HandleCellClick(DateTime clickedDate)
     {
         this.clickedDate = clickedDate;
@@ -87,4 +88,11 @@
         await calendarService.ReadTasks();
         StateHasChanged();
     }
+    //style komorek gdzie są zadania
+    bool HasTasks(DateTime day)
+    {
+        var tasksForDay = calendarService.TasksCollection.Where(t => t.Termin == day.Date.ToString("dd.MM.yyyy"));
+        return tasksForDay.Any();
+    }
+
 }

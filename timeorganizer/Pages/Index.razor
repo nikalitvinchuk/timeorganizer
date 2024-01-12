@@ -2,34 +2,36 @@
 @using timeorganizer.Services
 @* @using System.Windows.Maui.Controls; // biblioteka odpowiadająca za utworzenie diagramu kołowego *@
 @inject AuthServiceSetUser service
-
 @if (service.CurrentUser.Identity.IsAuthenticated)
 {
     // ZALOGOWANY
-    <div id="container">
+    <div id="container" >
         <div>
         @inject ToDoService taskService
+        @inject StatisticService Statistic
         @inject NavigationManager NavigationManager
             
             <h2> Witaj!</h2>
             <p>Postęp</p>
-            <div class="progress">
-                
-                <div class="progress-bar bg-secondary" style="width:70%">Ukończone zadania</div>
-            </div>
+            <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
 
-            <p>Aktualne zadania</p>
+                <div class="progress-bar bg-primary" style="width: @Statistic.ComplitedPrecent;">Ukończone zadania: @Statistic.Realized</div>
+            </div>
             
+            <h3>Aktualne zadania</h3>
+          
 
             @foreach (var task in taskService.showTask.TasksCollection)
             {
-                <div class="d-flex flex-row border p-2" style="cursor: pointer;">
-                    <p class="mr-3 mb-0">@task.Name</p>
-                    <p class="mr-3 mb-0">@task.Description</p>
-                    <p class="mr-3 mb-0">@task.Type</p>
-                    @* <p class="mr-3 mb-0">@task.status</p> *@
-                    <p class="mr-3 mb-0">@task.Termin</p>
-                    <button @onclick="@(e => RedirectToDetails(@task.Id))">Szczegóły zadania</button>
+                <div class="task-tile">
+                    <p class="task-title">@task.Name</p>
+                    <p class="task-description">@task.Description</p>
+                    <div class="task-details">
+                        <p class="task-type">Typ: @task.Type</p>
+                        <p class="task-due-date">Termin: @task.Termin</p>
+                        <p class="task-progress">Realizacja: @task.RealizedPercent%</p>
+                    </div>
+                    <button @onclick="@(e => RedirectToDetails(@task.Id))" class="buttondetails">Szczegóły zadania</button>
                 </div>
                 @code {
             private async void RedirectToDetails(int taskId)
@@ -50,7 +52,9 @@
                 taskService.showTask.Status = "Aktywne";
                 if (firstRender)
                 {
+
                     filterTask();
+                    GetStatistic();
                     StateHasChanged();
                 }
             }
@@ -58,6 +62,10 @@
             {
                 await taskService.showTask.FilterTasks();
                 StateHasChanged();
+            }
+            public async void GetStatistic()
+            {
+                await Statistic.GetUserRealizedTasks();
             }
         }
 
@@ -99,9 +107,13 @@ else
 {
     // NIEZALOGOWANY
 	<div id="container">
-		<a href="login" class="button">Logowanie</a>
-		<a href="register" class="button">Rejestracja</a>
+        <img src="vizualization2.png">
 
+		<a href="login" class="buttongl">LOGIN</a>
+		<a href="register" class="buttongl" id="buttonsignup">SIGN UP</a> <br/>
+        <div class="container-fluid">
+            <img src="instagram_icon.png" @* style="width: 100px; height: 100px; margin-left: 10px;" *@ /><a href="https://www.instagram.com/"><br>odwiedź nasz instagram</a>
+        </div>
 	</div>
 }
 

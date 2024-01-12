@@ -1,45 +1,82 @@
 ﻿.container {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 75vh;
-    padding: 20px;
+    width: 98%;
+    padding: 1%;
     box-sizing: border-box;
     align-items: center;
     justify-content: center;
+    overflow-y: scroll;
+    scrollbar-color: gray #f1f1f1;
 }
 
 h2 {
-    color: blueviolet;
+    color: purple;
     text-align: center;
 }
 label {
     color: blueviolet;
 }
-
-
-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid gray;
-    border-radius: 10px;
-    box-sizing: border-box;
-    background-color: #beaff3;
-}
-
-button {
-    width: 70%;
-    background-color: blueviolet;
-    color: white;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
 a {
     color: blueviolet;
+}
+
+.form-label {
+    color: blueviolet;
+    font-weight: bold;
+}
+
+.form-control {
+    width:100%;
+    height: 40px;
+}
+.task-tile {
+    width: 90%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.task-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: blueviolet;
+}
+
+.task-description {
+    color: violet;
+}
+
+.task-details {
+    margin-top: 10px;
+}
+
+    .task-details p {
+        margin-bottom: 5px;
+    }
+
+button {
+    background-color: blueviolet;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 25px;
+    width: 80%;
+}
+.buttondetails {
+    background-color: #CC33FF;
+}
+.oi
+{
+    color: darkcyan;
+    font-size: 30px;
+}
+.add-task-button
+{
+    background-color: transparent;
+    border: none;
+    width: 60px;
+    margin-left: 85%;
 }

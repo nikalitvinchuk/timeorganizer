@@ -50,19 +50,22 @@ namespace timeorganizer.Services.TaskServiceExtension
 		
 		public async Task AddTask()
 		{
-			if (_userId == 0) _userId = await Getid();
+
+            var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
+
+            if (_userId == 0) _userId = await Getid();
 			Status = "Aktywne";
 			Modified = DateTime.Now.ToString("dd.MM.yyyy, HH:mm");
-			Tasks Task = new()
-			{
+			Tasks Task = new() {
 				Name = Name,
 				Description = Description,
 				Type = Typ,
 				UserId = _userId,
 				Status = Status,
-				RealizedPercent = Progress,
+				RealizedPercent = 0,
 				Updated = null,
 				Created = DateTime.Now.ToLongDateString(),
+				TerminDateTime = Termin.Date,
 				Termin = Termin.ToString("dd.MM.yyyy")
 			};
 
@@ -123,7 +126,8 @@ namespace timeorganizer.Services.TaskServiceExtension
                     
                 }
 			});
-		}
+            await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService 
+        }
 
         [ObservableProperty]
         public bool _isBusy;

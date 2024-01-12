@@ -5,7 +5,7 @@
     height: 75vh;
     padding: 20px;
     box-sizing: border-box;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
 }
 
@@ -13,15 +13,17 @@ h2 {
     color: blueviolet;
 }
 
-#button-menu {
-    width: 70%;
-    background-color: blueviolet;
-    color: white;
-    padding: 10px 20px;
+.button-menu {
+    width: 100%;
+    height: 10%;
+    background-color: transparent;
+    color: black;
+    padding: 10px 0px;
     margin-bottom: 10px;
     border: none;
-    border-radius: 25px;
     cursor: pointer;
+    text-align: left;
+    border-bottom: 2px solid blueviolet;
     transition: background-color 0.3s ease;
 }
 a {
@@ -35,16 +37,40 @@ input {
     border: 1px solid gray;
     border-radius: 10px;
     box-sizing: border-box;
-    background-color: #beaff3;
 }
 
 button {
-    width: 70%;
+    width: 90%;
     background-color: blueviolet;
     color: white;
     padding: 10px 20px;
     margin-bottom: 10px;
     border: none;
-    border-radius: 25px;
     cursor: pointer;
+}
+.oi {
+    width: 2rem;
+    font-size: 1.1rem;
+    vertical-align: text-top;
+    color: blueviolet;
+}
+#footer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+}
+.button-back
+{
+    margin-top: 50px;
+    width: 300px;
+    background-color: blueviolet;
+    border-radius: 25px;
+}
+.button-help {
+    width: 300px;
+    background-color: #CC33FF;
+    border-radius: 25px;
 }

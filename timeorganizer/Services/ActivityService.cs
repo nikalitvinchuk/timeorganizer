@@ -29,11 +29,11 @@ namespace timeorganizer.Services
         private readonly DatabaseLogin _context;
 		private DateTime LastActivity { get; set; }
 		private System.Timers.Timer timer;
-
+		private int userid = 0;
 		public ActivityService()
 		{
 			_context = new DatabaseLogin();
-			timer = new System.Timers.Timer(1000); //wywołanie co sekunde 
+			timer = new System.Timers.Timer(5000); //wywołanie co sekunde 
 
 		}
 		
@@ -58,7 +58,7 @@ namespace timeorganizer.Services
 			return await SecureStorage.Default.GetAsync("token");
 		}
 
-
+		private UserSessions session = new UserSessions();
 		//funkcja po wywołaniu której sesja jest przedłużana - NL
 		//musi być sprawdzana od początku po zalogowaniu! - do rozbudowy
 		public async Task ChangeExpirationDateCommand()
@@ -67,21 +67,23 @@ namespace timeorganizer.Services
 			timer.Elapsed += async (sender, e) => await CheckLastActivityVsExpirationDate();
 			timer.Enabled = true;
 			Debug.WriteLine("Metoda ChangeExpirationDateCommand rozpoczęta.");
-
-			int userId = await Getid();
+			if(userid== 0)
+			{
+                userid = await Getid();
+            }
 			string userToken = await GetToken();
 
 			Debug.WriteLine("Pobrano token użytkownika: " + userToken);
-			if (userId != 0)
+			if (userid != 0)
 			{
 				Debug.WriteLine("Uzyskano ID użytkownika");
 
-				var sessions = await _context.GetFileteredAsync<UserSessions>(t => t.UserId == userId);
+				var sessions = await _context.GetFileteredAsync<UserSessions>(t => t.UserId == userid);
 				foreach (var session in sessions)
 				{
 					if (session.Token == userToken)
 					{
-						Debug.WriteLine("Pobrano sesję użytkownika: " + userId);
+						Debug.WriteLine("Pobrano sesję użytkownika: " + userid);
 
                         session.ExpirationDate = DateTime.Now.AddMinutes(3);
                         //session.ExpirationDate = DateTime.Now.AddSeconds(10);
@@ -104,27 +106,31 @@ namespace timeorganizer.Services
 			}
 		}
 
-
-        //funkcja do automatycznego wylogowania - dokonczyc
+		private async Task GetExpirationDate(string token)
+		{
+			var tmp = await _context.GetFileteredAsync<UserSessions>(t => t.Token == token);
+			session = tmp.FirstOrDefault();
+        }
+        //funkcja do automatycznego wylogowania - dok{onczyc
         [Obsolete]
         public async Task CheckLastActivityVsExpirationDate()
 		{
 			string userToken = await GetToken();
-
-			var sessions = await _context.GetFileteredAsync<UserSessions>(t => t.Token == userToken);
-			var session = sessions.FirstOrDefault();
+			if(session == null || session.ExpirationDate <= DateTime.Now) 
+			{
+				await GetExpirationDate(userToken);
+			}
+			
 			if (session != null)
 			{
 				if (session.Token == userToken)
 				{
 					DateTime timeNow = DateTime.Now;
 
-					// Debug.WriteLine("ExpirationDate " + session.ExpirationDate);
-					// Debug.WriteLine("Czas teraz " + timeNow);
 
 					if (timeNow >= session.ExpirationDate)
 					{
-						Debug.WriteLine("TimeNow=ExpirationDate");
+						
 						SecureStorage.Default.Remove("token");
 						timer.Enabled = false;
 						timer.Stop();
