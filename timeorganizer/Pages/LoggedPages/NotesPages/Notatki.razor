@@ -1,8 +1,10 @@
 ﻿@page "/Notatki"
+@using timeorganizer.DatabaseModels;
 @using timeorganizer.Services
 
 @inject NoteService noteService
 @inject NavigationManager NavigationManager
+@inject DatabaseLogin context
 
 <div class="container">
     <div class="row">
@@ -27,10 +29,7 @@
                                 <td>@note.Title</td>
                                 <td>@note.Content</td>
                                 <td>@note.Created</td>
-                                @*<td>
-                                    <a class="btn btn-primary" href="/editnotes/@note.Id">Edytuj</a>
-                                    <button class="btn btn-danger" @onclick="() => DeleteNote(note.Id)">Usuń</button>
-                                </td>*@
+                                <td><button @onclick="@(e=> DeleteNote(@note.Id))">Usuń</button></td>
                             </tr>
                         }
                     </tbody>
@@ -60,4 +59,21 @@
         await noteService.ShowNotesTitle.GetNotes();
         StateHasChanged();
     }
+
+    private async void DeleteNote(int id)
+    {
+        try
+        {
+            await context.DeleteItemByKeyAsync<Notes>(id);
+            // Aktualizacja listy notatek
+            await noteService.ShowNotesTitle.GetNotes();
+            StateHasChanged();// Pobiera notatki i aktualizuje NotesList
+        }
+        catch (Exception ex)
+        {
+            // Obsługa błędu
+            Console.WriteLine($"Błąd podczas usuwania notatki: {ex.Message}");
+        }
+    }
+
 }

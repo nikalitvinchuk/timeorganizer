@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
+using timeorganizer.DatabaseModels;
 using timeorganizer.Services;
 namespace timeorganizer
 {
@@ -36,7 +37,7 @@ namespace timeorganizer
             builder.Services.AddSingleton<CalendarService>();
             builder.Services.AddSingleton<SummaryServic>();
             builder.Services.AddSingleton<StatisticService>();
-
+            builder.Services.AddSingleton<DatabaseLogin>();
 
             builder.Services.AddOptions();
             return builder.Build();

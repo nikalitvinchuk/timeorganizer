@@ -20,13 +20,6 @@ public partial class EditNotesService : ObservableObject
     {
         _context = new();
     }
-    //public async Notes GetNotes(int id)
-    //{
-    //    await ExecuteAsync(async () =>
-    //    {
-    //        EditNote = await _context.GetItemByKeyAsync<Notes>(_id);
-    //    });
-    //}
 
     public async Task GetNotes(int id)
     {
@@ -39,7 +32,6 @@ public partial class EditNotesService : ObservableObject
 
     public async Task Update()
     {
-        //await ExecuteAsync(async () =>
         {
             var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
             await _context.UpdateItemAsync<Notes>(EditNote);
