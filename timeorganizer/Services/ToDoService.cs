@@ -9,4 +9,5 @@ public class ToDoService : ObservableObject
 	public AddSubTaskExtension AddSTask { get; } = new AddSubTaskExtension();
 	public FilterExtension showTask { get; } = new FilterExtension();
 	public EditTaskService EditTask { get; } = new();
+	public AddTaskTypExtension Addtyp { get; } = new();
 }

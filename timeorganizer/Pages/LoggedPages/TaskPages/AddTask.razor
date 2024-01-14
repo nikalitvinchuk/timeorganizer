@@ -14,7 +14,11 @@
             <input class="form-control" @bind="@taskService.addTask.Description" placeholder="Określ konkrety, które chcesz zrealizować." />
 
             <label class="form-label mt-3">Określ typ zadania</label>
-            <input class="form-control" @bind="@taskService.addTask.Typ" placeholder="Wprowadź typ zadania: home/work/hobby/other" />
+            <InputSelect @bind-Value="taskService.addTask.Typ" class="form-control">
+                @foreach (var status in taskService.addTask.TypList) {
+                    <option value="@status.Name">@status.Name</option>
+                }
+            </InputSelect>
 
             <label class="form-label mt-3">Podaj Termin wykonania zadania</label>
             <InputDate Type="InputDateType.Date" class="form-eliment jds-d-inline-block jds-max-width150" @bind-Value="taskService.addTask.Termin" style="width: 100%; height: 40px;"> </InputDate>
@@ -26,6 +30,12 @@
 </div>
 
 @code {
+    protected override async void OnAfterRender(bool firstRender) {
+        if (firstRender) {
+            await taskService.addTask.GetList();
+            StateHasChanged();
+        }
+    }
     public async void AddT() {
             await taskService.addTask.AddTask();
             await taskService.showTask.FilterTasks();

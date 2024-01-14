@@ -1,0 +1,30 @@
+﻿@page "/addtasktyp"
+@using timeorganizer.Services
+@using timeorganizer.Helpers
+
+@inject ToDoService taskService
+@inject NavigationManager NavigationManager
+<div class="container">
+    <h1>Dodaj Typ Zadania </h1>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <label class="form-label">Nazwa Typu</label>
+            <input class="form-control" @bind="@taskService.Addtyp.Name" />
+
+        </div>
+        <button class="btn btn-primary mt-3" @onclick="@AddT">Dodaj typ</button>
+        <button class="btn btn-primary mt-3" @onclick="@Powroc">Powrót</button>
+    </div>
+</div>
+
+@code {
+    public async void AddT() {
+        await taskService.Addtyp.AddTaskTyp();
+        NavigationManager.NavigateTo("/todo");
+    }
+    private void Powroc() {
+        NavigationManager.NavigateTo("/todo");
+    }
+}
+
+

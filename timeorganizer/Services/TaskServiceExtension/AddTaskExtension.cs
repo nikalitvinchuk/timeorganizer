@@ -9,9 +9,12 @@ namespace timeorganizer.Services.TaskServiceExtension
 		private string _name, _desc, _type, _status, _termin2;
 		private int _userId, _relizedpr;
 		private DateTime _termin = DateTime.Now;
-		public string Name { get => _name; set => _name = value; }
+		private List<TaskTyp> _typeList;
+
+        public string Name { get => _name; set => _name = value; }
 		public string Description { get => _desc; set => _desc = value; }
 		public string Typ { get => _type; set => _type = value; }
+		public List<TaskTyp> TypList { get => _typeList; set => _typeList = value; }
 		public string Status { get => _status; set => _status = value; }
 		//public int Id { get => _id; set => _id = value; }
 		public int UserId { get => _userId; set => _userId = value; }
@@ -30,8 +33,8 @@ namespace timeorganizer.Services.TaskServiceExtension
 		{
 			Termin2 = DateTime.Now.ToString("dd.MM.yyyy");
             _context = new DatabaseLogin();
-			//AddTaskCommand = new Command(AddTask);
-		}
+			TypList = new();
+        }
 		private async Task<int> Getid()
 		{
 			string _tokenvalue = await SecureStorage.Default.GetAsync("token");
@@ -47,8 +50,13 @@ namespace timeorganizer.Services.TaskServiceExtension
 			}
 
 		}
-		
-		public async Task AddTask()
+        public async Task GetList() {
+			UserId = await Getid();
+			var typL = await _context.GetFileteredAsync<TaskTyp>(t => t.UserId == UserId);
+			_typeList=typL.ToList();
+			_typeList.Insert(0, new TaskTyp { Name = null });
+        }
+        public async Task AddTask()
 		{
 
             var activityservice = new ActivityService(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate

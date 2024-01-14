@@ -4,10 +4,13 @@
 
 <div class="container">
     <!--Przycisk do dodawania zadan-->
-    <button @onclick="@(e => Przenies(0))" class="add-task-button">
+    <button @onclick="@(e => Przenies())" class="add-task-button">
             <span class="oi oi-plus" aria-hidden="true"></span>
-        </button> 
-@inject ToDoService taskService
+        </button>
+    <button @onclick="@(e => PrzeniesTyp())" class="add-task-button2">
+        <span class="oi oi-plus" aria-hidden="true"></span>
+    </button>
+    @inject ToDoService taskService
 @inject NavigationManager NavigationManager
    
 
@@ -34,7 +37,11 @@
     <div class="d-flex flex-row align-items-center">
         <div class="form-group mr-2">
             <label class="form-label">Typ</label>
-            <input @bind="@taskService.showTask.Typ" class="form-control" />
+            <InputSelect @bind-Value="@taskService.showTask.Typ" class="form-control">
+                @foreach (var status in taskService.addTask.TypList) {
+                    <option value="@status.Name">@status.Name</option>
+                }
+            </InputSelect>
         </div>
 
         <div class="form-group mr-2">
@@ -59,8 +66,11 @@
                 await taskService.AddSTask.GetTask();
                 NavigationManager.NavigateTo("/subtask");
             }
-            private void Przenies(int typ){
+            private void Przenies(){
                 NavigationManager.NavigateTo("/addtask");
+            }
+            private void PrzeniesTyp(){
+                NavigationManager.NavigateTo("/addtasktyp");
             }
         }
         <a href="/" class="button">Wróć</a>
@@ -68,8 +78,9 @@
 </div>
 @code{
     
-    protected override void OnAfterRender(bool firstRender){
+    protected override async void OnAfterRender(bool firstRender){
         if (firstRender){
+            await taskService.addTask.GetList();
             filterTask();
             StateHasChanged();
         }
