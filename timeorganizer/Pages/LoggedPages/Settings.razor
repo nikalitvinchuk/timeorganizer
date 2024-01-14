@@ -2,16 +2,24 @@
 @using timeorganizer.Services
 @using timeorganizer.Helpers
 @inject SettingsService service
+@inject LoginService loginService
+
 
 <div id="container">
-<h2>KONTO</h2>
-	Email: <span>@service.Email</span>
-	Login: <span>@service.Login</span>
-<br />
 
-<h2>USTAWIENIA</h2>
 @if(service.option == -1) // DOMYSLNY WIDOK
 {
+			<div id="userinformation">
+			<br/>
+				<h2>KONTO</h2>
+			<label>Email: <span>@loginService.Email</span> </label>
+            <label>Login: <span>@loginService.Login</span></label>
+			<label>Data Utw.: <span>@loginService.DateCreate</span></label>
+			<br /><br />
+				<h2>USTAWIENIA</h2>
+			</div>
+
+
 			<button class="button-menu" @onclick="@(e => changeoption(1))">
 				<span class="oi oi-envelope-closed" aria-hidden="true"></span> Zmień Email
 			</button>
@@ -34,11 +42,11 @@
 @if (service.option == 1) // ZMIANA EMAIL
 {
 
-
+		<h2>Wprowadź dane</h2>
 		<br />
 		<input @bind="service.Email" placeholder="Podaj email"/>
 		<br />
-		<input @bind="service.CurrentPassword" placeholder="Podaj haslo" />
+		<input @bind="service.CurrentPassword" placeholder="Podaj haslo" type="password"/>
 		<br />
 		<button type="button" class="btn btn-success btn-rounded  btn-block btn-lg" data-mdb-ripple-color="#ffffff" style="background-color:blueviolet" @onclick="summit">Zatwierdz zmiany</button>
 		<button type="button" class="btn btn-danger btn-rounded btn-block btn-lg" @onclick="@(e=> changeoption(-1))">Wróć</button>
@@ -48,13 +56,13 @@
 @if (service.option == 2) // ZMIANA HASLA
 {
 
-
+		<h2>Wprowadź dane</h2>
 		<br />
 		<input @bind="service.Password" placeholder="Podaj nowe haslo" />
 		<br />
 		<input @bind="service.ConfirmPassword" placeholder="Powtorz nowe haslo" />
 		<br />
-		<input @bind="service.CurrentPassword" placeholder="Podaj obecne haslo" />
+		<input @bind="service.CurrentPassword" placeholder="Podaj obecne haslo" type="password" />
 		<br />
 		<button type="button" class="btn btn-success btn-rounded  btn-block btn-lg" data-mdb-ripple-color="#ffffff" style="background-color:blueviolet" @onclick="summit">Zatwierdz zmiany</button>
 
@@ -65,7 +73,7 @@
 @if (service.option == 3) //ZMIANA LOGIN I HASLO
 {
 
-
+		<h2>Wprowadź dane</h2>
 		<br />
 		<input @bind="service.Email" placeholder="Email"/>
 		<br />
@@ -73,7 +81,7 @@
 		<br />
 		<input @bind="service.ConfirmPassword" placeholder="Powtorz haslo"/>
 		<br />
-		<input @bind="service.CurrentPassword" placeholder="Obecne haslo"/>
+		<input @bind="service.CurrentPassword" placeholder="Obecne haslo" type="password" />
 		<br />
 		<button type="button" class="btn btn-success btn-rounded  btn-block btn-lg" data-mdb-ripple-color="#ffffff" style="background-color:blueviolet" @onclick="summit">Zatwierdz zmiany</button>
 
@@ -82,9 +90,9 @@
 }
 @if (service.option == 4) // USUN KONTO
 {
-
+		<h2>Wprowadź hasło</h2>
 		<br />
-		<input @bind="service.CurrentPassword" placeholder="Podaj haslo" />
+		<input @bind="service.CurrentPassword" placeholder="Podaj haslo" type="password" />
 		<br />
 		<button type="button" class="btn btn-success btn-rounded  btn-block btn-lg" data-mdb-ripple-color="#ffffff" style="background-color:blueviolet" @onclick="summit">Zatwierdz zmiany</button>
 
@@ -95,6 +103,7 @@
 
 
 @code{
+
 	private void changeoption(int i)
 	{
 		service.Email = null;
@@ -107,12 +116,14 @@
 	private async void summit()
 	{
 		await service.Change();
+		await loginService.InfoUser();
 		service.Email = null;
 		service.Password = null;
 		service.CurrentPassword = null;
 		service.ConfirmPassword = null;
 		StateHasChanged();
 	}
+
 }
 
 

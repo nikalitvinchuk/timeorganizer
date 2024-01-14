@@ -25,7 +25,11 @@ namespace timeorganizer.Services
 			null;
 #endif
         private string _login, _password;
+
+		private int _id;
 		public string Login { get => _login; set => _login = value; }
+		public string Email { get; private set; }
+		public string DateCreate { get; private set; }
 		public string Password { get => _password; set => _password = value; }
         private readonly DatabaseLogin _context;
         public string LoginValue { get; set; } // Właściwość do przechowywania danych wprowadzonych w polu Login
@@ -92,7 +96,10 @@ namespace timeorganizer.Services
                 auth.CurrentUser = authenticatedUser;
                 await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
 				await activityservice.CheckLastActivityVsExpirationDate(); //przedłużanie sesji - funkcja z ActivityViewModel 
-				
+
+				Email = user.Email;
+				Login = user.Login;
+				DateCreate = user.DataCreated;
 			}
 			else
 			{
@@ -100,6 +107,20 @@ namespace timeorganizer.Services
 				await Application.Current.MainPage.DisplayAlert("Błąd", "Niepoprawny login lub hasło", "OK");
 				
 			}
+			LoginValue = "";
+			PassValue = "";
+
+		}
+		private async Task<int> Getid()
+		{
+			string _tokenvalue = await SecureStorage.Default.GetAsync("token");
+			var getids = await _context.GetFileteredAsync<UserSessions>(t => t.Token == _tokenvalue);
+			if (getids.Any(t => t.Token == _tokenvalue))
+			{
+				var getid = getids.First(t => t.Token == _tokenvalue);
+				return getid.UserId;
+			}
+			else { return 0; }
 		}
 
 		private bool isValidEntry() //obsługa w przypadku braku podanych danych
@@ -122,7 +143,21 @@ namespace timeorganizer.Services
 			}
 			return true;
 		}
-
-        
-    }
+		public async Task InfoUser()
+		{
+			_id = await Getid();
+			Users user = new Users();
+			user = await _context.GetItemByKeyAsync<Users>(_id);
+			if (user != null)
+			{
+				Email = user.Email;
+				Login = user.Login;
+			}
+			else
+			{
+				Email = string.Empty;
+				Login = string.Empty;
+			}
+		}
+	}
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Primitives;
 //using Mopups.Services;
 using System.Windows.Input;
 using timeorganizer.DatabaseModels;
+
 namespace timeorganizer.Services
 {
 	public partial class SettingsService : ObservableObject
@@ -20,9 +21,12 @@ namespace timeorganizer.Services
 		}
 		private string _email, _password, _passwordconfirm, _currentpassword, _login;
 		private int _id; // zmienna ustalona z user session z pomoca SecureStorge
-
 		public string Login { get => _login; set => SetProperty(ref _login, value); }
-		public string Email { get => _email; set => _email = value; }
+		public string Email { get => _email; set => SetProperty(ref _email, value); }
+
+		//public string EmailInfo { get; private set;}
+		//public string LoginInfo { get; private set; }
+
 		//public string Login { get => _login; set => _login = value; } - LOGIN NIEMOZLIWY DO ZMIANY 
 		public string Password { get => _password; set => _password = value; }
 		public string ConfirmPassword { get => _passwordconfirm; set => _passwordconfirm = value; }
@@ -203,6 +207,15 @@ namespace timeorganizer.Services
 			);
 
 		}
+		//Informacje o użytkowniku
+		//public async Task InfoUser()
+		//{
+		//	Users user = new Users();
+		//	user = await _context.GetItemByKeyAsync<Users>(_id);
+		//	EmailInfo = user.Email;
+		//	LoginInfo = user.Login;
+
+		//}
 		public async Task Change()
 		{
 			if (option == 1)

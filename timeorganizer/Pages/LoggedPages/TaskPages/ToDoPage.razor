@@ -7,9 +7,6 @@
     <button @onclick="@(e => Przenies())" class="add-task-button">
             <span class="oi oi-plus" aria-hidden="true"></span>
         </button>
-    <button @onclick="@(e => PrzeniesTyp())" class="add-task-button2">
-        <span class="oi oi-plus" aria-hidden="true"></span>
-    </button>
     @inject ToDoService taskService
 @inject NavigationManager NavigationManager
    
@@ -58,6 +55,9 @@
             <InputDate Type="InputDateType.Date" class="form-control" @bind-Value="taskService.showTask.TerminD"> </InputDate>
         </div>
     </div>
+
+    <button @onclick="@(e => PrzeniesTyp())" class="add-task-button2"> Dodaj własny typ zadań</button>
+
         <button @onclick="@filterTask" style="margin: 10px auto; display: block;">Filtruj</button> <br/>
 
         @code {
