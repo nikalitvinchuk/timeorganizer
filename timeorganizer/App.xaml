@@ -6,7 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
 
-            <Color x:Key="PageBackgroundColor">#beaff3</Color> <!--kolor tła-->
+            <!--<Color x:Key="PageBackgroundColor">#beaff3</Color> --><!--kolor tła-->
             <Color x:Key="PrimaryTextColor">White</Color>
 
             <Style TargetType="Label">

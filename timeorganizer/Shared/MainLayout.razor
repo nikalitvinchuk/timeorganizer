@@ -1,13 +1,29 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-   
-    <main>
 
-        <NavMenu />
+    <main>
+    <div @onclick="ToggleNavMenu">
+    <NavMenu />
+    </div>
+        <div class="page" style="opacity: @pageOpacity">
         <article class="content px-4">
             @Body
         </article>
+    </div>
     </main>
-</div>
 
-<link href="~/css/app.css" rel="stylesheet" /> @* odnośnik do css gdzie jest kolor tła *@
+
+<link href="~/css/app.css" rel="stylesheet" />
+
+@code {
+    private bool collapseNavMenu = true;
+    private float pageOpacity = 1.0f; // Początkowa wartość przezroczystości
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+        pageOpacity = !collapseNavMenu ? 0.0f : 1.0f; // Ustaw przezroczystość na 0.0, gdy menu jest rozwinięte
+
+    }
+}
