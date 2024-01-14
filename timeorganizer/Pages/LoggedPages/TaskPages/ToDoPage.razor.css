@@ -80,3 +80,9 @@ button {
     width: 60px;
     margin-left: 85%;
 }
+.add-task-button2 {
+    background-color: transparent;
+    border: 1px solid #000;
+    width: 60px;
+    margin-left: 15%;
+}
