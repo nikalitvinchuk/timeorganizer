@@ -2,16 +2,21 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 75vh;
     padding: 20px;
     box-sizing: border-box;
     align-items: center;
     justify-content: center;
+    overflow-y: scroll;
+    scrollbar-color: gray #f1f1f1;
 }
 
 h1 {
     color: blueviolet;
     text-align: center;
+}
+h2
+{
+    margin-top: 25px;
 }
 
 input {
@@ -28,27 +33,33 @@ button {
     background-color: blueviolet;
     color: white;
     padding: 10px 20px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     border: none;
     border-radius: 25px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 table {
-    border: 1px solid;
+    border: 1px solid #cccccc;
     border-collapse: collapse;
-    width: 100%;
-    background-color: #cfaff3;
+    width: 335px;
     border-color: #cccccc; 
 }
 
 th, td {
-    border: 1px solid;
+    border: 1px solid #cccccc;
     padding: 8px;
-    border-color: #cccccc; 
 }
 
 th {
-    background-color: #c9aff3;
+    background-color: #CC33FF;
     font-weight: bold;
+    color: white;
+}
+.btnsubtask {
+    background-color: transparent;
+    color: #CC33FF;
+    width: 100%;
+    border-radius: 0px;
+    padding: 0px;
 }

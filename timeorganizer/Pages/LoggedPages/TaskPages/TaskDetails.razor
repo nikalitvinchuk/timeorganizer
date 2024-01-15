@@ -14,15 +14,16 @@
     <button class="btn btn-primary mt-3" @onclick="@(e => FinaMainTask())">Ukończ zadanie</button>
 }
 <button class="btn btn-primary mt-3" @onclick="@Powroc">Powrót</button>
+<h2>Zadania</h2>
 <table class="table">
     <thead>
         <tr>
             <th>Name</th>
             <th>Description</th>
             <th>Type</th>
-            <th>Status</th>-->
+            @*<th>Status</th>-->*@
             <th>Termin</th>
-            <th>% ukończenia</th>
+            @*<th>% ukończenia</th>*@
         </tr>
     </thead>
     <tbody>
@@ -30,19 +31,21 @@
             <td>@taskService.AddSTask.OTask.Name</td>
             <td>@taskService.AddSTask.OTask.Description</td>
             <td>@taskService.AddSTask.OTask.Type</td>
-            <td>@taskService.AddSTask.OTask.Status</td>
+            @*<td>@taskService.AddSTask.OTask.Status</td>*@
             <td>@taskService.AddSTask.OTask.Termin</td>
-            <td>@taskService.AddSTask.OTask.RealizedPercent %</td>
+            @*<td>@taskService.AddSTask.OTask.RealizedPercent %</td>*@
          </tr>
     </tbody>
 </table>
+<h2>Podzadania</h2>
 <table>
     <thead>
         <tr>
             <th>Name</th>
             <th>Description</th>
-            <th>Type</th>
-            <th>Status</th>
+            @*<th>Type</th>*@
+            @*<th>Status</th>*@
+            <th>Akcje</th>
         </tr>
     </thead>
 
@@ -52,11 +55,13 @@
         <tr>
             <td>@subTasks.Name</td>
             <td>@subTasks.Description</td>
-            <td>@subTasks.TaskId</td>
-            <td>@subTasks.Status</td>
+            @*<td>@subTasks.TaskId</td>*@
+            @*<td>@subTasks.Status</td>*@
                     @if (taskService.AddSTask.OTask.Status != "Ukończono" && subTasks.Status != "Ukończono") {
-                    <td><button class="btn btn-primary mt-3" @onclick="@(e => MoveToEdit(@subTasks.Id, 1))">Edytuj Etap</button></td>
-                    <td><button class="btn btn-primary mt-3" @onclick="@(e => FinaComponent(@subTasks))">Ukończ</button></td>
+                    <td>
+                        <button class="btn btn-primary mt-3 btnsubtask" @onclick="@(e => MoveToEdit(@subTasks.Id, 1))">Edytuj</button>
+                        <button class="btn btn-primary mt-3 btnsubtask" @onclick="@(e => FinaComponent(@subTasks))">Ukończ</button>
+                    </td>
                     }
         </tr>
 

@@ -11,7 +11,7 @@
 }
 
 h2 {
-    color: purple;
+    color: blueviolet;
     text-align: center;
 }
 label {
@@ -32,7 +32,7 @@ a {
 }
 .task-tile {
     width: 90%;
-    border: 1px solid #ccc;
+    border: 1px solid blueviolet;
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 10px;
@@ -66,11 +66,11 @@ button {
     width: 80%;
 }
 .buttondetails {
-    background-color: #CC33FF;
+    background-color: blueviolet;
 }
 .oi
 {
-    color: darkcyan;
+    color: mediumvioletred;
     font-size: 30px;
 }
 .add-task-button

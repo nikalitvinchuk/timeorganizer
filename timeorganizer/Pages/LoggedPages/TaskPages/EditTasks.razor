@@ -12,17 +12,6 @@
 <button class="btn btn-primary mt-3" @onclick="@Usun">Usuń</button>
 <button class="btn btn-primary mt-3" @onclick="@Usunbaze">USUŃ BAZĘ DANYCH(CZYSZCZENIE DANYCH)</button>
 <table class="table">
-    <div class="row">
-   @*  <thead> *@
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Termin</th>
-        </tr>
-    @* </thead> *@
-    </div>
     @* <tbody> *@
         @if (taskService.EditTask.typ == 0) {
             <tr>

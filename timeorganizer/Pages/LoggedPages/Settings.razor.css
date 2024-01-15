@@ -85,3 +85,15 @@ button {
 {
     border-radius: 25px;
 }
+
+label
+{
+    color: violet;
+    margin-bottom: 10px;
+    font-weight: bold;
+    
+}
+span {
+    color: black;
+    font-weight: 200;
+}
