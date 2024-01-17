@@ -25,17 +25,6 @@
 @code {
     [Parameter] public int noteId { get; set; }
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    noteService.EditNotesService = await noteService.GetNoteById(noteId);
-    //}
-
-    //public async void UpdateNote()
-    //{
-    //    await noteService.EditNotes.UpdateNote();
-    //    StateHasChanged();
-    //}
-
     private void Cancel()
     {
         NavigationManager.NavigateTo("/Notatki");

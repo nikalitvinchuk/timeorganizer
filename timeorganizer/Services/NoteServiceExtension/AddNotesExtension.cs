@@ -115,7 +115,6 @@ namespace timeorganizer.Services.NoteServiceExtension
             }
             catch (Exception ex)
             {
-                //await activityViewModel.ChangeExpirationDateCommand();
             }
             await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService 
         }
@@ -148,20 +147,16 @@ namespace timeorganizer.Services.NoteServiceExtension
 
         private async Task ExecuteAsync(Func<Task> operation)
         {
-            //var activityViewModel = new ActivityViewModel(); //inicjalizacja do późniejszego wywołania ChangeExpirationDate
-            //IsBusy = true;
             try
             {
                 await operation?.Invoke();
             }
             catch (Exception ex)
-            {
-                //await activityViewModel.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityViewModel 
+            { 
                 await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
             }
             finally
             {
-                //IsBusy = false;
             }
         }
     }

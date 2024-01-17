@@ -71,7 +71,6 @@ namespace timeorganizer.Services.NoteServiceExtension
 						note = await _context.GetItemByKeyAsync<Notes>(id);
 
 					});
-					//await MopupService.Instance.PushAsync(new NoteInfoPopupPage(note));
 				}
 				catch (Exception ex)
 				{

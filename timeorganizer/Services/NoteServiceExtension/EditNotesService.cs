@@ -9,7 +9,6 @@ public partial class EditNotesService : ObservableObject
     private int _id;
     private DateTime _updated;
 
-    //public DateTime Updated { get => _updated; set => _updated = value; }
     public int noteId { get => _id; set => _id = value; }
     public int typ;
 
@@ -23,11 +22,9 @@ public partial class EditNotesService : ObservableObject
 
     public async Task GetNotes(int id)
     {
-        //await ExecuteAsync(async () =>
         {
             EditNote = await _context.GetItemByKeyAsync<Notes>(id);
         }
-        //);
     }
 
     public async Task Update()
@@ -38,28 +35,7 @@ public partial class EditNotesService : ObservableObject
             await activityservice.ChangeExpirationDateCommand(); //przedłużanie sesji - funkcja z ActivityService 
 
             await App.Current.MainPage.DisplayAlert("Sukces", "Zmieniono dane", "Ok");
-        }//);
+        }
     }
-
-    //[ObservableProperty]
-    //public bool IsBusy;// { get; set; }
-
-    //public static async Notes ExecuteAsync(Func<Notes> operation)
-    //{
-    //    var activityService = new ActivityService();
-    //    IsBusy = true;
-    //    try
-    //    {
-    //        await operation?.Invoke();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        await App.Current.MainPage.DisplayAlert("ERROR SQL", ex.Message, "Ok");
-    //    }
-    //    finally
-    //    {
-    //        IsBusy = false;
-    //    }
-    //}
 
 }
