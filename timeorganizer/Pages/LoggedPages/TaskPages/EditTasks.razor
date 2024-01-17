@@ -10,7 +10,6 @@
 
 <button class="btn btn-primary mt-3" @onclick="@Powroc">Powrót</button>
 <button class="btn btn-primary mt-3" @onclick="@Usun">Usuń</button>
-<button class="btn btn-primary mt-3" @onclick="@Usunbaze">USUŃ BAZĘ DANYCH(CZYSZCZENIE DANYCH)</button>
 <table class="table">
     @* <tbody> *@
         @if (taskService.EditTask.typ == 0) {
@@ -71,9 +70,6 @@
             await taskService.EditTask.Usun(taskService.EditTask.EditEtap);
             NavigationManager.NavigateTo("/todo");
         }
-    }
-    public void Usunbaze() {
-        taskService.EditTask.usunabaze();
     }
     private void Powroc() {
         NavigationManager.NavigateTo("/subtask");

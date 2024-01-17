@@ -13,7 +13,6 @@ namespace timeorganizer.Services.TaskServiceExtension
 
 	public partial class FilterExtension : ObservableObject
     {
-
 		private string _name, _description, _typ, _status, _created, _termin;
 		public int _priority, _prcomplited, _userId;
 		private DateTime? _terminD;
