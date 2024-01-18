@@ -9,8 +9,8 @@
 	<input class="form-control" @bind="year" placeholder="Rok" @onfocusout="RefreshStat" />
 
 	@foreach( var year in summaryService.TasksColYear) {
-		<h2>@((year as dynamic).Year)</h2>
-		<h2>Miesiące roku</h2>
+		<br /><h2>@((year as dynamic).Year)</h2>
+		<br /><h2>Miesiące roku</h2>
 		@foreach (var item in summaryService.TasksColMon)
 		{
 			if ((year as dynamic).Year == (item as dynamic).Year){
@@ -21,7 +21,7 @@
 				<p class="mr-3 mb-0">Procent pełnej kompletności zadań		@((item as dynamic).Count100precent)%</p>
 			}
 		}
-		<h2>Tygodnie roku</h2>
+		 <br/><h2>Tygodnie roku</h2>
 
 		@foreach (var item in summaryService.TasksColWeek){
 			if ((year as dynamic).Year == (item as dynamic).Year){

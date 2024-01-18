@@ -1,4 +1,15 @@
-﻿a.button {
+﻿.container {
+    display: flex;
+    flex-direction: column;
+    width: 98%;
+    padding: 1%;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    overflow-y: scroll;
+    scrollbar-color: gray #f1f1f1;
+}
+a.button {
     color: blueviolet;
     padding: 10px 20px;
     border-radius: 5px;
