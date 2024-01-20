@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿
+using CommunityToolkit.Mvvm.ComponentModel;
 
 using System;
 using System.Collections.Generic;
@@ -54,8 +55,13 @@ namespace timeorganizer.Services
                 int _inprogress = TaskList.Where(t => t.RealizedPercent > 0 && t.RealizedPercent < 100 && t.Status != "Rem").Count();
 
                 Total = _all;
-                var tmp = (double)_realized / _all * 100;
-                ComplitedPrecent = Convert.ToInt32(tmp).ToString() + '%';
+                double tmp = 0;
+                if (_all != 0)
+                tmp = (double)_realized / _all * 100;
+                if (tmp != 0)
+                    ComplitedPrecent = Convert.ToInt32(tmp).ToString() + '%';
+                else
+                    ComplitedPrecent = "0%";
                 Inprogress = _inprogress;
                 Realized = _realized;
                 Active = _all - _realized - _inprogress;
